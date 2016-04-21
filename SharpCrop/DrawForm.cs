@@ -40,9 +40,14 @@ namespace SharpCrop
 
             isMouseDown = false;
 
-            Opacity = 0;
-            Grabber.GetScreenshot(GetRect(source, dest));
-            Application.Exit();
+            var r = GetRect(source, dest);
+
+            if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
+            {
+                Opacity = 0;
+                Grabber.GetScreenshot(r);
+                Application.Exit();
+            }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
