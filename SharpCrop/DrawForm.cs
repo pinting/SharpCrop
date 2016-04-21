@@ -6,10 +6,9 @@ namespace SharpCrop
 {
     public partial class DrawForm : Form
     {
-        private Grabber grabber = new Grabber();
-        private Point mouseDownPoint = Point.Empty;
-        private Point mousePoint = Point.Empty;
-        private bool mouseDown = false;
+        private Point source = Point.Empty;
+        private Point dest = Point.Empty;
+        private bool isMouseDown = false;
 
         public DrawForm()
         {
@@ -30,22 +29,27 @@ namespace SharpCrop
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            mouseDown = true;
-            mousePoint = mouseDownPoint = e.Location;
+
+            isMouseDown = true;
+            dest = source = e.Location;
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            mouseDown = false;
+
+            isMouseDown = false;
+
             Opacity = 0;
-            grabber.GetScreenshot(mouseDown, mousePoint);
+            Grabber.GetScreenshot(GetRect(source, dest));
+            Application.Exit();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            mousePoint = e.Location;
+
+            dest = e.Location;
             Invalidate();
         }
 
@@ -53,17 +57,24 @@ namespace SharpCrop
         {
             base.OnPaint(e);
 
-            if (mouseDown)
+            if (!isMouseDown)
             {
-                Rectangle rectangle = new Rectangle(
-                    Math.Min(mouseDownPoint.X, mousePoint.X),
-                    Math.Min(mouseDownPoint.Y, mousePoint.Y),
-                    Math.Abs(mouseDownPoint.X - mousePoint.X),
-                    Math.Abs(mouseDownPoint.Y - mousePoint.Y));
-
-                e.Graphics.FillRectangle(Brushes.RoyalBlue, rectangle);
+                return;
             }
+
+            e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(source, dest));
         }
+
+        private Rectangle GetRect(Point source, Point dest)
+        {
+            return new Rectangle(
+                Math.Min(source.X, dest.X),
+                Math.Min(source.Y, dest.Y),
+                Math.Abs(source.X - dest.X),
+                Math.Abs(source.Y - dest.Y));
+        }
+
+        #region Public Events
 
         public void CallOnMouseDown(MouseEventArgs e)
         {
@@ -84,5 +95,7 @@ namespace SharpCrop
         {
             OnPaint(e);
         }
+
+        #endregion
     }
 }

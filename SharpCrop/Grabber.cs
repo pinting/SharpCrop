@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
@@ -6,14 +7,13 @@ namespace SharpCrop
 {
     class Grabber
     {
-        public Bitmap GetScreenshot(Point source, Point dest)
+        public static Bitmap GetScreenshot(Rectangle r)
         {
-            var bitmap = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
+            var bitmap = new Bitmap(r.Width, r.Height, PixelFormat.Format32bppArgb);
             var gfx = Graphics.FromImage(bitmap);
-
-            gfx.CopyFromScreen(source.X, source.Y, dest.X, dest.Y, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
-
-            bitmap.Save("test.png", ImageFormat.Png);
+            
+            gfx.CopyFromScreen(r.X, r.Y, 0, 0, new Size(r.Width, r.Height), CopyPixelOperation.SourceCopy);
+            bitmap.Save(DateTime.Now.Ticks.ToString() + ".png", ImageFormat.Png);
 
             return bitmap;
         }
