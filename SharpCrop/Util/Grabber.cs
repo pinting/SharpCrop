@@ -7,6 +7,11 @@ namespace SharpCrop
 {
     class Grabber
     {
+        /// <summary>
+        /// Get a Bitmap from screen in the size of the given rectangle.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public static Bitmap GetScreenshot(Rectangle r)
         {
             var bitmap = new Bitmap(r.Width, r.Height, PixelFormat.Format32bppArgb);

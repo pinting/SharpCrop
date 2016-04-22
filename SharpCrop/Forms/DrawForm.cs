@@ -10,9 +10,17 @@ namespace SharpCrop
         private Point dest = Point.Empty;
         private bool isMouseDown = false;
 
+        /// <summary>
+        /// A nonclickable form which background is transparent - so drawing is possible.
+        /// </summary>
         public DrawForm()
         {
-            InitializeComponent();
+            SuspendLayout();
+            
+            Name = "DrawForm";
+            Text = "ClickForm";
+            ClientSize = Screen.PrimaryScreen.Bounds.Size;
+            Location = new Point(0, 0);
 
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
@@ -26,6 +34,10 @@ namespace SharpCrop
             Opacity = 0.75;
         }
 
+        /// <summary>
+        /// Listen for mouse down events and save the coords.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -34,6 +46,10 @@ namespace SharpCrop
             dest = source = e.Location;
         }
 
+        /// <summary>
+        /// Listen for mouse up events.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
@@ -50,6 +66,10 @@ namespace SharpCrop
             }
         }
 
+        /// <summary>
+        /// Change the last coord as the mouse moves.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -58,18 +78,26 @@ namespace SharpCrop
             Invalidate();
         }
 
+        /// <summary>
+        /// Paint the rectangle if the mouse button is down.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
-            if (!isMouseDown)
+            if (isMouseDown)
             {
-                return;
+                e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(source, dest));
             }
-
-            e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(source, dest));
         }
 
+        /// <summary>
+        /// Private helper function to construct a rectangle from two points.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
+        /// <returns></returns>
         private Rectangle GetRect(Point source, Point dest)
         {
             return new Rectangle(
@@ -80,6 +108,8 @@ namespace SharpCrop
         }
 
         #region Public Events
+
+        /* These methods are needed to make internal functions public to the ClickForm */
 
         public void CallOnMouseDown(MouseEventArgs e)
         {
