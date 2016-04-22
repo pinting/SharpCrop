@@ -19,7 +19,7 @@ namespace SharpCrop
             Text = "SharpCrop";
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
-
+            
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             ShowInTaskbar = false;

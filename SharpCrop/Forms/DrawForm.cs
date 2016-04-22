@@ -6,8 +6,9 @@ namespace SharpCrop
 {
     public partial class DrawForm : Form
     {
-        private Point source = Point.Empty;
-        private Point dest = Point.Empty;
+        private Point mouseDown = Point.Empty;
+        private Point mouseMove = Point.Empty;
+        private Point mouseUp = Point.Empty;
         private bool isMouseDown = false;
 
         /// <summary>
@@ -16,16 +17,15 @@ namespace SharpCrop
         public DrawForm()
         {
             SuspendLayout();
-            
+
             Name = "DrawForm";
             Text = "ClickForm";
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
-
+            
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             ShowInTaskbar = false;
-
             DoubleBuffered = true;
             TopMost = true;
 
@@ -43,7 +43,7 @@ namespace SharpCrop
             base.OnMouseDown(e);
 
             isMouseDown = true;
-            dest = source = e.Location;
+            mouseUp = mouseMove = mouseDown = e.Location;
         }
 
         /// <summary>
@@ -55,8 +55,9 @@ namespace SharpCrop
             base.OnMouseUp(e);
 
             isMouseDown = false;
+            mouseUp = e.Location;
 
-            var r = GetRect(source, dest);
+            var r = GetRect(mouseDown, mouseUp);
 
             if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
             {
@@ -74,7 +75,7 @@ namespace SharpCrop
         {
             base.OnMouseMove(e);
 
-            dest = e.Location;
+            mouseMove = e.Location;
             Invalidate();
         }
 
@@ -88,7 +89,7 @@ namespace SharpCrop
 
             if (isMouseDown)
             {
-                e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(source, dest));
+                e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(mouseDown, mouseMove));
             }
         }
 
