@@ -2,20 +2,20 @@
 using System.Net;
 using System.Windows.Forms;
 
-namespace SharpCrop.Util
+namespace SharpCrop.Token
 {
-    class TokenGrabber
+    class ExternalGrabber
     {
         private readonly string clientId = "cou3krww0do592i";
         private readonly string redirect = "http://localhost";
 
         private Action<string> onToken;
-        private SimpleHTTPServer server;
+        private HttpServer server;
         private string token;
 
-        public TokenGrabber(Action<string> onToken)
+        public ExternalGrabber(Action<string> onToken)
         {
-            this.server = new SimpleHTTPServer(Application.StartupPath + "/www", 80, OnRequest);
+            this.server = new HttpServer(Application.StartupPath + "/www", 80, OnRequest);
             this.onToken = onToken;
 
             System.Diagnostics.Process.Start("https://www.dropbox.com/oauth2/authorize?client_id=" + clientId + "&response_type=token&redirect_uri=" + redirect);

@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 
 
-class SimpleHTTPServer
+class HttpServer
 {
     private static IDictionary<string, string> mimeTypeMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
         {".html", "text/html"}
@@ -27,7 +27,7 @@ class SimpleHTTPServer
     /// <param name="root">Directory path to serve.</param>
     /// <param name="port">Port of the server.</param>
     /// <param name="onRequest">Callback function for incoming requests.</param>
-    public SimpleHTTPServer(string root, int port, Action<HttpListenerRequest> onRequest)
+    public HttpServer(string root, int port, Action<HttpListenerRequest> onRequest)
     {
         this.onRequest = onRequest;
         this.port = port;
