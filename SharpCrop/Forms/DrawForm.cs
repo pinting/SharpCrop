@@ -26,8 +26,9 @@ namespace SharpCrop
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             ShowInTaskbar = false;
-            DoubleBuffered = true;
             TopMost = true;
+
+            DoubleBuffered = true;
 
             BackColor = Color.White;
             TransparencyKey = Color.White;
