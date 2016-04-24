@@ -2,9 +2,9 @@
 using System.Net;
 using System.Windows.Forms;
 
-namespace SharpCrop.Token
+namespace SharpCrop.Dropbox.Token
 {
-    class ExternalGrabber
+    class LocalServer
     {
         private readonly string clientId = "cou3krww0do592i";
         private readonly string redirect = "http://localhost";
@@ -13,7 +13,7 @@ namespace SharpCrop.Token
         private HttpServer server;
         private string token;
 
-        public ExternalGrabber(Action<string> onToken)
+        public LocalServer(Action<string> onToken)
         {
             this.server = new HttpServer(Application.StartupPath + "/www", 80, OnRequest);
             this.onToken = onToken;

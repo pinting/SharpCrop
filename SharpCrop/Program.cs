@@ -1,4 +1,4 @@
-﻿using SharpCrop.Token;
+﻿using SharpCrop.Dropbox;
 using System;
 using System.Windows.Forms;
 
@@ -9,7 +9,7 @@ namespace SharpCrop
         [STAThread]
         static public void Main()
         {
-            var token = new ExternalGrabber(delegate(string result)
+            DropboxToken.GetToken(delegate (string token)
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

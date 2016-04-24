@@ -63,7 +63,7 @@ namespace SharpCrop
             if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
             {
                 Opacity = 0;
-                Grabber.GetScreenshot(r);
+                Screenshot.Grab(r);
                 Application.Exit();
             }
         }

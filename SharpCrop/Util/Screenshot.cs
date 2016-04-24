@@ -6,14 +6,14 @@ using System.Windows.Forms;
 
 namespace SharpCrop
 {
-    class Grabber
+    class Screenshot
     {
         /// <summary>
         /// Get a Bitmap from screen in the size of the given rectangle.
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public static Bitmap GetScreenshot(Rectangle r)
+        public static Bitmap Grab(Rectangle r)
         {
             var s = GetScaling();
             var rs = new Rectangle((int)((float)r.X * s), (int)((float)r.Y * s), (int)((float)r.Width * s), (int)((float)r.Height * s));

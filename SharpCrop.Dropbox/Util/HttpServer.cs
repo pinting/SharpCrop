@@ -4,7 +4,6 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-
 class HttpServer
 {
     private static IDictionary<string, string> mimeTypeMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
