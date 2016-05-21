@@ -2,9 +2,8 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
-namespace SharpCrop
+namespace SharpCrop.Util
 {
     class Screenshot
     {

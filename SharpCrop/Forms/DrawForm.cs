@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SharpCrop.Util;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace SharpCrop
+namespace SharpCrop.Forms
 {
     public partial class DrawForm : Form
     {
@@ -18,8 +19,8 @@ namespace SharpCrop
         {
             SuspendLayout();
 
-            Name = "DrawForm";
-            Text = "ClickForm";
+            Name = "SharpCrop";
+            Text = "SharpCrop";
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
             

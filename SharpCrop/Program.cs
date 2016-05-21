@@ -1,5 +1,6 @@
-﻿using SharpCrop.Dropbox;
+﻿using SharpCrop.Forms;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop
@@ -9,12 +10,9 @@ namespace SharpCrop
         [STAThread]
         static public void Main()
         {
-            DropboxToken.GetToken(delegate (string token)
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new ClickForm());
-            });
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
         }
     }
 }
