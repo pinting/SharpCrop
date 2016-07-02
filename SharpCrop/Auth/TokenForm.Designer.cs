@@ -1,6 +1,6 @@
-﻿namespace SharpCrop.Services
+﻿namespace SharpCrop.Auth
 {
-    partial class GrabberForm
+    partial class TokenForm
     {
         /// <summary>
         /// Required designer variable.

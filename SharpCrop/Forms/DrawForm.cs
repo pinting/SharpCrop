@@ -1,4 +1,5 @@
-﻿using SharpCrop.Util;
+﻿using SharpCrop.Services;
+using SharpCrop.Utils;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -12,6 +13,9 @@ namespace SharpCrop.Forms
         private Point mouseUp = Point.Empty;
         private bool isMouseDown = false;
 
+        private CaptureService capture;
+        private UploadService upload;
+
         /// <summary>
         /// A nonclickable form which background is transparent - so drawing is possible.
         /// </summary>
@@ -24,16 +28,49 @@ namespace SharpCrop.Forms
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
             
-            FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
-            ShowInTaskbar = false;
-            TopMost = true;
+            //FormBorderStyle = FormBorderStyle.None;
+            //WindowState = FormWindowState.Maximized;
+            //ShowInTaskbar = false;
+            //TopMost = true;
 
             DoubleBuffered = true;
 
             BackColor = Color.White;
             TransparencyKey = Color.White;
             Opacity = 0.75;
+
+            var accessToken = Settings.Default.AccessToken;
+
+            Console.WriteLine(accessToken);
+
+            capture = new CaptureService();
+            upload = new UploadService(accessToken);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="r"></param>
+        private void Upload(Rectangle r)
+        {
+            var bitmap = capture.GetBitmap(r);
+
+            upload.UploadBitmap(bitmap);
+        }
+
+        /// <summary>
+        /// Private helper function to construct a rectangle from two points.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
+        /// <returns></returns>
+        private Rectangle GetRect(Point source, Point dest)
+        {
+            return new Rectangle(
+                Math.Min(source.X, dest.X),
+                Math.Min(source.Y, dest.Y),
+                Math.Abs(source.X - dest.X),
+                Math.Abs(source.Y - dest.Y));
         }
 
         /// <summary>
@@ -63,8 +100,8 @@ namespace SharpCrop.Forms
 
             if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
             {
-                Opacity = 0;
-                Screenshot.Grab(r);
+                Hide();
+                Upload(r);
                 Application.Exit();
             }
         }
@@ -93,21 +130,6 @@ namespace SharpCrop.Forms
             {
                 e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(mouseDown, mouseMove));
             }
-        }
-
-        /// <summary>
-        /// Private helper function to construct a rectangle from two points.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="dest"></param>
-        /// <returns></returns>
-        private Rectangle GetRect(Point source, Point dest)
-        {
-            return new Rectangle(
-                Math.Min(source.X, dest.X),
-                Math.Min(source.Y, dest.Y),
-                Math.Abs(source.X - dest.X),
-                Math.Abs(source.Y - dest.Y));
         }
 
         #region Public Events

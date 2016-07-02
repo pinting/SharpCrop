@@ -1,6 +1,5 @@
 ﻿using SharpCrop.Forms;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop

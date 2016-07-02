@@ -1,6 +1,6 @@
 ﻿using Dropbox.Api;
-using SharpCrop.Interfaces;
-using SharpCrop.Util;
+using SharpCrop.Auth;
+using SharpCrop.Utils;
 using System;
 using System.Net;
 using System.Threading;
@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace SharpCrop.Services
 {
-    class GrabberServer : IGrabber
+    class TokenServer : IToken
     {
         private readonly string redirectUrl = "http://localhost/";
 
@@ -17,10 +17,10 @@ namespace SharpCrop.Services
         private HttpServer server;
         private string authState;
 
-        public GrabberServer()
+        public TokenServer()
         {
-            this.server = new HttpServer(Application.StartupPath + "/www", 80, OnRequest);
-            this.authState = Guid.NewGuid().ToString("N");
+            server = new HttpServer(Application.StartupPath + "/www", 80, OnRequest);
+            authState = Guid.NewGuid().ToString("N");
 
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Settings.Default.ClientId, new Uri(redirectUrl), authState);
 

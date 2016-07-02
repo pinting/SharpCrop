@@ -3,16 +3,16 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace SharpCrop.Util
+namespace SharpCrop.Services
 {
-    class Screenshot
+    class CaptureService
     {
         /// <summary>
         /// Get a Bitmap from screen in the size of the given rectangle.
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public static Bitmap Grab(Rectangle r)
+        public Bitmap GetBitmap(Rectangle r)
         {
             var s = GetScaling();
             var rs = new Rectangle((int)((float)r.X * s), (int)((float)r.Y * s), (int)((float)r.Width * s), (int)((float)r.Height * s));
@@ -21,7 +21,6 @@ namespace SharpCrop.Util
             var gfx = Graphics.FromImage(bitmap);
             
             gfx.CopyFromScreen(rs.X, rs.Y, 0, 0, new Size(rs.Width, rs.Height), CopyPixelOperation.SourceCopy);
-            bitmap.Save(DateTime.Now.Ticks.ToString() + ".png", ImageFormat.Png);
 
             return bitmap;
         }
@@ -30,7 +29,7 @@ namespace SharpCrop.Util
         /// Get the percentage of scalling.
         /// </summary>
         /// <returns></returns>
-        public static float GetScaling()
+        public float GetScaling()
         {
             Graphics gfx = Graphics.FromHwnd(IntPtr.Zero);
             IntPtr desktop = gfx.GetHdc();

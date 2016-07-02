@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SharpCrop.Util
+namespace SharpCrop.Utils
 {
     class HttpServer
     {
@@ -69,10 +69,9 @@ namespace SharpCrop.Util
 
         private void Process(HttpListenerContext context)
         {
-            Task.Run(() => onRequest(context.Request));
+            onRequest(context.Request);
 
-            string filename = context.Request.Url.AbsolutePath;
-            filename = filename.Substring(1);
+            var filename = context.Request.Url.AbsolutePath.Substring(1);
 
             if (string.IsNullOrEmpty(filename))
             {
@@ -87,6 +86,7 @@ namespace SharpCrop.Util
             }
 
             filename = Path.Combine(root, filename);
+
             string mime;
 
             if (File.Exists(filename) && mimeTypeMappings.TryGetValue(Path.GetExtension(filename), out mime))

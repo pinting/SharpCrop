@@ -1,19 +1,20 @@
 ﻿using Dropbox.Api;
-using SharpCrop.Interfaces;
+using SharpCrop.Auth;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpCrop.Services
+namespace SharpCrop.Auth
 {
-    public partial class GrabberForm : Form, IGrabber
+    public partial class TokenForm : Form, IToken
     {
         private readonly string redirectUrl = "http://localhost/";
 
         private Action<OAuth2Response> onToken;
         private string authState;
+        private bool success;
 
-        public GrabberForm()
+        public TokenForm()
         {
             InitializeComponent();
             authState = Guid.NewGuid().ToString("N");
@@ -21,6 +22,16 @@ namespace SharpCrop.Services
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Settings.Default.ClientId, new Uri(redirectUrl), authState);
 
             webBrowser.Navigate(url);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            if(!success)
+            {
+                Task.Run(() => onToken(null));
+            }
         }
 
         public void OnToken(Action<OAuth2Response> onToken)
@@ -39,13 +50,10 @@ namespace SharpCrop.Services
             {
                 OAuth2Response result = DropboxOAuth2Helper.ParseTokenFragment(e.Url);
 
-                if (result.State != authState)
-                {
-                    Task.Run(() => onToken(null));
-                }
-                else
+                if (result.State == authState)
                 {
                     Task.Run(() => onToken(result));
+                    success = true;
                 }
 
                 Close();

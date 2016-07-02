@@ -49,6 +49,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,28 +73,29 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\GrabberForm.cs">
+    <Compile Include="Auth\TokenForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Services\GrabberForm.Designer.cs">
-      <DependentUpon>GrabberForm.cs</DependentUpon>
+    <Compile Include="Auth\TokenForm.Designer.cs">
+      <DependentUpon>TokenForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IGrabber.cs" />
+    <Compile Include="Auth\IToken.cs" />
+    <Compile Include="Services\UploadService.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Services\GrabberServer.cs" />
+    <Compile Include="Auth\TokenServer.cs" />
     <Compile Include="Utils\HttpServer.cs" />
-    <Compile Include="Utils\Screenshot.cs" />
+    <Compile Include="Services\CaptureService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Services\GrabberForm.resx">
-      <DependentUpon>GrabberForm.cs</DependentUpon>
+    <EmbeddedResource Include="Auth\TokenForm.resx">
+      <DependentUpon>TokenForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
