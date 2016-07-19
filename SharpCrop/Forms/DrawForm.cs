@@ -1,5 +1,4 @@
 ﻿using SharpCrop.Services;
-using SharpCrop.Utils;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -14,13 +13,14 @@ namespace SharpCrop.Forms
         private Point mouseUp = Point.Empty;
         private bool isMouseDown = false;
 
-        private CaptureService capture;
-        private UploadService upload;
+        private CaptureService captureService;
+        private UploadService uploadService;
+        private ClickForm clickForm;
 
         /// <summary>
         /// A nonclickable form which background is transparent - so drawing is possible.
         /// </summary>
-        public DrawForm()
+        public DrawForm(ClickForm parent)
         {
             SuspendLayout();
 
@@ -42,8 +42,21 @@ namespace SharpCrop.Forms
 
             var accessToken = Settings.Default.AccessToken;
 
-            capture = new CaptureService();
-            upload = new UploadService(accessToken);
+            captureService = new CaptureService();
+            uploadService = new UploadService(accessToken);
+            clickForm = parent;
+        }
+
+        private void Upload(Rectangle r)
+        {
+            // Hide click and draw form
+            Hide();
+            clickForm.Hide();
+            Application.DoEvents();
+
+            // Process upload
+            uploadService.UploadBitmap(captureService.GetBitmap(r));
+            Application.Exit();
         }
 
         /// <summary>
@@ -88,13 +101,7 @@ namespace SharpCrop.Forms
 
             if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
             {
-                Hide();
-
-                Task.Run(() => 
-                {
-                    upload.UploadBitmap(capture.GetBitmap(r));
-                    Application.Exit();
-                });
+                Upload(r);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using Dropbox.Api;
-using SharpCrop.Services;
 using SharpCrop.Auth;
 using System;
 using System.Timers;
@@ -12,7 +11,6 @@ namespace SharpCrop.Forms
         public MainForm()
         {
             InitializeComponent();
-            Hide();
 
             var accessToken = Settings.Default.AccessToken;
 
