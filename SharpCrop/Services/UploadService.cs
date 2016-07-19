@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
+using System.Windows.Forms;
 
 namespace SharpCrop.Services
 {
@@ -37,6 +38,10 @@ namespace SharpCrop.Services
             {
                 client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream).Wait();
             }
+
+            var meta = client.Sharing.CreateSharedLinkWithSettingsAsync(path).Result;
+            
+            Clipboard.SetText(meta.Url);
         }
     }
 }
