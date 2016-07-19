@@ -33,9 +33,7 @@ namespace SharpCrop.Forms
             WindowState = FormWindowState.Maximized;
             ShowInTaskbar = false;
             TopMost = true;
-
             DoubleBuffered = true;
-
             BackColor = Color.White;
             TransparencyKey = Color.White;
             Opacity = 0.75;
@@ -47,6 +45,10 @@ namespace SharpCrop.Forms
             clickForm = parent;
         }
 
+        /// <summary>
+        /// Grab bitmap and upload it to the saved Dropbox account.
+        /// </summary>
+        /// <param name="r">Bitmap position, size</param>
         private void Upload(Rectangle r)
         {
             // Hide click and draw form
