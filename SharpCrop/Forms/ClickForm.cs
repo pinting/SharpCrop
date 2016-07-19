@@ -20,10 +20,10 @@ namespace SharpCrop.Forms
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
             
-            //FormBorderStyle = FormBorderStyle.None;
-            //WindowState = FormWindowState.Maximized;
-            //ShowInTaskbar = false;
-            //TopMost = true;
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+            ShowInTaskbar = false;
+            TopMost = true;
 
             BackColor = Color.Black;
             Opacity = 0.005;

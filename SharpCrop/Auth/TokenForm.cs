@@ -52,17 +52,16 @@ namespace SharpCrop.Auth
 
                 if (result.State == authState)
                 {
-                    Task.Run(() => onToken(result));
                     success = true;
+                    Task.Run(() => onToken(result));
                 }
-
-                Close();
             }
-            catch (ArgumentException)
+            catch (ArgumentException ev)
             {
-                onToken(null);
-                Close();
+                Console.WriteLine(ev.Message);
             }
+
+            Close();
         }
     }
 }

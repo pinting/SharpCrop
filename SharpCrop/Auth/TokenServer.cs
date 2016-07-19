@@ -7,10 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpCrop.Services
+namespace SharpCrop.Auth
 {
     class TokenServer : IToken
     {
+        private readonly string serverPath = Application.StartupPath + "/www";
         private readonly string redirectUrl = "http://localhost/";
 
         private Action<OAuth2Response> onToken;
@@ -19,7 +20,7 @@ namespace SharpCrop.Services
 
         public TokenServer()
         {
-            server = new HttpServer(Application.StartupPath + "/www", 80, OnRequest);
+            server = new HttpServer(serverPath, 80, OnRequest);
             authState = Guid.NewGuid().ToString("N");
 
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Settings.Default.ClientId, new Uri(redirectUrl), authState);
@@ -48,13 +49,12 @@ namespace SharpCrop.Services
                 {
                     Task.Run(() => onToken(result));
                 }
-
-                Thread.Sleep(1000);
+                
                 Close();
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-                return;
+                Console.WriteLine(e.Message);
             }
         }
 

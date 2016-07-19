@@ -2,6 +2,7 @@
 using SharpCrop.Utils;
 using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
@@ -28,10 +29,10 @@ namespace SharpCrop.Forms
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
             
-            //FormBorderStyle = FormBorderStyle.None;
-            //WindowState = FormWindowState.Maximized;
-            //ShowInTaskbar = false;
-            //TopMost = true;
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+            ShowInTaskbar = false;
+            TopMost = true;
 
             DoubleBuffered = true;
 
@@ -41,21 +42,8 @@ namespace SharpCrop.Forms
 
             var accessToken = Settings.Default.AccessToken;
 
-            Console.WriteLine(accessToken);
-
             capture = new CaptureService();
             upload = new UploadService(accessToken);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="r"></param>
-        private void Upload(Rectangle r)
-        {
-            var bitmap = capture.GetBitmap(r);
-
-            upload.UploadBitmap(bitmap);
         }
 
         /// <summary>
@@ -101,8 +89,12 @@ namespace SharpCrop.Forms
             if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
             {
                 Hide();
-                Upload(r);
-                Application.Exit();
+
+                Task.Run(() => 
+                {
+                    upload.UploadBitmap(capture.GetBitmap(r));
+                    Application.Exit();
+                });
             }
         }
 

@@ -22,14 +22,20 @@ namespace SharpCrop.Services
 
         public void UploadBitmap(Bitmap bitmap)
         {
+            var path = "/" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".png";
+            byte[] byteArray;
+
             using (var stream = new MemoryStream())
             {
                 bitmap.Save(stream, ImageFormat.Png);
-                bitmap.Save(DateTime.Now.Ticks.ToString() + ".png", ImageFormat.Png);
+                stream.Close();
 
-                var response = client.Files.UploadAsync("/" + DateTime.Now.Ticks.ToString() + ".png", WriteMode.Overwrite.Instance, body: stream);
+                byteArray = stream.ToArray();
+            }
 
-                bitmap.Dispose();
+            using (var stream = new MemoryStream(byteArray))
+            {
+                client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream).Wait();
             }
         }
     }

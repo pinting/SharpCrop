@@ -12,12 +12,15 @@ namespace SharpCrop.Forms
         public MainForm()
         {
             InitializeComponent();
+            Hide();
 
             var accessToken = Settings.Default.AccessToken;
 
             if (accessToken.Length > 0)
             {
-                Console.WriteLine(accessToken);
+                WindowState = FormWindowState.Minimized;
+                ShowInTaskbar = false;
+
                 Start();
             }
         }
@@ -40,7 +43,7 @@ namespace SharpCrop.Forms
             }
         }
 
-        private void TokenParser(OAuth2Response result)
+        private void Success(OAuth2Response result)
         {
             if (result == null)
             {
@@ -58,8 +61,21 @@ namespace SharpCrop.Forms
         private void Failed()
         {
             MessageBox.Show("Failed to connect!");
-            Show();
-            Focus();
+
+            var action = new Action(() =>
+            {
+                Show();
+                Focus();
+            });
+
+            if (InvokeRequired)
+            {
+                Invoke(action);
+            }
+            else
+            {
+                action();
+            }
         }
 
         private void Login(IToken grabber)
@@ -67,7 +83,12 @@ namespace SharpCrop.Forms
             var timer = new System.Timers.Timer(1000 * 60 * 3);
 
             Hide();
-            grabber.OnToken(TokenParser);
+
+            grabber.OnToken((OAuth2Response token) => 
+            {
+                timer.Stop();
+                Success(token);
+            });
 
             timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
             {
