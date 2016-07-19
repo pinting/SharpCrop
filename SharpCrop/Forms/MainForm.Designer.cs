@@ -28,15 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.externalLogin = new System.Windows.Forms.Button();
             this.internalLogin = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // externalLogin
             // 
-            this.externalLogin.Location = new System.Drawing.Point(12, 12);
+            this.externalLogin.Location = new System.Drawing.Point(8, 8);
+            this.externalLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.externalLogin.Name = "externalLogin";
-            this.externalLogin.Size = new System.Drawing.Size(751, 88);
+            this.externalLogin.Size = new System.Drawing.Size(501, 57);
             this.externalLogin.TabIndex = 0;
             this.externalLogin.Text = "Connect to Dropbox";
             this.externalLogin.UseVisualStyleBackColor = true;
@@ -45,9 +47,10 @@
             // internalLogin
             // 
             this.internalLogin.AutoSize = true;
-            this.internalLogin.Location = new System.Drawing.Point(276, 103);
+            this.internalLogin.Location = new System.Drawing.Point(184, 67);
+            this.internalLogin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.internalLogin.Name = "internalLogin";
-            this.internalLogin.Size = new System.Drawing.Size(206, 20);
+            this.internalLogin.Size = new System.Drawing.Size(138, 13);
             this.internalLogin.TabIndex = 1;
             this.internalLogin.TabStop = true;
             this.internalLogin.Text = "Login using internal browser";
@@ -55,11 +58,13 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(778, 144);
+            this.ClientSize = new System.Drawing.Size(519, 94);
             this.Controls.Add(this.internalLogin);
             this.Controls.Add(this.externalLogin);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MainForm";
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
