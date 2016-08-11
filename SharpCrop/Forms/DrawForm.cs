@@ -1,7 +1,6 @@
 ﻿using SharpCrop.Services;
 using System;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
@@ -16,12 +15,16 @@ namespace SharpCrop.Forms
         private CaptureService captureService;
         private UploadService uploadService;
         private ClickForm clickForm;
+        private MainForm mainForm;
 
         /// <summary>
         /// A nonclickable form which background is transparent - so drawing is possible.
         /// </summary>
-        public DrawForm(ClickForm parent)
+        public DrawForm(MainForm mainForm, ClickForm clickForm)
         {
+            this.clickForm = clickForm;
+            this.mainForm = mainForm;
+
             SuspendLayout();
 
             Name = "SharpCrop";
@@ -42,7 +45,6 @@ namespace SharpCrop.Forms
 
             captureService = new CaptureService();
             uploadService = new UploadService(accessToken);
-            clickForm = parent;
         }
 
         /// <summary>
@@ -56,8 +58,11 @@ namespace SharpCrop.Forms
             clickForm.Hide();
             Application.DoEvents();
 
-            // Process upload
-            uploadService.UploadBitmap(captureService.GetBitmap(r));
+            // Upload and get URL
+            var url = uploadService.UploadBitmap(captureService.GetBitmap(r));
+
+            MessageBox.Show("Uploaded successfully!");
+            Clipboard.SetText(url);
             Application.Exit();
         }
 

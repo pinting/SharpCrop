@@ -7,12 +7,15 @@ namespace SharpCrop.Forms
     public partial class ClickForm : Form
     {
         private DrawForm drawForm;
+        private MainForm mainForm;
 
         /// <summary>
         /// A clickable form which is totally transparent - so no drawing is possible here.
         /// </summary>
-        public ClickForm()
+        public ClickForm(MainForm mainForm)
         {
+            this.mainForm = mainForm;
+
             SuspendLayout();
             
             Name = "SharpCrop";
@@ -26,8 +29,8 @@ namespace SharpCrop.Forms
             TopMost = true;
             BackColor = Color.Black;
             Opacity = 0.005;
-
-            drawForm = new DrawForm(this);
+            
+            drawForm = new DrawForm(mainForm, this);
             drawForm.Show();
         }
 

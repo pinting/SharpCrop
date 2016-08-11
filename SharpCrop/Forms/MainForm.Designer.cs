@@ -36,7 +36,7 @@
             // externalLogin
             // 
             this.externalLogin.Location = new System.Drawing.Point(8, 8);
-            this.externalLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.externalLogin.Margin = new System.Windows.Forms.Padding(2);
             this.externalLogin.Name = "externalLogin";
             this.externalLogin.Size = new System.Drawing.Size(501, 57);
             this.externalLogin.TabIndex = 0;
@@ -47,7 +47,7 @@
             // internalLogin
             // 
             this.internalLogin.AutoSize = true;
-            this.internalLogin.Location = new System.Drawing.Point(184, 67);
+            this.internalLogin.Location = new System.Drawing.Point(187, 67);
             this.internalLogin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.internalLogin.Name = "internalLogin";
             this.internalLogin.Size = new System.Drawing.Size(138, 13);
@@ -64,8 +64,11 @@
             this.Controls.Add(this.internalLogin);
             this.Controls.Add(this.externalLogin);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximumSize = new System.Drawing.Size(535, 133);
+            this.MinimumSize = new System.Drawing.Size(535, 133);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
             this.PerformLayout();
