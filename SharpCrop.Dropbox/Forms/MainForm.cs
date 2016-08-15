@@ -9,28 +9,13 @@ namespace SharpCrop.Dropbox.Forms
     public partial class MainForm : Form
     {
         private Action<string> onResult;
-        
+
         // Main form which get an AccessToken from the user (using internal or external tools).
         public MainForm(Action<string> onResult)
         {
             this.onResult = onResult;
 
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// This function is executed when the AccessToken was obtained successfully.
-        /// </summary>
-        /// <param name="result"></param>
-        private void OnResult(OAuth2Response result)
-        {
-            if (result == null)
-            {
-                Close();
-                return;
-            }
-            
-            onResult(result.AccessToken);
         }
 
         /// <summary>
@@ -43,16 +28,42 @@ namespace SharpCrop.Dropbox.Forms
 
             Hide();
 
-            grabber.OnToken((OAuth2Response token) => 
+            grabber.OnToken((OAuth2Response result) =>
             {
+                var action = new Action(() => Close());
+
                 timer.Stop();
-                OnResult(token);
+                
+                if (result != null)
+                {
+                    onResult(result.AccessToken);
+                }
+                else if(InvokeRequired)
+                {
+                    Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
             });
 
             timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
             {
-                grabber.Close();
-                Close();
+                var action = new Action(() => 
+                {
+                    grabber.Close();
+                    Close();
+                });
+
+                if (InvokeRequired)
+                {
+                    Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
             };
 
             timer.AutoReset = false;

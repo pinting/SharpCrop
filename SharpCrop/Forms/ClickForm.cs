@@ -64,9 +64,15 @@ namespace SharpCrop.Forms
         {
             base.OnKeyDown(e);
 
-            if(e.KeyCode == Keys.Escape)
+            switch(e.KeyCode)
             {
-                Application.Exit();
+                case Keys.Escape:
+                    Application.Exit();
+                    break;
+                case Keys.F1:
+                    Settings.Default.Reset();
+                    Application.Exit();
+                    break;
             }
         }
 

@@ -34,5 +34,17 @@ namespace SharpCrop {
                 this["Token"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Provider {
+            get {
+                return ((string)(this["Provider"]));
+            }
+            set {
+                this["Provider"] = value;
+            }
+        }
     }
 }

@@ -9,10 +9,21 @@ namespace SharpCrop.Forms
         public MainForm()
         {
             InitializeComponent();
+            
+            if(string.IsNullOrEmpty(Settings.Default.Provider))
+            {
+                return;
+            }
 
-            // Debug
-            Settings.Default.Token = "";
-            Settings.Default.Save();
+            WindowState = FormWindowState.Minimized;
+            ShowInTaskbar = false;
+
+            switch (Settings.Default.Provider)
+            {
+                case "Dropbox":
+                    OnDropbox(null, null);
+                    break;
+            }
         }
 
         private void Start(IProvider provider)
@@ -33,7 +44,7 @@ namespace SharpCrop.Forms
             }
         }
 
-        private void StartProvider(IProvider provider)
+        private void StartProvider(string name, IProvider provider)
         {
             Hide();
 
@@ -41,11 +52,16 @@ namespace SharpCrop.Forms
             {
                 if(token == null)
                 {
-                    MessageBox.Show("Failed to register provider!");
+                    WindowState = FormWindowState.Normal;
+                    ShowInTaskbar = true;
+
                     Show();
+                    MessageBox.Show("Failed to register provider!");
+
                     return;
                 }
 
+                Settings.Default.Provider = name;
                 Settings.Default.Token = token;
                 Settings.Default.Save();
 
@@ -55,7 +71,7 @@ namespace SharpCrop.Forms
 
         private void OnDropbox(object sender, EventArgs e)
         {
-            StartProvider(new Dropbox.Provider());
+            StartProvider("Dropbox", new Dropbox.Provider());
         }
 
         private void OnGoogleDrive(object sender, EventArgs e)
