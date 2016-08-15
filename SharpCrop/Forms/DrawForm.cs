@@ -1,5 +1,4 @@
-﻿using SharpCrop.Services;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,19 +10,15 @@ namespace SharpCrop.Forms
         private Point mouseMove = Point.Empty;
         private Point mouseUp = Point.Empty;
         private bool isMouseDown = false;
-
-        private CaptureService captureService;
-        private UploadService uploadService;
-        private ClickForm clickForm;
-        private MainForm mainForm;
+        
+        private ClickForm parent;
 
         /// <summary>
         /// A nonclickable form which background is transparent - so drawing is possible.
         /// </summary>
-        public DrawForm(MainForm mainForm, ClickForm clickForm)
+        public DrawForm(ClickForm parent)
         {
-            this.clickForm = clickForm;
-            this.mainForm = mainForm;
+            this.parent = parent;
 
             SuspendLayout();
 
@@ -40,30 +35,6 @@ namespace SharpCrop.Forms
             BackColor = Color.White;
             TransparencyKey = Color.White;
             Opacity = 0.75;
-
-            var accessToken = Settings.Default.AccessToken;
-
-            captureService = new CaptureService();
-            uploadService = new UploadService(accessToken);
-        }
-
-        /// <summary>
-        /// Grab bitmap and upload it to the saved Dropbox account.
-        /// </summary>
-        /// <param name="r">Bitmap position, size</param>
-        private void Upload(Rectangle r)
-        {
-            // Hide click and draw form
-            Hide();
-            clickForm.Hide();
-            Application.DoEvents();
-
-            // Upload and get URL
-            var url = uploadService.UploadBitmap(captureService.GetBitmap(r));
-
-            MessageBox.Show("Uploaded successfully!");
-            Clipboard.SetText(url);
-            Application.Exit();
         }
 
         /// <summary>
@@ -108,7 +79,7 @@ namespace SharpCrop.Forms
 
             if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
             {
-                Upload(r);
+                parent.Upload(r);
             }
         }
 

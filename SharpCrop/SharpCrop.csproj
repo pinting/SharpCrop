@@ -39,13 +39,10 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dropbox.Api, Version=0.1.6024.18266, Culture=neutral, PublicKeyToken=310f0e82fbb45d01, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dropbox.Api.3.4.0\lib\net45\Dropbox.Api.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -76,29 +73,16 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Auth\TokenForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Auth\TokenForm.Designer.cs">
-      <DependentUpon>TokenForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Auth\IToken.cs" />
-    <Compile Include="Services\UploadService.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Auth\TokenServer.cs" />
-    <Compile Include="Utils\HttpServer.cs" />
-    <Compile Include="Services\CaptureService.cs" />
+    <Compile Include="Utils\CaptureHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Auth\TokenForm.resx">
-      <DependentUpon>TokenForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -120,12 +104,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
-    <Content Include="www\index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\SharpCrop.Dropbox\SharpCrop.Dropbox.csproj">
+      <Project>{4003f97c-e078-4a3d-b7d8-b6fd705876d2}</Project>
+      <Name>SharpCrop.Dropbox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpCrop.Provider\SharpCrop.Provider.csproj">
+      <Project>{318ee826-9014-4869-b84a-b447980229bc}</Project>
+      <Name>SharpCrop.Provider</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

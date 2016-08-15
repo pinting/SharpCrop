@@ -29,55 +29,66 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.externalLogin = new System.Windows.Forms.Button();
-            this.internalLogin = new System.Windows.Forms.LinkLabel();
+            this.dropboxButton = new System.Windows.Forms.Button();
+            this.googleDriveButton = new System.Windows.Forms.Button();
+            this.oneDriveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // externalLogin
+            // dropboxButton
             // 
-            this.externalLogin.Location = new System.Drawing.Point(8, 8);
-            this.externalLogin.Margin = new System.Windows.Forms.Padding(2);
-            this.externalLogin.Name = "externalLogin";
-            this.externalLogin.Size = new System.Drawing.Size(501, 57);
-            this.externalLogin.TabIndex = 0;
-            this.externalLogin.Text = "Connect to Dropbox";
-            this.externalLogin.UseVisualStyleBackColor = true;
-            this.externalLogin.Click += new System.EventHandler(this.ExternalLogin);
+            this.dropboxButton.BackColor = System.Drawing.Color.PaleTurquoise;
+            this.dropboxButton.Location = new System.Drawing.Point(17, 23);
+            this.dropboxButton.Name = "dropboxButton";
+            this.dropboxButton.Size = new System.Drawing.Size(251, 244);
+            this.dropboxButton.TabIndex = 0;
+            this.dropboxButton.Text = "Dropbox";
+            this.dropboxButton.UseVisualStyleBackColor = false;
+            this.dropboxButton.Click += new System.EventHandler(this.OnDropbox);
             // 
-            // internalLogin
+            // googleDriveButton
             // 
-            this.internalLogin.AutoSize = true;
-            this.internalLogin.Location = new System.Drawing.Point(187, 67);
-            this.internalLogin.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.internalLogin.Name = "internalLogin";
-            this.internalLogin.Size = new System.Drawing.Size(138, 13);
-            this.internalLogin.TabIndex = 1;
-            this.internalLogin.TabStop = true;
-            this.internalLogin.Text = "Login using internal browser";
-            this.internalLogin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.InternalLogin);
+            this.googleDriveButton.BackColor = System.Drawing.Color.PaleGreen;
+            this.googleDriveButton.Location = new System.Drawing.Point(274, 23);
+            this.googleDriveButton.Name = "googleDriveButton";
+            this.googleDriveButton.Size = new System.Drawing.Size(251, 244);
+            this.googleDriveButton.TabIndex = 1;
+            this.googleDriveButton.Text = "Google Drive";
+            this.googleDriveButton.UseVisualStyleBackColor = false;
+            this.googleDriveButton.Click += new System.EventHandler(this.OnGoogleDrive);
+            // 
+            // oneDriveButton
+            // 
+            this.oneDriveButton.BackColor = System.Drawing.Color.SandyBrown;
+            this.oneDriveButton.Location = new System.Drawing.Point(531, 23);
+            this.oneDriveButton.Name = "oneDriveButton";
+            this.oneDriveButton.Size = new System.Drawing.Size(234, 244);
+            this.oneDriveButton.TabIndex = 2;
+            this.oneDriveButton.Text = "OneDrive";
+            this.oneDriveButton.UseVisualStyleBackColor = false;
+            this.oneDriveButton.Click += new System.EventHandler(this.OnOneDrive);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 94);
-            this.Controls.Add(this.internalLogin);
-            this.Controls.Add(this.externalLogin);
+            this.ClientSize = new System.Drawing.Size(778, 274);
+            this.Controls.Add(this.oneDriveButton);
+            this.Controls.Add(this.googleDriveButton);
+            this.Controls.Add(this.dropboxButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximumSize = new System.Drawing.Size(535, 133);
-            this.MinimumSize = new System.Drawing.Size(535, 133);
+            this.MaximumSize = new System.Drawing.Size(800, 330);
+            this.MinimumSize = new System.Drawing.Size(800, 330);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button externalLogin;
-        private System.Windows.Forms.LinkLabel internalLogin;
+        private System.Windows.Forms.Button dropboxButton;
+        private System.Windows.Forms.Button googleDriveButton;
+        private System.Windows.Forms.Button oneDriveButton;
     }
 }

@@ -23,36 +23,15 @@ namespace SharpCrop {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("cou3krww0do592i")]
-        public string ClientId {
-            get {
-                return ((string)(this["ClientId"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AccessToken {
+        public string Token {
             get {
-                return ((string)(this["AccessToken"]));
+                return ((string)(this["Token"]));
             }
             set {
-                this["AccessToken"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string UserId {
-            get {
-                return ((string)(this["UserId"]));
-            }
-            set {
-                this["UserId"] = value;
+                this["Token"] = value;
             }
         }
     }

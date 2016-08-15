@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SharpCrop.Provider;
+using SharpCrop.Utils;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,14 +9,14 @@ namespace SharpCrop.Forms
     public partial class ClickForm : Form
     {
         private DrawForm drawForm;
-        private MainForm mainForm;
+        private IProvider provider;
 
         /// <summary>
         /// A clickable form which is totally transparent - so no drawing is possible here.
         /// </summary>
-        public ClickForm(MainForm mainForm)
+        public ClickForm(IProvider provider)
         {
-            this.mainForm = mainForm;
+            this.provider = provider;
 
             SuspendLayout();
             
@@ -30,8 +32,28 @@ namespace SharpCrop.Forms
             BackColor = Color.Black;
             Opacity = 0.005;
             
-            drawForm = new DrawForm(mainForm, this);
+            drawForm = new DrawForm(this);
             drawForm.Show();
+        }
+
+        /// <summary>
+        /// Grab bitmap and upload it to the saved Dropbox account.
+        /// </summary>
+        /// <param name="r">Bitmap position, size</param>
+        public void Upload(Rectangle r)
+        {
+            // Hide click and draw form
+            Hide();
+            drawForm.Hide();
+            Application.DoEvents();
+
+            // Get Bitmap, upload it and return the URL
+            var bitmap = CaptureHelper.GetBitmap(r);
+            var url = provider.Upload(bitmap);
+
+            MessageBox.Show("Uploaded successfully!");
+            Clipboard.SetText(url);
+            Application.Exit();
         }
 
         /// <summary>
