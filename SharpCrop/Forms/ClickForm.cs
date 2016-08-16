@@ -19,7 +19,7 @@ namespace SharpCrop.Forms
             this.provider = provider;
 
             SuspendLayout();
-            
+
             Name = "SharpCrop";
             Text = "SharpCrop";
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
@@ -31,7 +31,7 @@ namespace SharpCrop.Forms
             TopMost = true;
             BackColor = Color.Black;
             Opacity = 0.005;
-            
+
             drawForm = new DrawForm(this);
             drawForm.Show();
         }
@@ -51,9 +51,8 @@ namespace SharpCrop.Forms
             var bitmap = CaptureHelper.GetBitmap(r);
             var url = provider.Upload(bitmap);
 
-            MessageBox.Show("Uploaded successfully!");
             Clipboard.SetText(url);
-            Application.Exit();
+            ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit());
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace SharpCrop.Forms
         {
             base.OnKeyDown(e);
 
-            switch(e.KeyCode)
+            switch (e.KeyCode)
             {
                 case Keys.Escape:
                     Application.Exit();

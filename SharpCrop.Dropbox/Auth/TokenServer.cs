@@ -11,7 +11,6 @@ namespace SharpCrop.Dropbox.Auth
     {
         private readonly string serverPath = Application.StartupPath + "/www";
         private readonly string redirectUrl = "http://localhost/";
-        private readonly string clientId = "cou3krww0do592i";
 
         private Action<OAuth2Response> onToken;
         private HttpServer server;
@@ -22,7 +21,7 @@ namespace SharpCrop.Dropbox.Auth
             server = new HttpServer(serverPath, 80, OnRequest);
             authState = Guid.NewGuid().ToString("N");
 
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, clientId, new Uri(redirectUrl), authState);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(redirectUrl), authState);
 
             System.Diagnostics.Process.Start(url.ToString());
         }

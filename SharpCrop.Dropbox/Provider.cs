@@ -15,6 +15,8 @@ namespace SharpCrop.Dropbox
         private HttpClient httpClient;
         private DropboxClient client;
 
+        public static readonly string ClientId = "cou3krww0do592i";
+
         public Provider()
         {
             httpClient = new HttpClient(new WebRequestHandler { ReadWriteTimeout = 10 * 1000 }) { Timeout = TimeSpan.FromMinutes(20) };

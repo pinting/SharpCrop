@@ -9,6 +9,7 @@ namespace SharpCrop.Dropbox.Forms
     public partial class MainForm : Form
     {
         private Action<string> onResult;
+        private bool success = false;
 
         // Main form which get an AccessToken from the user (using internal or external tools).
         public MainForm(Action<string> onResult)
@@ -30,15 +31,20 @@ namespace SharpCrop.Dropbox.Forms
 
             grabber.OnToken((OAuth2Response result) =>
             {
-                var action = new Action(() => Close());
-
                 timer.Stop();
-                
-                if (result != null)
+
+                var action = new Action(() => 
                 {
-                    onResult(result.AccessToken);
-                }
-                else if(InvokeRequired)
+                    if (result != null)
+                    {
+                        onResult(result.AccessToken);
+                        success = true;
+                    }
+
+                    Close();
+                });
+                
+                if(InvokeRequired)
                 {
                     Invoke(action);
                 }
@@ -50,20 +56,11 @@ namespace SharpCrop.Dropbox.Forms
 
             timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
             {
-                var action = new Action(() => 
+                Invoke(new Action(() =>
                 {
                     grabber.Close();
                     Close();
-                });
-
-                if (InvokeRequired)
-                {
-                    Invoke(action);
-                }
-                else
-                {
-                    action();
-                }
+                }));
             };
 
             timer.AutoReset = false;
@@ -103,7 +100,11 @@ namespace SharpCrop.Dropbox.Forms
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            onResult(null);
+
+            if(!success)
+            {
+                onResult(null);
+            }
         }
     }
 }

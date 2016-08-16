@@ -1,4 +1,5 @@
 ﻿using SharpCrop.Provider;
+using SharpCrop.Utils;
 using System;
 using System.Windows.Forms;
 
@@ -6,72 +7,25 @@ namespace SharpCrop.Forms
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        private Loader loader;
+
+        public MainForm(Loader loader)
         {
+            this.loader = loader;
+
             InitializeComponent();
-            
-            if(string.IsNullOrEmpty(Settings.Default.Provider))
-            {
-                return;
-            }
-
-            WindowState = FormWindowState.Minimized;
-            ShowInTaskbar = false;
-
-            switch (Settings.Default.Provider)
-            {
-                case "Dropbox":
-                    OnDropbox(null, null);
-                    break;
-            }
         }
 
-        private void Start(IProvider provider)
+        protected override void OnClosed(EventArgs e)
         {
-            var action = new Action(() =>
-            {
-                var form = new ClickForm(provider);
-                form.Show();
-            });
-
-            if (InvokeRequired)
-            {
-                Invoke(action);
-            }
-            else
-            {
-                action();
-            }
-        }
-
-        private void StartProvider(string name, IProvider provider)
-        {
-            Hide();
-
-            provider.Register(Settings.Default.Token, token => 
-            {
-                if(token == null)
-                {
-                    WindowState = FormWindowState.Normal;
-                    ShowInTaskbar = true;
-
-                    Show();
-                    MessageBox.Show("Failed to register provider!");
-
-                    return;
-                }
-
-                Settings.Default.Provider = name;
-                Settings.Default.Token = token;
-                Settings.Default.Save();
-
-                Start(provider);
-            });
+            base.OnClosed(e);
+            Application.Exit();
         }
 
         private void OnDropbox(object sender, EventArgs e)
         {
-            StartProvider("Dropbox", new Dropbox.Provider());
+            loader.Load("Dropbox");
+            Hide();
         }
 
         private void OnGoogleDrive(object sender, EventArgs e)

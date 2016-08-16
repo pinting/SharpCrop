@@ -8,7 +8,7 @@ namespace SharpCrop.Dropbox.Auth
     public partial class TokenForm : Form, IToken
     {
         private readonly string redirectUrl = "http://localhost/";
-        private readonly string clientId = "cou3krww0do592i";
+        private readonly string disposeUrl = "about:blank";
 
         private Action<OAuth2Response> onToken;
         private string authState;
@@ -19,7 +19,7 @@ namespace SharpCrop.Dropbox.Auth
             InitializeComponent();
             authState = Guid.NewGuid().ToString("N");
 
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, clientId, new Uri(redirectUrl), authState);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(redirectUrl), authState);
 
             webBrowser.Navigate(url);
         }
@@ -41,6 +41,12 @@ namespace SharpCrop.Dropbox.Auth
 
         private void OnResponse(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            if(e.Url.ToString() == disposeUrl)
+            {
+                webBrowser.Stop();
+                Close();
+            }
+
             if (!e.Url.ToString().StartsWith(redirectUrl, StringComparison.OrdinalIgnoreCase))
             {
                 return;
@@ -52,20 +58,18 @@ namespace SharpCrop.Dropbox.Auth
 
                 if (result.State == authState)
                 {
-                    success = true;
-
                     Task.Run(() => onToken(result));
+
+                    webBrowser.Navigate(disposeUrl);
+                    Hide();
+
+                    success = true;
                 }
             }
             catch (ArgumentException ev)
             {
                 Console.WriteLine(ev.Message);
             }
-
-            webBrowser.Stop();
-            webBrowser.Dispose();
-
-            Close();
         }
     }
 }

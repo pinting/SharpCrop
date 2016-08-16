@@ -10,7 +10,7 @@ namespace SharpCrop.Forms
         private Point mouseMove = Point.Empty;
         private Point mouseUp = Point.Empty;
         private bool isMouseDown = false;
-        
+
         private ClickForm parent;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace SharpCrop.Forms
             Text = "SharpCrop";
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
-            
+
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             ShowInTaskbar = false;
