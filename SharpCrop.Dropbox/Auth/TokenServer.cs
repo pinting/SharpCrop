@@ -16,6 +16,9 @@ namespace SharpCrop.Dropbox.Auth
         private HttpServer server;
         private string authState;
 
+        /// <summary>
+        /// TokenServer can create a HTTP server on port 80 and listen for a Dropbox AccessToken.
+        /// </summary>
         public TokenServer()
         {
             server = new HttpServer(serverPath, 80, OnRequest);
@@ -26,12 +29,24 @@ namespace SharpCrop.Dropbox.Auth
             System.Diagnostics.Process.Start(url.ToString());
         }
 
+        /// <summary>
+        /// Callback function setter. The callback will be executed when an AccessToken is found.
+        /// </summary>
+        /// <param name="onToken"></param>
         public void OnToken(Action<OAuth2Response> onToken)
         {
-            this.onToken = onToken;
+            this.onToken = new Action<OAuth2Response>(t1 =>
+            {
+                this.onToken = new Action<OAuth2Response>(t2 => { });
+                onToken(t1);
+            });
         }
 
-        public void OnRequest(HttpListenerRequest request)
+        /// <summary>
+        /// Callback for HttpServer. This function will be called on every request.
+        /// </summary>
+        /// <param name="request"></param>
+        private void OnRequest(HttpListenerRequest request)
         {
             var url = new Uri(request.Url.ToString().Replace('?', '#'));
 
@@ -39,13 +54,13 @@ namespace SharpCrop.Dropbox.Auth
             {
                 OAuth2Response result = DropboxOAuth2Helper.ParseTokenFragment(url);
 
-                if (result.State != authState)
+                if (result.State == authState)
                 {
-                    Task.Run(() => onToken(null));
+                    Task.Run(() => onToken(result));
                 }
                 else
                 {
-                    Task.Run(() => onToken(result));
+                    Task.Run(() => onToken(null));
                 }
                 
                 Close();
@@ -56,8 +71,12 @@ namespace SharpCrop.Dropbox.Auth
             }
         }
 
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
         public void Close()
         {
+            onToken(null);
             server.Stop();
         }
     }

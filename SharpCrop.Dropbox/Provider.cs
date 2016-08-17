@@ -11,22 +11,37 @@ namespace SharpCrop.Dropbox
 {
     public class Provider : IProvider
     {
+        public static readonly string ClientId = "cou3krww0do592i";
+
         private DropboxClientConfig config;
         private HttpClient httpClient;
         private DropboxClient client;
 
-        public static readonly string ClientId = "cou3krww0do592i";
-
+        /// <summary>
+        /// Provider is responsible for handling the communication with a service - like Dropbox.
+        /// </summary>
         public Provider()
         {
             httpClient = new HttpClient(new WebRequestHandler { ReadWriteTimeout = 10 * 1000 }) { Timeout = TimeSpan.FromMinutes(20) };
             config = new DropboxClientConfig("SharpCrop") { HttpClient = httpClient };
         }
 
+        /// <summary>
+        /// Register for the service. If an old token was given, it gonna try to use it. If it was not given or it
+        /// was expired, it will try to request a new one. Eventully onResult will be called with the something.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="onResult"></param>
         public void Register(string token, Action<string> onResult)
         {
             try
             {
+                if(token == null)
+                {
+                    // Goto catch phrase
+                    throw new Exception();
+                }
+
                 // Create a new client object and test if the AccessToken is valid
                 client = new DropboxClient(token, config);
                 client.Users.GetSpaceUsageAsync().Wait();
@@ -37,13 +52,11 @@ namespace SharpCrop.Dropbox
             {
                 var form = new Forms.MainForm(newToken =>
                 {
-                    if(newToken == null)
+                    if(newToken != null)
                     {
-                        onResult(null);
-                        return;
+                        client = new DropboxClient(newToken, config);
                     }
 
-                    client = new DropboxClient(newToken, config);
                     onResult(newToken);
                 });
 

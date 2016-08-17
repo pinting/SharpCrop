@@ -9,6 +9,11 @@ namespace SharpCrop.Forms
     {
         private double interval;
 
+        /// <summary>
+        /// Toast form which responsible for the right-bottom side toast boxes.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="duration"></param>
         public ToastForm(string text, double duration)
         {
             InitializeComponent();
@@ -20,6 +25,10 @@ namespace SharpCrop.Forms
             Desc.Text = text;
         }
 
+        /// <summary>
+        /// Start duration timer.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -35,6 +44,10 @@ namespace SharpCrop.Forms
             timer.Enabled = true;
         }
 
+        /// <summary>
+        /// Close on click.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);

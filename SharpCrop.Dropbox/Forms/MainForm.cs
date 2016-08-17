@@ -3,18 +3,23 @@ using SharpCrop.Dropbox.Auth;
 using System;
 using System.Timers;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace SharpCrop.Dropbox.Forms
 {
     public partial class MainForm : Form
     {
-        private Action<string> onResult;
-        private bool success = false;
+        private Action<string> onToken;
 
         // Main form which get an AccessToken from the user (using internal or external tools).
-        public MainForm(Action<string> onResult)
+        public MainForm(Action<string> onToken)
         {
-            this.onResult = onResult;
+            // Cannot be used twice
+            this.onToken = new Action<string>(t1 => 
+            {
+                this.onToken = new Action<string>(t2 => { });
+                onToken(t1);
+            });
 
             InitializeComponent();
         }
@@ -33,12 +38,15 @@ namespace SharpCrop.Dropbox.Forms
             {
                 timer.Stop();
 
-                var action = new Action(() => 
+                var action = new Action(() =>
                 {
-                    if (result != null)
+                    if (result == null)
                     {
-                        onResult(result.AccessToken);
-                        success = true;
+                        onToken(null);
+                    }
+                    else
+                    {
+                        onToken(result.AccessToken);
                     }
 
                     Close();
@@ -100,11 +108,7 @@ namespace SharpCrop.Dropbox.Forms
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-
-            if(!success)
-            {
-                onResult(null);
-            }
+            onToken(null);
         }
     }
 }

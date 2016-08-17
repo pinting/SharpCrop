@@ -23,7 +23,7 @@ namespace SharpCrop.Provider.Utils
         private int port;
 
         /// <summary>
-        /// Construct server with given port.
+        /// Construct a HTTP server with given port. Written by `aksakalli`!
         /// </summary>
         /// <param name="root">Directory path to serve.</param>
         /// <param name="port">Port of the server.</param>
@@ -43,14 +43,8 @@ namespace SharpCrop.Provider.Utils
         }
 
         /// <summary>
-        /// Stop server and dispose all functions.
+        /// Start listening for ever and ever and ever...
         /// </summary>
-        public void Stop()
-        {
-            listener.Stop();
-            thread.Abort();
-        }
-
         private void Listen()
         {
             while (true)
@@ -66,6 +60,10 @@ namespace SharpCrop.Provider.Utils
             }
         }
 
+        /// <summary>
+        /// Process a request.
+        /// </summary>
+        /// <param name="context"></param>
         private void Process(HttpListenerContext context)
         {
             onRequest(context.Request);
@@ -123,6 +121,15 @@ namespace SharpCrop.Provider.Utils
             }
 
             context.Response.OutputStream.Close();
+        }
+
+        /// <summary>
+        /// Stop server and dispose everything.
+        /// </summary>
+        public void Stop()
+        {
+            listener.Stop();
+            thread.Abort();
         }
     }
 }

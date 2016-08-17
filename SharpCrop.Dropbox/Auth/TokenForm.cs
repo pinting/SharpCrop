@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace SharpCrop.Dropbox.Auth
 {
@@ -12,8 +13,11 @@ namespace SharpCrop.Dropbox.Auth
 
         private Action<OAuth2Response> onToken;
         private string authState;
-        private bool success;
 
+        /// <summary>
+        /// TokenForm is an internal implemantaion of the IToken interface. It works like the TokenServer,
+        /// but requires less privilege. It gonna listen for the AccessToken through a WebBrowser element.
+        /// </summary>
         public TokenForm()
         {
             InitializeComponent();
@@ -24,21 +28,24 @@ namespace SharpCrop.Dropbox.Auth
             webBrowser.Navigate(url);
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            if (!success)
-            {
-                Task.Run(() => onToken(null));
-            }
-        }
-
+        /// <summary>
+        /// Callback function setter. The callback will be executed when an AccessToken is found.
+        /// </summary>
+        /// <param name="onToken"></param>
         public void OnToken(Action<OAuth2Response> onToken)
         {
-            this.onToken = onToken;
+            this.onToken = new Action<OAuth2Response>(t1 =>
+            {
+                this.onToken = new Action<OAuth2Response>(t2 => { });
+                onToken(t1);
+            });
         }
 
+        /// <summary>
+        /// Called by the internal WebBrowser after the current page is loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnResponse(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if(e.Url.ToString() == disposeUrl)
@@ -59,17 +66,29 @@ namespace SharpCrop.Dropbox.Auth
                 if (result.State == authState)
                 {
                     Task.Run(() => onToken(result));
-
-                    webBrowser.Navigate(disposeUrl);
-                    Hide();
-
-                    success = true;
                 }
+                else
+                {
+                    Task.Run(() => onToken(null));
+                }
+
+                webBrowser.Navigate(disposeUrl);
+                Hide();
             }
             catch (ArgumentException ev)
             {
                 Console.WriteLine(ev.Message);
             }
+        }
+
+        /// <summary>
+        /// Form is closed event.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Task.Run(() => onToken(null));
         }
     }
 }
