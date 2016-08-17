@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -7,7 +8,8 @@ namespace SharpCrop.Forms
 {
     public partial class ToastForm : Form
     {
-        private double interval;
+        private System.Timers.Timer timer;
+        private double duration;
 
         /// <summary>
         /// Toast form which responsible for the right-bottom side toast boxes.
@@ -21,7 +23,7 @@ namespace SharpCrop.Forms
             Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width, Screen.PrimaryScreen.Bounds.Height - Height);
             FormBorderStyle = FormBorderStyle.None;
 
-            interval = duration;
+            this.duration = duration;
             Desc.Text = text;
         }
 
@@ -32,8 +34,8 @@ namespace SharpCrop.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            var timer = new System.Timers.Timer(interval);
+            
+            timer = new System.Timers.Timer(duration);
 
             timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
             {
@@ -51,6 +53,7 @@ namespace SharpCrop.Forms
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
+            timer.Stop();
             Close();
         }
     }

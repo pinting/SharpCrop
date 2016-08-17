@@ -4,6 +4,7 @@ using System;
 using System.Timers;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace SharpCrop.Dropbox.Forms
 {

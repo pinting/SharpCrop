@@ -63,7 +63,11 @@ namespace SharpCrop.Dropbox.Auth
                     Task.Run(() => onToken(null));
                 }
                 
-                Close();
+                Task.Run(() => 
+                {
+                    Task.Delay(2000);
+                    Close();
+                });
             }
             catch (ArgumentException e)
             {
