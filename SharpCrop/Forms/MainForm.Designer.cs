@@ -48,6 +48,7 @@
             // googleDriveButton
             // 
             this.googleDriveButton.BackColor = System.Drawing.Color.PaleGreen;
+            this.googleDriveButton.Enabled = false;
             this.googleDriveButton.Location = new System.Drawing.Point(274, 23);
             this.googleDriveButton.Name = "googleDriveButton";
             this.googleDriveButton.Size = new System.Drawing.Size(251, 244);
@@ -59,6 +60,7 @@
             // oneDriveButton
             // 
             this.oneDriveButton.BackColor = System.Drawing.Color.SandyBrown;
+            this.oneDriveButton.Enabled = false;
             this.oneDriveButton.Location = new System.Drawing.Point(531, 23);
             this.oneDriveButton.Name = "oneDriveButton";
             this.oneDriveButton.Size = new System.Drawing.Size(234, 244);
