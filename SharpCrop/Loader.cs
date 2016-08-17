@@ -74,9 +74,21 @@ namespace SharpCrop
             // Try to register Provider
             provider.Register(SettingsHelper.Memory.Token, (token, state) =>
             {
-                if (token == null && state == ProviderState.ServiceError)
+                if (token == null)
                 {
-                    ToastFactory.CreateToast("Failed to register provider!");
+                    switch(state)
+                    {
+                        case ProviderState.ServiceError:
+                            ToastFactory.CreateToast("Failed to register provider!");
+                            break;
+                        case ProviderState.UserError:
+                            ToastFactory.CreateToast("User aborted the registration!");
+                            break;
+                        case ProviderState.PermissionError:
+                            ToastFactory.CreateToast("You have no permission to do that!");
+                            break;
+                    }
+
                     onResult(null);
                     return;
                 }

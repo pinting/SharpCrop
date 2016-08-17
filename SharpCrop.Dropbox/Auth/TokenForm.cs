@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ComponentModel;
+using SharpCrop.Provider.Models;
 
 namespace SharpCrop.Dropbox.Auth
 {
@@ -11,7 +12,7 @@ namespace SharpCrop.Dropbox.Auth
         private readonly string redirectUrl = "http://localhost/";
         private readonly string disposeUrl = "about:blank";
 
-        private Action<string> onToken;
+        private Action<string, ProviderState> onToken;
         private string authState;
 
         /// <summary>
@@ -32,12 +33,12 @@ namespace SharpCrop.Dropbox.Auth
         /// Callback function setter. The callback will be executed when an AccessToken is found.
         /// </summary>
         /// <param name="onToken"></param>
-        public void OnToken(Action<string> onToken)
+        public void OnToken(Action<string, ProviderState> onToken)
         {
-            this.onToken = new Action<string>(t1 =>
+            this.onToken = new Action<string, ProviderState>((t1, e1) =>
             {
-                this.onToken = new Action<string>(t2 => { });
-                onToken(t1);
+                this.onToken = new Action<string, ProviderState>((t2, e2) => { });
+                onToken(t1, e1);
             });
         }
 
@@ -66,11 +67,11 @@ namespace SharpCrop.Dropbox.Auth
 
                 if (result != null && result.AccessToken != null && result.State == authState)
                 {
-                    Task.Run(() => onToken(result.AccessToken));
+                    Task.Run(() => onToken(result.AccessToken, ProviderState.Normal));
                 }
                 else
                 {
-                    Task.Run(() => onToken(null));
+                    Task.Run(() => onToken(null, ProviderState.ServiceError));
                 }
 
                 // Need to navigate to a blank page to close it, because sometimes IE
@@ -91,7 +92,7 @@ namespace SharpCrop.Dropbox.Auth
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            Task.Run(() => onToken(null));
+            Task.Run(() => onToken(null, ProviderState.UserError));
         }
     }
 }

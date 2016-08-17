@@ -34,21 +34,13 @@ namespace SharpCrop.Dropbox.Forms
 
             Hide();
 
-            grabber.OnToken((string token) =>
+            grabber.OnToken((string token, ProviderState state) =>
             {
                 timer.Stop();
 
                 var action = new Action(() =>
                 {
-                    if (token == null)
-                    {
-                        onToken(null, ProviderState.ServiceError);
-                    }
-                    else
-                    {
-                        onToken(token, ProviderState.Normal);
-                    }
-
+                    onToken(token, state);
                     Close();
                 });
                 
@@ -64,10 +56,7 @@ namespace SharpCrop.Dropbox.Forms
 
             timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
             {
-                Invoke(new Action(() =>
-                {
-                    grabber.Close();
-                }));
+                Invoke(new Action(() => grabber.Close()));
             };
 
             timer.AutoReset = false;
@@ -87,6 +76,7 @@ namespace SharpCrop.Dropbox.Forms
             }
             catch
             {
+                onToken(null, ProviderState.PermissionError);
                 Close();
             }
         }

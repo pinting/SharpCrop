@@ -20,7 +20,7 @@ namespace SharpCrop.Forms
         {
             InitializeComponent();
 
-            Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width, Screen.PrimaryScreen.Bounds.Height - Height);
+            Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width - 5, Screen.PrimaryScreen.Bounds.Height - Height - 5);
 
             this.duration = duration;
             Desc.Text = text;

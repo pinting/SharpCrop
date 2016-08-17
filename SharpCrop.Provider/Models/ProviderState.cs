@@ -5,6 +5,7 @@
          Normal,
          Renewed,
          UserError,
-         ServiceError
+         ServiceError,
+         PermissionError
     }
 }
