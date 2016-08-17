@@ -20,21 +20,10 @@ namespace SharpCrop.Forms
         {
             this.parent = parent;
 
-            SuspendLayout();
-
-            Name = "SharpCrop";
-            Text = "SharpCrop";
+            InitializeComponent();
+            
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
-
-            FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
-            ShowInTaskbar = false;
-            TopMost = true;
-            DoubleBuffered = true;
-            BackColor = Color.White;
-            TransparencyKey = Color.White;
-            Opacity = 0.75;
         }
 
         /// <summary>

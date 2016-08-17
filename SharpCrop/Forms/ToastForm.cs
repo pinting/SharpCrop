@@ -21,7 +21,6 @@ namespace SharpCrop.Forms
             InitializeComponent();
 
             Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width, Screen.PrimaryScreen.Bounds.Height - Height);
-            FormBorderStyle = FormBorderStyle.None;
 
             this.duration = duration;
             Desc.Text = text;
