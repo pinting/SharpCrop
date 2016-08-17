@@ -3,7 +3,6 @@ using System;
 using System.Drawing;
 using Dropbox.Api;
 using Dropbox.Api.Files;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using SharpCrop.Provider.Models;
@@ -75,13 +74,13 @@ namespace SharpCrop.Dropbox
         /// <returns>URL of the uploaded file.</returns>
         public string Upload(Bitmap bitmap)
         {
-            var path = "/" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".png";
+            var path = "/" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + SharpCrop.Provider.Constants.FormatExt;
             byte[] byteArray;
 
             // ByteArray is needed, because Dropbox API will not work with Bitmap
             using (var stream = new MemoryStream())
             {
-                bitmap.Save(stream, ImageFormat.Png);
+                bitmap.Save(stream, SharpCrop.Provider.Constants.Format);
                 stream.Close();
 
                 byteArray = stream.ToArray();

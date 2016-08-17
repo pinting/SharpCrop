@@ -67,6 +67,7 @@
       <DependentUpon>TokenForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Auth\TokenServer.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

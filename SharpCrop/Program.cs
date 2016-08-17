@@ -1,11 +1,12 @@
-﻿using SharpCrop.Utils;
+﻿using SharpCrop.Provider.Utils;
+using SharpCrop.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SharpCrop
 {
-    static class Program
+    public static class Program
     {
         [STAThread]
         public static void Main()

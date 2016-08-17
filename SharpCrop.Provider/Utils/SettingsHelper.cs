@@ -1,14 +1,12 @@
 ﻿using Newtonsoft.Json;
-using SharpCrop.Models;
+using SharpCrop.Provider.Models;
 using System;
 using System.IO;
 
-namespace SharpCrop.Utils
+namespace SharpCrop.Provider.Utils
 {
     public static class SettingsHelper
     {
-        private static readonly string path = "Settings.json";
-
         /// <summary>
         /// In-memory settings.
         /// </summary>
@@ -21,7 +19,7 @@ namespace SharpCrop.Utils
         {
             try
             {
-                Memory = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(path));
+                Memory = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Constants.SettingsPath));
             }
             catch
             {
@@ -37,7 +35,7 @@ namespace SharpCrop.Utils
         {
             try
             {
-                File.WriteAllText(path, JsonConvert.SerializeObject(Memory));
+                File.WriteAllText(Constants.SettingsPath, JsonConvert.SerializeObject(Memory));
             }
             catch(Exception e)
             {

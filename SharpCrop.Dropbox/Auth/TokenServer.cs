@@ -8,11 +8,8 @@ using System.Windows.Forms;
 
 namespace SharpCrop.Dropbox.Auth
 {
-    class TokenServer : IToken
+    public class TokenServer : IToken
     {
-        private readonly string serverPath = Application.StartupPath + "/www";
-        private readonly string redirectUrl = "http://localhost/";
-
         private Action<string, ProviderState> onToken;
         private HttpServer server;
         private string authState;
@@ -22,10 +19,10 @@ namespace SharpCrop.Dropbox.Auth
         /// </summary>
         public TokenServer()
         {
-            server = new HttpServer(serverPath, 80, OnRequest);
+            server = new HttpServer(Application.StartupPath + Constants.ServerPath, 80, OnRequest);
             authState = Guid.NewGuid().ToString("N");
 
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(redirectUrl), authState);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(Constants.RedirectUrl), authState);
 
             System.Diagnostics.Process.Start(url.ToString());
         }

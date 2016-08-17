@@ -4,7 +4,7 @@ using System;
 
 namespace SharpCrop.Dropbox.Auth
 {
-    interface IToken
+    public interface IToken
     {
         void OnToken(Action<string, ProviderState> onToken);
 

@@ -9,9 +9,6 @@ namespace SharpCrop.Dropbox.Auth
 {
     public partial class TokenForm : Form, IToken
     {
-        private readonly string redirectUrl = "http://localhost/";
-        private readonly string disposeUrl = "about:blank";
-
         private Action<string, ProviderState> onToken;
         private string authState;
 
@@ -24,7 +21,7 @@ namespace SharpCrop.Dropbox.Auth
             InitializeComponent();
             authState = Guid.NewGuid().ToString("N");
 
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(redirectUrl), authState);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(Constants.RedirectUrl), authState);
 
             webBrowser.Navigate(url);
         }
@@ -50,13 +47,13 @@ namespace SharpCrop.Dropbox.Auth
         private void OnResponse(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             // Close the form if disposeUrl was loaded
-            if(e.Url.ToString() == disposeUrl)
+            if(e.Url.ToString() == Constants.DisposeUrl)
             {
                 webBrowser.Stop();
                 Close();
             }
 
-            if (!e.Url.ToString().StartsWith(redirectUrl, StringComparison.OrdinalIgnoreCase))
+            if (!e.Url.ToString().StartsWith(Constants.RedirectUrl, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
@@ -76,7 +73,7 @@ namespace SharpCrop.Dropbox.Auth
 
                 // Need to navigate to a blank page to close it, because sometimes IE
                 // opens after the Form is closed.
-                webBrowser.Navigate(disposeUrl);
+                webBrowser.Navigate(Constants.RedirectUrl);
                 Hide();
             }
             catch (ArgumentException ev)

@@ -1,4 +1,5 @@
 ﻿using SharpCrop.Provider;
+using SharpCrop.Provider.Utils;
 using SharpCrop.Utils;
 using System;
 using System.Drawing;

@@ -1,4 +1,4 @@
-﻿namespace SharpCrop.Models
+﻿namespace SharpCrop.Provider.Models
 {
     public class Settings
     {

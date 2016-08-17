@@ -23,7 +23,7 @@ namespace SharpCrop.Forms
             Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width - 5, Screen.PrimaryScreen.Bounds.Height - Height - 5);
 
             this.duration = duration;
-            Desc.Text = text;
+            Description.Text = text;
         }
 
         /// <summary>

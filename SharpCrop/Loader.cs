@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using SharpCrop.Forms;
-using SharpCrop.Models;
+﻿using SharpCrop.Forms;
 using SharpCrop.Provider;
 using SharpCrop.Provider.Models;
+using SharpCrop.Provider.Utils;
 using SharpCrop.Utils;
 using System;
-using System.IO;
-using System.Timers;
 using System.Windows.Forms;
 
 namespace SharpCrop

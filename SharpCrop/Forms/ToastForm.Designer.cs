@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToastForm));
-            this.Desc = new System.Windows.Forms.Label();
+            this.Description = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // Desc
+            // Description
             // 
-            this.Desc.AutoSize = true;
-            this.Desc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.Desc.Location = new System.Drawing.Point(13, 16);
-            this.Desc.Name = "Desc";
-            this.Desc.Size = new System.Drawing.Size(112, 22);
-            this.Desc.TabIndex = 0;
-            this.Desc.Text = "Lorem ispum";
-            this.Desc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Description.AutoSize = true;
+            this.Description.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.Description.Location = new System.Drawing.Point(13, 16);
+            this.Description.Name = "Description";
+            this.Description.Size = new System.Drawing.Size(112, 22);
+            this.Description.TabIndex = 0;
+            this.Description.Text = "Lorem ispum";
+            this.Description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ToastForm
             // 
@@ -49,7 +49,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(400, 60);
             this.ControlBox = false;
-            this.Controls.Add(this.Desc);
+            this.Controls.Add(this.Description);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -70,6 +70,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label Desc;
+        private System.Windows.Forms.Label Description;
     }
 }
