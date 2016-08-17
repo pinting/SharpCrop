@@ -11,7 +11,7 @@ namespace SharpCrop.Dropbox.Auth
         private readonly string redirectUrl = "http://localhost/";
         private readonly string disposeUrl = "about:blank";
 
-        private Action<OAuth2Response> onToken;
+        private Action<string> onToken;
         private string authState;
 
         /// <summary>
@@ -32,11 +32,11 @@ namespace SharpCrop.Dropbox.Auth
         /// Callback function setter. The callback will be executed when an AccessToken is found.
         /// </summary>
         /// <param name="onToken"></param>
-        public void OnToken(Action<OAuth2Response> onToken)
+        public void OnToken(Action<string> onToken)
         {
-            this.onToken = new Action<OAuth2Response>(t1 =>
+            this.onToken = new Action<string>(t1 =>
             {
-                this.onToken = new Action<OAuth2Response>(t2 => { });
+                this.onToken = new Action<string>(t2 => { });
                 onToken(t1);
             });
         }
@@ -48,7 +48,7 @@ namespace SharpCrop.Dropbox.Auth
         /// <param name="e"></param>
         private void OnResponse(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            // Close the form if disposeUrl was loaded - usually about:blank
+            // Close the form if disposeUrl was loaded
             if(e.Url.ToString() == disposeUrl)
             {
                 webBrowser.Stop();
@@ -64,9 +64,9 @@ namespace SharpCrop.Dropbox.Auth
             {
                 OAuth2Response result = DropboxOAuth2Helper.ParseTokenFragment(e.Url);
 
-                if (result.State == authState)
+                if (result != null && result.AccessToken != null && result.State == authState)
                 {
-                    Task.Run(() => onToken(result));
+                    Task.Run(() => onToken(result.AccessToken));
                 }
                 else
                 {

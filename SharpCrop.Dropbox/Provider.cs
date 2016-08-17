@@ -6,6 +6,7 @@ using Dropbox.Api.Files;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
+using SharpCrop.Provider.Models;
 
 namespace SharpCrop.Dropbox
 {
@@ -32,7 +33,7 @@ namespace SharpCrop.Dropbox
         /// </summary>
         /// <param name="token"></param>
         /// <param name="onResult"></param>
-        public void Register(string token, Action<string> onResult)
+        public void Register(string token, Action<string, ProviderState> onResult)
         {
             try
             {
@@ -46,18 +47,21 @@ namespace SharpCrop.Dropbox
                 client = new DropboxClient(token, config);
                 client.Users.GetSpaceUsageAsync().Wait();
 
-                onResult(token);
+                onResult(token, ProviderState.Normal);
             }
             catch
             {
-                var form = new Forms.MainForm(newToken =>
+                var form = new Forms.MainForm((newToken, state) =>
                 {
                     if(newToken != null)
                     {
                         client = new DropboxClient(newToken, config);
+                        onResult(newToken, ProviderState.Renewed);
                     }
-
-                    onResult(newToken);
+                    else
+                    {
+                        onResult(newToken, state);
+                    }
                 });
 
                 form.Show();

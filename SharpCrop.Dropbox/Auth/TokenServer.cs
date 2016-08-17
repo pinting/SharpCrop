@@ -12,7 +12,7 @@ namespace SharpCrop.Dropbox.Auth
         private readonly string serverPath = Application.StartupPath + "/www";
         private readonly string redirectUrl = "http://localhost/";
 
-        private Action<OAuth2Response> onToken;
+        private Action<string> onToken;
         private HttpServer server;
         private string authState;
 
@@ -33,11 +33,11 @@ namespace SharpCrop.Dropbox.Auth
         /// Callback function setter. The callback will be executed when an AccessToken is found.
         /// </summary>
         /// <param name="onToken"></param>
-        public void OnToken(Action<OAuth2Response> onToken)
+        public void OnToken(Action<string> onToken)
         {
-            this.onToken = new Action<OAuth2Response>(t1 =>
+            this.onToken = new Action<string>(t1 =>
             {
-                this.onToken = new Action<OAuth2Response>(t2 => { });
+                this.onToken = new Action<string>(t2 => { });
                 onToken(t1);
             });
         }
@@ -54,9 +54,9 @@ namespace SharpCrop.Dropbox.Auth
             {
                 OAuth2Response result = DropboxOAuth2Helper.ParseTokenFragment(url);
 
-                if (result.State == authState)
+                if (result != null && result.AccessToken != null && result.State == authState)
                 {
-                    Task.Run(() => onToken(result));
+                    Task.Run(() => onToken(result.AccessToken));
                 }
                 else
                 {

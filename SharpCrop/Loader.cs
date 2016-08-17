@@ -2,6 +2,7 @@
 using SharpCrop.Forms;
 using SharpCrop.Models;
 using SharpCrop.Provider;
+using SharpCrop.Provider.Models;
 using SharpCrop.Utils;
 using System;
 using System.IO;
@@ -71,22 +72,19 @@ namespace SharpCrop
             }
             
             // Try to register Provider
-            provider.Register(SettingsHelper.Memory.Token, token =>
+            provider.Register(SettingsHelper.Memory.Token, (token, state) =>
             {
-                // On failure - exited by user or something went wrong
-                if (token == null)
+                if (token == null && state == ProviderState.ServiceError)
                 {
                     ToastFactory.CreateToast("Failed to register provider!");
                     onResult(null);
                     return;
                 }
-
-                // When a new token was created because the old one was expired
-                if (SettingsHelper.Memory.Token != token)
+                
+                if (state == ProviderState.Renewed)
                 {
                     SettingsHelper.Memory.Provider = name;
                     SettingsHelper.Memory.Token = token;
-
                     ToastFactory.CreateToast("Successfully registered provider!");
                 }
 
