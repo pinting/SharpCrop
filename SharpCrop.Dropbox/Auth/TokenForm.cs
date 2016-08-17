@@ -48,6 +48,7 @@ namespace SharpCrop.Dropbox.Auth
         /// <param name="e"></param>
         private void OnResponse(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            // Close the form if disposeUrl was loaded - usually about:blank
             if(e.Url.ToString() == disposeUrl)
             {
                 webBrowser.Stop();
@@ -72,6 +73,8 @@ namespace SharpCrop.Dropbox.Auth
                     Task.Run(() => onToken(null));
                 }
 
+                // Need to navigate to a blank page to close it, because sometimes IE
+                // opens after the Form is closed.
                 webBrowser.Navigate(disposeUrl);
                 Hide();
             }

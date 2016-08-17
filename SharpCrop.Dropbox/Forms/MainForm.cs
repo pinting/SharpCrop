@@ -68,7 +68,6 @@ namespace SharpCrop.Dropbox.Forms
                 Invoke(new Action(() =>
                 {
                     grabber.Close();
-                    Close();
                 }));
             };
 
