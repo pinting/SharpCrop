@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B8779394-3FCB-4CCC-96EC-2BF2D4827A16}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharpCrop</RootNamespace>
     <AssemblyName>SharpCrop</AssemblyName>
@@ -86,14 +86,11 @@
       <DependentUpon>ToastForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Loader.cs" />
-    <Compile Include="Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Utils\CaptureHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\SettingsHelper.cs" />
     <Compile Include="Utils\ToastFactory.cs" />
     <EmbeddedResource Include="Forms\ClickForm.resx">
       <DependentUpon>ClickForm.cs</DependentUpon>
@@ -118,10 +115,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
-    <None Include="Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,6 +1,4 @@
-﻿using SharpCrop.Forms;
-using SharpCrop.Provider;
-using SharpCrop.Utils;
+﻿using SharpCrop.Utils;
 using System;
 using System.Windows.Forms;
 
@@ -11,9 +9,13 @@ namespace SharpCrop
         [STAThread]
         public static void Main()
         {
+            SettingsHelper.Load();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Loader());
+
+            SettingsHelper.Save();
         }
     }
 }

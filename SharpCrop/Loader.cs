@@ -1,7 +1,10 @@
-﻿using SharpCrop.Forms;
+﻿using Newtonsoft.Json;
+using SharpCrop.Forms;
+using SharpCrop.Models;
 using SharpCrop.Provider;
 using SharpCrop.Utils;
 using System;
+using System.IO;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -9,8 +12,8 @@ namespace SharpCrop
 {
     public class Loader : ApplicationContext
     {
-        private MainForm mainForm = null;
-        private ClickForm clickForm;
+        private Form mainForm = null;
+        private Form clickForm;
 
         /// <summary>
         /// Loader is responsible for the loading of the application - bah. It gonna try to load
@@ -18,7 +21,7 @@ namespace SharpCrop
         /// </summary>
         public Loader()
         {
-            LoadForm(Settings.Default.Provider);
+            LoadForm(SettingsHelper.Memory.Provider);
         }
 
         /// <summary>
@@ -68,7 +71,7 @@ namespace SharpCrop
             }
             
             // Try to register Provider
-            provider.Register(Settings.Default.Token, token =>
+            provider.Register(SettingsHelper.Memory.Token, token =>
             {
                 // On failure - exited by user or something went wrong
                 if (token == null)
@@ -79,11 +82,10 @@ namespace SharpCrop
                 }
 
                 // When a new token was created because the old one was expired
-                if (Settings.Default.Token != token)
+                if (SettingsHelper.Memory.Token != token)
                 {
-                    Settings.Default.Provider = name;
-                    Settings.Default.Token = token;
-                    Settings.Default.Save();
+                    SettingsHelper.Memory.Provider = name;
+                    SettingsHelper.Memory.Token = token;
 
                     ToastFactory.CreateToast("Successfully registered provider!");
                 }

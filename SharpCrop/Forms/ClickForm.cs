@@ -69,7 +69,7 @@ namespace SharpCrop.Forms
                     Application.Exit();
                     break;
                 case Keys.F1:
-                    Settings.Default.Reset();
+                    SettingsHelper.Reset();
                     Application.Exit();
                     break;
             }
