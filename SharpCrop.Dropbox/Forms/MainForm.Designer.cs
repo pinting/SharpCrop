@@ -35,7 +35,7 @@
             // 
             // externalLogin
             // 
-            this.externalLogin.Location = new System.Drawing.Point(12, 12);
+            this.externalLogin.Location = new System.Drawing.Point(10, 12);
             this.externalLogin.Name = "externalLogin";
             this.externalLogin.Size = new System.Drawing.Size(752, 88);
             this.externalLogin.TabIndex = 0;
@@ -46,7 +46,7 @@
             // internalLogin
             // 
             this.internalLogin.AutoSize = true;
-            this.internalLogin.Location = new System.Drawing.Point(280, 103);
+            this.internalLogin.Location = new System.Drawing.Point(285, 103);
             this.internalLogin.Name = "internalLogin";
             this.internalLogin.Size = new System.Drawing.Size(206, 20);
             this.internalLogin.TabIndex = 1;
@@ -54,17 +54,17 @@
             this.internalLogin.Text = "Login using internal browser";
             this.internalLogin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.InternalLogin);
             // 
-            // StartForm
+            // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(770, 118);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(770, 129);
             this.Controls.Add(this.internalLogin);
             this.Controls.Add(this.externalLogin);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(792, 174);
-            this.MinimumSize = new System.Drawing.Size(792, 174);
-            this.Name = "StartForm";
+            this.MaximumSize = new System.Drawing.Size(792, 185);
+            this.MinimumSize = new System.Drawing.Size(792, 185);
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
