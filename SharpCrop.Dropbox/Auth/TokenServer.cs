@@ -29,9 +29,7 @@ namespace SharpCrop.Dropbox.Auth
 
             System.Diagnostics.Process.Start(url.ToString());
 
-            waitForm = new WaitForm();
-            waitForm.SetLink(url.ToString());
-            waitForm.Show();
+            waitForm = new WaitForm(url.ToString());
             waitForm.FormClosed += (object sender, FormClosedEventArgs e) =>
             {
                 if(!closed)
@@ -39,6 +37,7 @@ namespace SharpCrop.Dropbox.Auth
                     Close();
                 }
             };
+            waitForm.Show();
         }
 
         /// <summary>

@@ -8,23 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpCrop.Dropbox.Forms
+namespace SharpCrop.Forms
 {
-    public partial class WaitForm : Form
+    public partial class CopyForm : Form
     {
-        string link;
-
-        public WaitForm(string url)
+        public CopyForm(string url)
         {
             InitializeComponent();
 
             linkBox.Text = url;
-            link = url;
-        }
-
-        private void Clicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start(link);
         }
     }
 }

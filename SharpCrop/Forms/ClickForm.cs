@@ -57,13 +57,28 @@ namespace SharpCrop.Forms
 
 				var url = provider.Upload (name, stream);
 
-				if (ConfigHelper.Memory.Copy) 
-				{
-					Clipboard.SetText(url);
-				}
-			}
+				if (ConfigHelper.Memory.Copy)
+                {
+                    #if __MonoCS__
+
+                    var form = new CopyForm();
+                    form.SetLink(url);
+                    form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
+                    form.Show();
+
+                    #else
+
+                    Clipboard.SetText(url);
+
+                    #endif
+                }
+            }
+
+            #if __MonoCS__
 
 			ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit ());
+
+            #endif
         }
 
         /// <summary>
@@ -99,7 +114,7 @@ namespace SharpCrop.Forms
             }
         }
 
-        #region Mouse Events
+#region Mouse Events
 
         /* These mouse events are binded to DrawForm */
 
@@ -127,6 +142,6 @@ namespace SharpCrop.Forms
             drawForm.CallOnPaint(e);
         }
 
-        #endregion
+#endregion
     }
 }
