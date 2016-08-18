@@ -73,7 +73,7 @@ namespace SharpCrop.Forms
                 }
             }
 
-            #if __MonoCS__
+            #if !__MonoCS__
 
 			ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit ());
 
