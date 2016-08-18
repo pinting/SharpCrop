@@ -61,9 +61,8 @@
             this.ClientSize = new System.Drawing.Size(770, 129);
             this.Controls.Add(this.internalLogin);
             this.Controls.Add(this.externalLogin);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(792, 185);
-            this.MinimumSize = new System.Drawing.Size(792, 185);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";

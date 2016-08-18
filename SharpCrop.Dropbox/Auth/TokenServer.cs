@@ -24,11 +24,7 @@ namespace SharpCrop.Dropbox.Auth
 
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Constants.ClientId, new Uri(Constants.RedirectUrl), authState);
 
-			#if __MonoCS__
-			System.Diagnostics.Process.Start("xdg-open", url.ToString());
-			#else
 			System.Diagnostics.Process.Start(url.ToString());
-			#endif
         }
 
         /// <summary>
