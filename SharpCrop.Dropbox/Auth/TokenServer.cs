@@ -1,4 +1,5 @@
 ﻿using Dropbox.Api;
+using SharpCrop.Dropbox.Forms;
 using SharpCrop.Provider.Models;
 using SharpCrop.Provider.Utils;
 using System;
@@ -11,6 +12,7 @@ namespace SharpCrop.Dropbox.Auth
     public class TokenServer : IToken
     {
         private Action<string, ProviderState> onToken;
+        private WaitForm waitForm;
         private HttpServer server;
         private string authState;
 
@@ -24,7 +26,12 @@ namespace SharpCrop.Dropbox.Auth
 
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Constants.ClientId, new Uri(Constants.RedirectUrl), authState);
 
-			System.Diagnostics.Process.Start(url.ToString());
+            System.Diagnostics.Process.Start(url.ToString());
+
+            waitForm = new WaitForm();
+            waitForm.SetLink(url.ToString());
+            waitForm.Show();
+            waitForm.FormClosed += (object sender, FormClosedEventArgs e) => Close();
         }
 
         /// <summary>

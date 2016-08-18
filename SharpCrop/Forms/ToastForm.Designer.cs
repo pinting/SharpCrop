@@ -29,31 +29,31 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToastForm));
-            this.Description = new System.Windows.Forms.Label();
+            this.label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // Description
+            // label
             // 
-            this.Description.AutoSize = true;
-            this.Description.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.Description.Location = new System.Drawing.Point(13, 16);
-            this.Description.Name = "Description";
-            this.Description.Size = new System.Drawing.Size(112, 22);
-            this.Description.TabIndex = 0;
-            this.Description.Text = "Lorem ispum";
-            this.Description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label.AutoSize = true;
+            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.label.Location = new System.Drawing.Point(13, 16);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(112, 22);
+            this.label.TabIndex = 0;
+            this.label.Text = "Lorem ispum";
+            this.label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ToastForm
-			//
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(400, 60);
             this.ControlBox = false;
-            this.Controls.Add(this.Description);
+            this.Controls.Add(this.label);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-			this.MinimizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ToastForm";
             this.Opacity = 0.9D;
             this.ShowIcon = false;
@@ -68,6 +68,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label Description;
+        private System.Windows.Forms.Label label;
     }
 }
