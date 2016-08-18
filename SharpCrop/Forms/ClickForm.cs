@@ -61,8 +61,7 @@ namespace SharpCrop.Forms
                 {
                     #if __MonoCS__
 
-                    var form = new CopyForm();
-                    form.SetLink(url);
+                    var form = new CopyForm(url);
                     form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
                     form.Show();
 
