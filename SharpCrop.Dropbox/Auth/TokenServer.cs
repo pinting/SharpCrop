@@ -24,7 +24,11 @@ namespace SharpCrop.Dropbox.Auth
 
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Constants.ClientId, new Uri(Constants.RedirectUrl), authState);
 
-            System.Diagnostics.Process.Start(url.ToString());
+			#if __MonoCS__
+			System.Diagnostics.Process.Start("xdg-open", url.ToString());
+			#else
+			System.Diagnostics.Process.Start(url.ToString());
+			#endif
         }
 
         /// <summary>
@@ -54,18 +58,17 @@ namespace SharpCrop.Dropbox.Auth
 
                 if (result != null && result.AccessToken != null && result.State == authState)
                 {
-                    Task.Run(() => onToken(result.AccessToken, ProviderState.Normal));
+					Task.Run(() => 
+					{
+						onToken(result.AccessToken, ProviderState.Normal);
+						Task.Delay(2000);
+						Close();
+					});
                 }
                 else
                 {
                     Task.Run(() => onToken(null, ProviderState.ServiceError));
                 }
-                
-                Task.Run(() => 
-                {
-                    Task.Delay(2000);
-                    Close();
-                });
             }
             catch (ArgumentException e)
             {
