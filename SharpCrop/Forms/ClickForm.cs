@@ -5,6 +5,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace SharpCrop.Forms
 {
@@ -36,28 +38,32 @@ namespace SharpCrop.Forms
         /// <param name="r">Bitmap position, size</param>
         public void Upload(Rectangle r)
         {
-            // Hide click and draw form
-            Hide();
-            drawForm.Hide();
-            Application.DoEvents();
+			Hide ();
+			drawForm.Hide ();
+			Application.DoEvents();
 
-            // Get Bitmap, upload it and return the URL
-            var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
-            var bitmap = CaptureHelper.GetBitmap(r);
+			#if __MonoCS__
 
-            using(var stream = new MemoryStream())
-            {
-                bitmap.Save(stream, ConfigHelper.Memory.FormatType);
+			Thread.Sleep(500);
 
-                var url = provider.Upload(name, stream);
+			#endif
 
-                if(ConfigHelper.Memory.Copy)
-                {
-                    Clipboard.SetText(url);
-                }
-            }
+			var name = DateTime.Now.ToString ("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
+			var bitmap = CaptureHelper.GetBitmap (r);
 
-            ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit());
+			using (var stream = new MemoryStream ()) 
+			{
+				bitmap.Save (stream, ConfigHelper.Memory.FormatType);
+
+				var url = provider.Upload (name, stream);
+
+				if (ConfigHelper.Memory.Copy) 
+				{
+					Clipboard.SetText(url);
+				}
+			}
+
+			ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit ());
         }
 
         /// <summary>

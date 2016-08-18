@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace SharpCrop.Utils
 {
@@ -14,7 +15,7 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static Bitmap GetBitmap(Rectangle r)
         {
-            var s = GetScaling();
+            var s = ConfigHelper.Memory.NoScaling ? 1.0f : GetScaling();
             var rs = new Rectangle((int)((float)r.X * s), (int)((float)r.Y * s), (int)((float)r.Width * s), (int)((float)r.Height * s));
 
             var bitmap = new Bitmap(rs.Width, rs.Height, PixelFormat.Format32bppArgb);
@@ -33,7 +34,14 @@ namespace SharpCrop.Utils
 		/// <returns></returns>
 		public static float GetScaling()
 		{
-			return 1.0f;
+            float result;
+
+            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                result = graphics.DpiX / 96;
+            }
+
+            return result;
 		}
 
         #else

@@ -15,7 +15,10 @@ namespace SharpCrop.Models
         public string Format { get; set; }
 
         [JsonProperty]
-        public bool Copy { get; set; }
+        public bool NoCopy { get; set; }
+
+		[JsonProperty]
+		public bool NoScaling { get; set; }
 
         [JsonIgnore]
         public ImageFormat FormatType
@@ -51,6 +54,15 @@ namespace SharpCrop.Models
                         return "png";
                 }
             }
-        }
+		}
+
+		[JsonIgnore]
+		public bool Copy
+		{
+			get 
+			{
+				return !NoCopy;
+			}
+		}
     }
 }

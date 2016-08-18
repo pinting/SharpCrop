@@ -71,7 +71,7 @@ namespace SharpCrop.Dropbox.Auth
 					Task.Run(() => 
 					{
 						onToken(result.AccessToken, ProviderState.Normal);
-						Task.Delay(2000);
+						Task.Delay(2000).Wait();
 						Close();
 					});
                 }
