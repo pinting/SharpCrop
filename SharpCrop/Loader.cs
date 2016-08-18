@@ -19,7 +19,7 @@ namespace SharpCrop
         /// </summary>
         public Loader()
         {
-            LoadForm(SettingsHelper.Memory.Provider);
+            LoadForm(ConfigHelper.Memory.Provider);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SharpCrop
             }
             
             // Try to register Provider
-            provider.Register(SettingsHelper.Memory.Token, (token, state) =>
+            provider.Register(ConfigHelper.Memory.Token, (token, state) =>
             {
                 if (token == null)
                 {
@@ -90,10 +90,10 @@ namespace SharpCrop
                     return;
                 }
                 
-                if (state == ProviderState.Renewed)
+                if (state == ProviderState.Refresh)
                 {
-                    SettingsHelper.Memory.Provider = name;
-                    SettingsHelper.Memory.Token = token;
+                    ConfigHelper.Memory.Provider = name;
+                    ConfigHelper.Memory.Token = token;
                     ToastFactory.CreateToast("Successfully registered provider!");
                 }
 

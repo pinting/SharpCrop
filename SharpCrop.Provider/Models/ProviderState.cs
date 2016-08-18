@@ -3,7 +3,7 @@
     public enum ProviderState
     {
          Normal,
-         Renewed,
+         Refresh,
          UserError,
          ServiceError,
          PermissionError

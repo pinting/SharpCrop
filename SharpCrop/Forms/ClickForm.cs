@@ -3,6 +3,7 @@ using SharpCrop.Provider.Utils;
 using SharpCrop.Utils;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
@@ -41,10 +42,21 @@ namespace SharpCrop.Forms
             Application.DoEvents();
 
             // Get Bitmap, upload it and return the URL
+            var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
             var bitmap = CaptureHelper.GetBitmap(r);
-            var url = provider.Upload(bitmap);
 
-            Clipboard.SetText(url);
+            using(var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ConfigHelper.Memory.FormatType);
+
+                var url = provider.Upload(name, stream);
+
+                if(ConfigHelper.Memory.Copy)
+                {
+                    Clipboard.SetText(url);
+                }
+            }
+
             ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit());
         }
 
@@ -62,7 +74,7 @@ namespace SharpCrop.Forms
                     Application.Exit();
                     break;
                 case Keys.F1:
-                    SettingsHelper.Reset();
+                    ConfigHelper.Reset();
                     Application.Exit();
                     break;
             }

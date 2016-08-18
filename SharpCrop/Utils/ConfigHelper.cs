@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
-using SharpCrop.Provider.Models;
+using SharpCrop.Models;
 using System;
 using System.IO;
 
-namespace SharpCrop.Provider.Utils
+namespace SharpCrop.Utils
 {
-    public static class SettingsHelper
+    public static class ConfigHelper
     {
         /// <summary>
         /// In-memory settings.
         /// </summary>
-        public static Settings Memory;
+        public static Config Memory;
 
         /// <summary>
         /// Load settings into memory.
@@ -19,11 +19,11 @@ namespace SharpCrop.Provider.Utils
         {
             try
             {
-                Memory = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Constants.SettingsPath));
+                Memory = JsonConvert.DeserializeObject<Config>(File.ReadAllText(Constants.SettingsPath));
             }
             catch
             {
-                Memory = new Settings();
+                Memory = new Config();
             }
 
         }
@@ -48,7 +48,7 @@ namespace SharpCrop.Provider.Utils
         /// </summary>
         public static void Reset()
         {
-            Memory = new Settings();
+            Memory = new Config();
         }
     }
 }

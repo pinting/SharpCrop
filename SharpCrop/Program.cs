@@ -16,13 +16,13 @@ namespace SharpCrop
                 SetProcessDPIAware();
             }
 
-            SettingsHelper.Load();
+            ConfigHelper.Load();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Loader());
 
-            SettingsHelper.Save();
+            ConfigHelper.Save();
         }
 
         [DllImport("user32.dll")]

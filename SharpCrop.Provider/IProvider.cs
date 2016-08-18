@@ -1,6 +1,6 @@
 ﻿using SharpCrop.Provider.Models;
 using System;
-using System.Drawing;
+using System.IO;
 
 namespace SharpCrop.Provider
 {
@@ -8,6 +8,6 @@ namespace SharpCrop.Provider
     {
         void Register(string token, Action<string, ProviderState> onResult);
 
-        string Upload(Bitmap bitmap);
+        string Upload(string name, MemoryStream stream);
     }
 }

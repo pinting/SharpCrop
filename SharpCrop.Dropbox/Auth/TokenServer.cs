@@ -22,7 +22,7 @@ namespace SharpCrop.Dropbox.Auth
             server = new HttpServer(Application.StartupPath + Constants.ServerPath, 80, OnRequest);
             authState = Guid.NewGuid().ToString("N");
 
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Provider.ClientId, new Uri(Constants.RedirectUrl), authState);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, Constants.ClientId, new Uri(Constants.RedirectUrl), authState);
 
             System.Diagnostics.Process.Start(url.ToString());
         }

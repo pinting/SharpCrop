@@ -1,6 +1,5 @@
 ﻿using SharpCrop.Provider;
 using System;
-using System.Drawing;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using System.IO;
@@ -11,8 +10,6 @@ namespace SharpCrop.Dropbox
 {
     public class Provider : IProvider
     {
-        public static readonly string ClientId = "cou3krww0do592i";
-
         private DropboxClientConfig config;
         private HttpClient httpClient;
         private DropboxClient client;
@@ -55,7 +52,7 @@ namespace SharpCrop.Dropbox
                     if(newToken != null)
                     {
                         client = new DropboxClient(newToken, config);
-                        onResult(newToken, ProviderState.Renewed);
+                        onResult(newToken, ProviderState.Refresh);
                     }
                     else
                     {
@@ -72,23 +69,14 @@ namespace SharpCrop.Dropbox
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns>URL of the uploaded file.</returns>
-        public string Upload(Bitmap bitmap)
+        public string Upload(string name, MemoryStream stream)
         {
-            var path = "/" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + SharpCrop.Provider.Constants.FormatExt;
-            byte[] byteArray;
+            var path = "/" + name;
 
-            // ByteArray is needed, because Dropbox API will not work with Bitmap
-            using (var stream = new MemoryStream())
+            // This is needed, because Dropbox API will not work otherwise - I do not know why
+            using (var newStream = new MemoryStream(stream.ToArray()))
             {
-                bitmap.Save(stream, SharpCrop.Provider.Constants.Format);
-                stream.Close();
-
-                byteArray = stream.ToArray();
-            }
-
-            using (var stream = new MemoryStream(byteArray))
-            {
-                client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream).Wait();
+                client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: newStream).Wait();
             }
 
             var meta = client.Sharing.CreateSharedLinkWithSettingsAsync(path).Result;
