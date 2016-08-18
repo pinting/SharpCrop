@@ -20,7 +20,6 @@ namespace SharpCrop.Provider.Utils
         private HttpListener listener;
         private Thread thread;
         private string root;
-        private int port;
 
         /// <summary>
         /// Construct a HTTP server with given port. Written by `aksakalli`!
@@ -31,7 +30,6 @@ namespace SharpCrop.Provider.Utils
         public HttpServer(string root, int port, Action<HttpListenerRequest> onRequest)
         {
             this.onRequest = onRequest;
-            this.port = port;
             this.root = root;
 
             listener = new HttpListener();

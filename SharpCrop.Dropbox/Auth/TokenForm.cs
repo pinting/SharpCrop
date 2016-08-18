@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
 using SharpCrop.Provider.Models;
 
 namespace SharpCrop.Dropbox.Auth
