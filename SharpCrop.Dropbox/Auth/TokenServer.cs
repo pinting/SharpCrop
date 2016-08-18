@@ -15,6 +15,7 @@ namespace SharpCrop.Dropbox.Auth
         private WaitForm waitForm;
         private HttpServer server;
         private string authState;
+        private bool closed = false;
 
         /// <summary>
         /// TokenServer can create a HTTP server on port 80 and listen for a Dropbox AccessToken.
@@ -31,7 +32,13 @@ namespace SharpCrop.Dropbox.Auth
             waitForm = new WaitForm();
             waitForm.SetLink(url.ToString());
             waitForm.Show();
-            waitForm.FormClosed += (object sender, FormClosedEventArgs e) => Close();
+            waitForm.FormClosed += (object sender, FormClosedEventArgs e) =>
+            {
+                if(!closed)
+                {
+                    Close();
+                }
+            };
         }
 
         /// <summary>
@@ -84,8 +91,19 @@ namespace SharpCrop.Dropbox.Auth
         /// </summary>
         public void Close()
         {
-            onToken(null, ProviderState.UserError);
+            closed = true;
+
+            if(waitForm.InvokeRequired)
+            {
+                waitForm.Invoke(new Action(() => waitForm.Close()));
+            }
+            else
+            {
+                waitForm.Close();
+            }
+
             server.Stop();
+            onToken(null, ProviderState.UserError);
         }
     }
 }

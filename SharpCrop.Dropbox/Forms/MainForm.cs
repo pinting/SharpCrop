@@ -1,7 +1,5 @@
-﻿using Dropbox.Api;
-using SharpCrop.Dropbox.Auth;
+﻿using SharpCrop.Dropbox.Auth;
 using System;
-using System.Timers;
 using System.Windows.Forms;
 using SharpCrop.Provider.Models;
 

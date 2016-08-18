@@ -4,19 +4,26 @@
     <title>SharpCrop</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-        h1 {
+        body {
             text-align: center;
             margin: 50px;
         }
     </style>
 </head>
 <body>
-    <h1>SharpCrop connected!</h1>
+    <noscript>
+        Oops! Turn on JavaScript or change # to ? in the URL!
+    </noscript>
     <script>
         var hash = location.hash.substr(1);
+        var url = location.origin + location.pathname + "?" + hash;
 
-        if (hash.length > 10) {
-            location.href = location.origin + "?" + hash;
+        if (hash.length > 0) {
+            document.write("<h1><a href=\"" + url + "\">Allow</a></h1>");
+            location.href = url;
+        }
+        else {
+            document.write("<h1>SharpCrop connected!</h1>");
         }
     </script>
 </body>

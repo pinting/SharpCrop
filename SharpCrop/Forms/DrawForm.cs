@@ -21,9 +21,17 @@ namespace SharpCrop.Forms
             this.parent = parent;
 
             InitializeComponent();
-            
+
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
+
+            #if __MonoCS__
+
+            this.TransparencyKey = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.Black;
+            this.Opacity = 0.20D;
+
+            #endif
         }
 
         /// <summary>

@@ -24,11 +24,11 @@ namespace SharpCrop.Utils
 
             return bitmap;
         }
-        
-		#if __MonoCS__
+
+        #if __MonoCS__
 
 		/// <summary>
-		/// Get the percentage of scalling for .
+		/// Get the percentage of scalling for Mono on Linux.
 		/// </summary>
 		/// <returns></returns>
 		public static float GetScaling()
@@ -36,26 +36,27 @@ namespace SharpCrop.Utils
 			return 1.0f;
 		}
 
-		#else 
+        #else
 
-		/// <summary>
-		/// Get the percentage of scaling for .NET on Windows.
-		/// </summary>
-		/// <returns></returns>
-		public static float GetScaling()
-		{
-		Graphics gfx = Graphics.FromHwnd(IntPtr.Zero);
-		IntPtr desktop = gfx.GetHdc();
+        /// <summary>
+        /// Get the percentage of scaling for .NET on Windows.
+        /// </summary>
+        /// <returns></returns>
+        public static float GetScaling()
+        {
+            Graphics gfx = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = gfx.GetHdc();
 
-		int logicalHeight = GetDeviceCaps(desktop, 10);
-		int physicalHeight = GetDeviceCaps(desktop, 117);
+            int logicalHeight = GetDeviceCaps(desktop, 10);
+            int physicalHeight = GetDeviceCaps(desktop, 117);
 
-		return (float)physicalHeight / (float)logicalHeight;
-		}
+            return (float)physicalHeight / (float)logicalHeight;
+        }
 
-		[DllImport("gdi32.dll")]
-		static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        [DllImport("gdi32.dll")]
+        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
-		#endif
+        #endif
+
     }
 }
