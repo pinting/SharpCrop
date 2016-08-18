@@ -74,10 +74,18 @@ namespace SharpCrop.Dropbox.Forms
         /// <param name="e"></param>
         private void InternalLogin(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            #if __MonoCS__
+
+            MessageBox.Show("Internal login not supported in Mono!");
+
+            #else
+
             var form = new TokenForm();
 
             form.Show();
             WaitForToken(form);
+
+            #endif
         }
 
         protected override void OnClosed(EventArgs e)
