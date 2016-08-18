@@ -37,13 +37,13 @@
             // 
             this.linkBox.Location = new System.Drawing.Point(12, 44);
             this.linkBox.Name = "linkBox";
-            this.linkBox.Size = new System.Drawing.Size(423, 26);
+            this.linkBox.Size = new System.Drawing.Size(603, 26);
             this.linkBox.TabIndex = 0;
             // 
             // linkLabel
             // 
             this.linkLabel.AutoSize = true;
-            this.linkLabel.Location = new System.Drawing.Point(12, 9);
+            this.linkLabel.Location = new System.Drawing.Point(97, 9);
             this.linkLabel.Name = "linkLabel";
             this.linkLabel.Size = new System.Drawing.Size(423, 20);
             this.linkLabel.TabIndex = 1;
@@ -55,7 +55,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(442, 83);
+            this.ClientSize = new System.Drawing.Size(627, 83);
             this.Controls.Add(this.linkLabel);
             this.Controls.Add(this.linkBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

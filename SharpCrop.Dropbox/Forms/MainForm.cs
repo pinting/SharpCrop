@@ -30,14 +30,10 @@ namespace SharpCrop.Dropbox.Forms
         /// <param name="grabber"></param>
         private void WaitForToken(IToken grabber)
         {
-            var timer = new System.Timers.Timer(1000 * 60 * 3);
-
             Hide();
 
             grabber.OnToken((string token, ProviderState state) =>
             {
-                timer.Stop();
-
                 var action = new Action(() =>
                 {
                     onToken(token, state);
@@ -53,14 +49,6 @@ namespace SharpCrop.Dropbox.Forms
                     action();
                 }
             });
-
-            timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
-            {
-                Invoke(new Action(() => grabber.Close()));
-            };
-
-            timer.AutoReset = false;
-            timer.Enabled = true;
         }
 
         /// <summary>
