@@ -8,7 +8,7 @@ using SharpCrop.Provider.Models;
 
 namespace SharpCrop.Dropbox
 {
-    class Provider : IProvider
+    public class Provider : IProvider
     {
         private DropboxClientConfig config;
         private HttpClient httpClient;
