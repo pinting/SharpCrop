@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop", "SharpCrop\Shar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{734E6433-F725-44E7-B46C-FC6F107A34D2}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		icon.ico = icon.ico
 		LICENSE = LICENSE
 		README.md = README.md

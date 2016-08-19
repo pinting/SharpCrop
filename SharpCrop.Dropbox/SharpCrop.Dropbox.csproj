@@ -41,8 +41,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Creds.cs" />
-    <Compile Include="CredsHolder.cs" />
+    <Compile Include="Credentials\Holder.Sample.cs" />
+    <Compile Include="Credentials\Holder.cs" />
+    <Compile Include="Credentials\Holder.Secret.cs" />
     <Compile Include="Provider.cs" />
   </ItemGroup>
   <ItemGroup>

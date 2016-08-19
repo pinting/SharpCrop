@@ -11,11 +11,6 @@ namespace SharpCrop
         [STAThread]
         public static void Main()
         {
-            Console.WriteLine("{0} - {1}", Dropbox.Creds.Key, Dropbox.Creds.Secret);
-            Console.Read();
-
-            return;
-
             if (Environment.OSVersion.Version.Major >= 6)
             {
                 SetProcessDPIAware();
