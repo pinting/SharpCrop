@@ -62,6 +62,12 @@
     <Compile Include="Forms\ClickForm.Designer.cs">
       <DependentUpon>ClickForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConfigForm.Designer.cs">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DrawForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +101,9 @@
     <Compile Include="Utils\ToastFactory.cs" />
     <EmbeddedResource Include="Forms\ClickForm.resx">
       <DependentUpon>ClickForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConfigForm.resx">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DrawForm.resx">
       <DependentUpon>DrawForm.cs</DependentUpon>

@@ -25,13 +25,19 @@ namespace SharpCrop.Forms
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
 
-            #if __MonoCS__
-
+#if __MonoCS__
             this.TransparencyKey = System.Drawing.Color.Black;
             this.BackColor = System.Drawing.Color.Black;
             this.Opacity = 0.20D;
+#endif
+        }
 
-            #endif
+        /// <summary>
+        /// Reset mouse position.
+        /// </summary>
+        public void Reset()
+        {
+            isMouseDown = false;
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace SharpCrop.Forms
             this.provider = provider;
 
             InitializeComponent();
-            
+
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
             Opacity = 0.005;
@@ -38,46 +38,54 @@ namespace SharpCrop.Forms
         /// <param name="r">Bitmap position, size</param>
         public void Upload(Rectangle r)
         {
-			Hide ();
-			drawForm.Hide ();
-			Application.DoEvents();
+            Hide();
+            drawForm.Hide();
+            Application.DoEvents();
 
-			#if __MonoCS__
-
+#if __MonoCS__
 			Thread.Sleep(500);
+#endif
 
-			#endif
+            var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
+            var bitmap = CaptureHelper.GetBitmap(r);
 
-			var name = DateTime.Now.ToString ("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
-			var bitmap = CaptureHelper.GetBitmap (r);
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ConfigHelper.Memory.FormatType);
 
-			using (var stream = new MemoryStream ()) 
-			{
-				bitmap.Save (stream, ConfigHelper.Memory.FormatType);
+                var url = provider.Upload(name, stream);
 
-				var url = provider.Upload (name, stream);
-
-				if (ConfigHelper.Memory.Copy)
+                if (ConfigHelper.Memory.Copy)
                 {
-                    #if __MonoCS__
-
+#if __MonoCS__
                     var form = new CopyForm(url);
                     form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
                     form.Show();
-
-                    #else
-
+#else
                     Clipboard.SetText(url);
-
-                    #endif
+#endif
                 }
             }
+            
+            ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit());
+        }
 
-            #if !__MonoCS__
+        /// <summary>
+        /// Show ConfigForm and hide ClickForm and DrawForm.
+        /// </summary>
+        private void ShowConfig()
+        {
+            drawForm.Hide();
+            Hide();
 
-			ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit ());
-
-            #endif
+            var form = new ConfigForm();
+            form.Show();
+            form.FormClosed += (object sender, FormClosedEventArgs ev) =>
+            {
+                drawForm.Reset();
+                drawForm.Show();
+                Show();
+            };
         }
 
         /// <summary>
@@ -94,8 +102,7 @@ namespace SharpCrop.Forms
                     Application.Exit();
                     break;
                 case Keys.F1:
-                    ConfigHelper.Reset();
-                    Application.Exit();
+                    ShowConfig();
                     break;
             }
         }
@@ -113,7 +120,7 @@ namespace SharpCrop.Forms
             }
         }
 
-#region Mouse Events
+        #region Mouse Events
 
         /* These mouse events are binded to DrawForm */
 
@@ -141,6 +148,6 @@ namespace SharpCrop.Forms
             drawForm.CallOnPaint(e);
         }
 
-#endregion
+        #endregion
     }
 }

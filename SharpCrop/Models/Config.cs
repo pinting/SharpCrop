@@ -63,6 +63,15 @@ namespace SharpCrop.Models
 			{
 				return !NoCopy;
 			}
-		}
+        }
+
+        [JsonIgnore]
+        public bool Scaling
+        {
+            get
+            {
+                return !NoScaling;
+            }
+        }
     }
 }

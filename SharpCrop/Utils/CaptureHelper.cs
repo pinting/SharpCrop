@@ -26,7 +26,7 @@ namespace SharpCrop.Utils
             return bitmap;
         }
 
-        #if __MonoCS__
+#if __MonoCS__
 
 		/// <summary>
 		/// Get the percentage of scalling for Mono on Linux.
@@ -44,7 +44,7 @@ namespace SharpCrop.Utils
             return result;
 		}
 
-        #else
+#else
 
         /// <summary>
         /// Get the percentage of scaling for .NET on Windows.
@@ -64,7 +64,7 @@ namespace SharpCrop.Utils
         [DllImport("gdi32.dll")]
         static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
-        #endif
+#endif
 
     }
 }
