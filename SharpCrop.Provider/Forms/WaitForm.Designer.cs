@@ -1,4 +1,4 @@
-﻿namespace SharpCrop.DropboxOld.Forms
+﻿namespace SharpCrop.Provider.Forms
 {
     partial class WaitForm
     {

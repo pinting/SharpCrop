@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B8779394-3FCB-4CCC-96EC-2BF2D4827A16}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharpCrop</RootNamespace>
     <AssemblyName>SharpCrop</AssemblyName>
@@ -37,6 +37,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -136,6 +139,10 @@
     <ProjectReference Include="..\SharpCrop.DropboxOld\SharpCrop.DropboxOld.csproj">
       <Project>{4003F97C-E078-4A3D-B7D8-B6FD705876D2}</Project>
       <Name>SharpCrop.DropboxOld</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpCrop.Dropbox\SharpCrop.Dropbox.csproj">
+      <Project>{52c62af5-cf9f-4f80-a5a6-13a322975e6c}</Project>
+      <Name>SharpCrop.Dropbox</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpCrop.Provider\SharpCrop.Provider.csproj">
       <Project>{318EE826-9014-4869-B84A-B447980229BC}</Project>

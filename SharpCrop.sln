@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.Provider", "Sharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.DropboxOld", "SharpCrop.DropboxOld\SharpCrop.DropboxOld.csproj", "{4003F97C-E078-4A3D-B7D8-B6FD705876D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.Dropbox", "SharpCrop.Dropbox\SharpCrop.Dropbox.csproj", "{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{4003F97C-E078-4A3D-B7D8-B6FD705876D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4003F97C-E078-4A3D-B7D8-B6FD705876D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4003F97C-E078-4A3D-B7D8-B6FD705876D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
