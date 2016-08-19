@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SharpCrop.Dropbox.Properties {
+namespace SharpCrop.DropboxOld.Properties {
     using System;
     
     

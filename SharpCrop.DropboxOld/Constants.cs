@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Imaging;
 
-namespace SharpCrop.Dropbox
+namespace SharpCrop.DropboxOld
 {
     public static class Constants
     {

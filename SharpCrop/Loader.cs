@@ -1,7 +1,6 @@
 ﻿using SharpCrop.Forms;
 using SharpCrop.Provider;
 using SharpCrop.Provider.Models;
-using SharpCrop.Provider.Utils;
 using SharpCrop.Utils;
 using System;
 using System.Windows.Forms;
@@ -61,7 +60,7 @@ namespace SharpCrop
             switch (name)
             {
                 case "Dropbox":
-                    provider = new Dropbox.Provider();
+                    provider = new DropboxOld.Provider();
                     break;
                 default:
                     onResult(null);

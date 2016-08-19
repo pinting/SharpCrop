@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpCrop.Provider.Models;
 
-namespace SharpCrop.Dropbox.Auth
+namespace SharpCrop.DropboxOld.Auth
 {
     public partial class TokenForm : Form, IToken
     {

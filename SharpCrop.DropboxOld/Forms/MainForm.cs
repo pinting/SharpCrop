@@ -1,9 +1,9 @@
-﻿using SharpCrop.Dropbox.Auth;
+﻿using SharpCrop.DropboxOld.Auth;
 using System;
 using System.Windows.Forms;
 using SharpCrop.Provider.Models;
 
-namespace SharpCrop.Dropbox.Forms
+namespace SharpCrop.DropboxOld.Forms
 {
     public partial class MainForm : Form
     {

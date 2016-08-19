@@ -2,7 +2,7 @@
 using SharpCrop.Provider.Models;
 using System;
 
-namespace SharpCrop.Dropbox.Auth
+namespace SharpCrop.DropboxOld.Auth
 {
     public interface IToken
     {

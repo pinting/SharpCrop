@@ -6,7 +6,7 @@ using System.IO;
 using System.Net.Http;
 using SharpCrop.Provider.Models;
 
-namespace SharpCrop.Dropbox
+namespace SharpCrop.DropboxOld
 {
     public class Provider : IProvider
     {

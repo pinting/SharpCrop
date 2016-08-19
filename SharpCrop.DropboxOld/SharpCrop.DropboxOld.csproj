@@ -7,8 +7,8 @@
     <ProjectGuid>{4003F97C-E078-4A3D-B7D8-B6FD705876D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpCrop.Dropbox</RootNamespace>
-    <AssemblyName>SharpCrop.Dropbox</AssemblyName>
+    <RootNamespace>SharpCrop.DropboxOld</RootNamespace>
+    <AssemblyName>SharpCrop.DropboxOld</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

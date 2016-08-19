@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpCrop.Dropbox.Forms
+namespace SharpCrop.DropboxOld.Forms
 {
     public partial class WaitForm : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace SharpCrop.Dropbox.Auth
+﻿namespace SharpCrop.DropboxOld.Auth
 {
     partial class TokenForm
     {

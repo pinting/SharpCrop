@@ -1,5 +1,5 @@
 ﻿using Dropbox.Api;
-using SharpCrop.Dropbox.Forms;
+using SharpCrop.DropboxOld.Forms;
 using SharpCrop.Provider.Models;
 using SharpCrop.Provider.Utils;
 using System;
@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpCrop.Dropbox.Auth
+namespace SharpCrop.DropboxOld.Auth
 {
     public class TokenServer : IToken
     {

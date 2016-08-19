@@ -133,9 +133,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpCrop.Dropbox\SharpCrop.Dropbox.csproj">
+    <ProjectReference Include="..\SharpCrop.DropboxOld\SharpCrop.DropboxOld.csproj">
       <Project>{4003F97C-E078-4A3D-B7D8-B6FD705876D2}</Project>
-      <Name>SharpCrop.Dropbox</Name>
+      <Name>SharpCrop.DropboxOld</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpCrop.Provider\SharpCrop.Provider.csproj">
       <Project>{318EE826-9014-4869-B84A-B447980229BC}</Project>
