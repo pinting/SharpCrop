@@ -6,24 +6,31 @@
     <style>
         body {
             text-align: center;
+            font-weight: bold;
+            font-size: 2em;
+            display: block;
             margin: 50px;
         }
     </style>
 </head>
 <body>
     <noscript>
-        <h1>Oops! JavaScript is needed!</h1>
+        Oops! JavaScript is needed!
     </noscript>
     <script>
         var hash = location.hash.substr(1);
+        var search = location.search.substr(1);
         var url = location.origin + location.pathname + "?" + hash;
 
-        if (hash.length > 0) {
-            document.write("<h1><a href=\"" + url + "\">Allow</a></h1>");
+        if (search.indexOf("access_token") >= 0) {
+            document.write("SharpCrop connected!");
+        }
+        else if (hash.indexOf("access_token") >= 0) {
+            document.write("<a href=\"" + url + "\">Allow</a>");
             location.href = url;
         }
         else {
-            document.write("<h1>SharpCrop connected!</h1>");
+            document.write("Error");
         }
     </script>
 </body>
