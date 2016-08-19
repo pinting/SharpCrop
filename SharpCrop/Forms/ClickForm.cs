@@ -12,6 +12,7 @@ namespace SharpCrop.Forms
 {
     public partial class ClickForm : Form
     {
+        private bool configShown = false;
         private DrawForm drawForm;
         private IProvider provider;
 
@@ -38,6 +39,11 @@ namespace SharpCrop.Forms
         /// <param name="r">Bitmap position, size</param>
         public void Upload(Rectangle r)
         {
+            if (configShown)
+            {
+                return;
+            }
+
             Hide();
             drawForm.Hide();
             Application.DoEvents();
@@ -66,8 +72,13 @@ namespace SharpCrop.Forms
 #endif
                 }
             }
-            
-            ToastFactory.CreateToast("Uploaded successfully!", 3000, () => Application.Exit());
+
+            ToastFactory.CreateToast("Uploaded successfully!", 3000, () => 
+            {
+#if !__MonoCS__
+                Application.Exit();
+#endif
+            });
         }
 
         /// <summary>
@@ -75,13 +86,18 @@ namespace SharpCrop.Forms
         /// </summary>
         private void ShowConfig()
         {
+            configShown = true;
+
             drawForm.Hide();
             Hide();
 
             var form = new ConfigForm();
+
             form.Show();
             form.FormClosed += (object sender, FormClosedEventArgs ev) =>
             {
+                configShown = false;
+
                 drawForm.Reset();
                 drawForm.Show();
                 Show();
