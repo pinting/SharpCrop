@@ -1,11 +1,11 @@
 ﻿# SharpCrop
 
-This application can grab a part of your screen and upload it to your Dropbox / Google Drive / OneDrive folder.
+This application can grab a part of your screen and upload it to your Dropbox / Google Drive / OneDrive cloud.
 
 ## Usage
 
 * `Esc` Close the crop window
-* `F1` Reset settings
+* `F1` Open config window
 
 ## Contributing
 
