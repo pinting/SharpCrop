@@ -1,13 +1,14 @@
 ﻿using SharpCrop.Provider.Models;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SharpCrop.Provider
 {
     public interface IProvider
     {
-        void Register(string token, Action<string, ProviderState> onResult);
+        Task Register(string token, Action<string, ProviderState> onResult);
 
-        string Upload(string name, MemoryStream stream);
+        Task<string> Upload(string name, MemoryStream stream);
     }
 }

@@ -2,8 +2,8 @@
 {
     public enum ProviderState
     {
-         Normal,
-         Refresh,
+         NewToken,
+         RefreshToken,
          UserError,
          ServiceError,
          PermissionError

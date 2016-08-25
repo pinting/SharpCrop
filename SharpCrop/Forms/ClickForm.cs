@@ -1,12 +1,9 @@
 ﻿using SharpCrop.Provider;
-using SharpCrop.Provider.Utils;
 using SharpCrop.Utils;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace SharpCrop.Forms
 {
@@ -37,8 +34,9 @@ namespace SharpCrop.Forms
         /// Grab bitmap and upload it to the saved Dropbox account.
         /// </summary>
         /// <param name="r">Bitmap position, size</param>
-        public void Upload(Rectangle r)
+        public async void Upload(Rectangle r)
         {
+            // Hide the UI and prepare to capture and upload
             if (configShown)
             {
                 return;
@@ -52,15 +50,17 @@ namespace SharpCrop.Forms
 			Thread.Sleep(500);
 #endif
 
-            var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
-            var bitmap = CaptureHelper.GetBitmap(r);
-
+            // Capture and start the upload process
             using (var stream = new MemoryStream())
             {
+                var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
+                var bitmap = CaptureHelper.GetBitmap(r);
+
                 bitmap.Save(stream, ConfigHelper.Memory.FormatType);
 
-                var url = provider.Upload(name, stream);
+                var url = await provider.Upload(name, stream);
 
+                // Copy the URL if needed
                 if (ConfigHelper.Memory.Copy)
                 {
 #if __MonoCS__
@@ -73,6 +73,7 @@ namespace SharpCrop.Forms
                 }
             }
 
+            // Uploaded notification
             ToastFactory.CreateToast("Uploaded successfully!", 3000, () => 
             {
 #if !__MonoCS__

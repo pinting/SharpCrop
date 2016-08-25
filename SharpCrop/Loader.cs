@@ -3,6 +3,7 @@ using SharpCrop.Provider;
 using SharpCrop.Provider.Models;
 using SharpCrop.Utils;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop
@@ -18,6 +19,9 @@ namespace SharpCrop
         /// </summary>
         public Loader()
         {
+            // Needed to construct this here to be in the right SynchronizationContext
+            mainForm = new MainForm(this);
+            
             LoadForm(ConfigHelper.Memory.Provider);
         }
 
@@ -25,25 +29,19 @@ namespace SharpCrop
         /// Load the required form for the given Provider.
         /// </summary>
         /// <param name="name"></param>
-        public void LoadForm(string name)
+        public async void LoadForm(string name)
         {
-            GetProvider(name, provider =>
+            await GetProvider(name, provider =>
             {
-                // Provider was created successfully
                 if (provider != null)
                 {
                     clickForm = new ClickForm(provider);
                     clickForm.Show();
-                    return;
                 }
-
-                // Provider could not be created, no saved Provider name was found
-                if (mainForm == null)
+                else
                 {
-                    mainForm = new MainForm(this);
+                    mainForm.Show();
                 }
-
-                mainForm.Show();
             });
         }
 
@@ -52,7 +50,7 @@ namespace SharpCrop
         /// </summary>
         /// <param name="name"></param>
         /// <param name="onResult"></param>
-        public void GetProvider(string name, Action<IProvider> onResult)
+        public async Task GetProvider(string name, Action<IProvider> onResult)
         {
             IProvider provider;
 
@@ -60,19 +58,19 @@ namespace SharpCrop
             switch (name)
             {
                 case "Dropbox":
-                    provider = new DropboxOld.Provider();
+                    provider = new Dropbox.Provider();
                     break;
                 default:
                     onResult(null);
                     return;
             }
-            
+
             // Try to register Provider
-            provider.Register(ConfigHelper.Memory.Token, (token, state) =>
+            await provider.Register(ConfigHelper.Memory.Token, (token, state) =>
             {
                 if (token == null)
                 {
-                    switch(state)
+                    switch (state)
                     {
                         case ProviderState.ServiceError:
                             ToastFactory.CreateToast("Failed to register provider!");
@@ -88,8 +86,8 @@ namespace SharpCrop
                     onResult(null);
                     return;
                 }
-                
-                if (state == ProviderState.Refresh)
+
+                if (state == ProviderState.NewToken)
                 {
                     ConfigHelper.Memory.Provider = name;
                     ConfigHelper.Memory.Token = token;

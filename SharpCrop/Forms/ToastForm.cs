@@ -8,15 +8,14 @@ namespace SharpCrop.Forms
 {
     public partial class ToastForm : Form
     {
-        private System.Timers.Timer timer;
-        private double duration;
+        private int duration;
 
         /// <summary>
         /// Toast form which responsible for the right-bottom side toast boxes.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="duration"></param>
-        public ToastForm(string text, double duration)
+        public ToastForm(string text, int duration)
         {
             InitializeComponent();
 
@@ -33,16 +32,16 @@ namespace SharpCrop.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
-            timer = new System.Timers.Timer(duration);
 
-            timer.Elapsed += delegate (Object source, ElapsedEventArgs ev)
+            Task.Run(async () =>
             {
-                Invoke(new Action(() => Close()));
-            };
+                await Task.Delay(duration);
 
-            timer.AutoReset = false;
-            timer.Enabled = true;
+                if (!IsDisposed)
+                {
+                    Invoke(new Action(() => Close()));
+                }
+            });
         }
 
         /// <summary>
@@ -52,8 +51,32 @@ namespace SharpCrop.Forms
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            timer.Stop();
             Close();
+        }
+
+        /// <summary>
+        /// Do not steal focus from other windows.
+        /// </summary>
+        protected override bool ShowWithoutActivation
+        {
+            get { return true; }
+        }
+    
+        /// <summary>
+        /// Keep focus for other windows while topmost.
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams baseParams = base.CreateParams;
+
+                const int WS_EX_NOACTIVATE = 0x08000000;
+                const int WS_EX_TOOLWINDOW = 0x00000080;
+                baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+
+                return baseParams;
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using SharpCrop.Provider.Utils;
-using SharpCrop.Utils;
+﻿using SharpCrop.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;

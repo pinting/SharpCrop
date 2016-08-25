@@ -1,6 +1,4 @@
-﻿using SharpCrop.Provider;
-using SharpCrop.Utils;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms

@@ -3,29 +3,94 @@ using System;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using System.IO;
-using System.Net.Http;
 using SharpCrop.Provider.Models;
+using SharpCrop.Provider.Utils;
+using SharpCrop.Dropbox.Forms;
+using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace SharpCrop.Dropbox
 {
     public class Provider : IProvider
     {
-        private DropboxClientConfig config;
-        private HttpClient httpClient;
         private DropboxClient client;
 
         /// <summary>
-        /// Provider is responsible for handling the communication with a service - like Dropbox.
+        /// Create a new DropboxClient and test it.
         /// </summary>
-        public Provider()
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private async Task<bool> ClientFactory(string token)
         {
-            httpClient = new HttpClient(new WebRequestHandler { ReadWriteTimeout = 10 * 1000 }) { Timeout = TimeSpan.FromMinutes(20) };
-            config = new DropboxClientConfig("SharpCrop") { HttpClient = httpClient };
+            try
+            {
+                client = new DropboxClient(token);
+
+                // Test if the token is valid with a simple action
+                await client.Users.GetSpaceUsageAsync();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void Register(string token, Action<string, ProviderState> onResult)
+        /// <summary>
+        /// Register for the service. If an old token was given, it gonna try to use it. If it was not given or it
+        /// was expired, it will try to request a new one. Eventully onResult will be called with the something.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="onResult"></param>
+        public async Task Register(string token, Action<string, ProviderState> onResult)
         {
-            throw new NotImplementedException();
+            if(await ClientFactory(token))
+            {
+                onResult(token, ProviderState.RefreshToken);
+                return;
+            }
+
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(
+                    OAuthResponseType.Code,
+                    Obscure.Decode(Constants.AppKey),
+                    (string)null);
+
+            var form = new WaitForm(url.ToString());
+            var success = false;
+
+            form.OnCode(async code =>
+            {
+                success = true;
+
+                form.Close();
+                Application.DoEvents();
+
+                var result = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
+                    code,
+                    Obscure.Decode(Constants.AppKey),
+                    Obscure.Decode(Constants.AppSecret));
+
+                if (result != null && result.AccessToken != null && await ClientFactory(result.AccessToken))
+                {
+                    onResult(result.AccessToken, ProviderState.NewToken);
+                }
+                else
+                {
+                    onResult(null, ProviderState.ServiceError);
+                }
+            });
+
+            form.FormClosed += (sender, e) =>
+            {
+                if (!success)
+                {
+                    onResult(null, ProviderState.UserError);
+                }
+            };
+
+            System.Diagnostics.Process.Start(url.ToString());
+            form.Show();
         }
 
         /// <summary>
@@ -34,17 +99,17 @@ namespace SharpCrop.Dropbox
         /// <param name="name"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public string Upload(string name, MemoryStream stream)
+        public async Task<string> Upload(string name, MemoryStream stream)
         {
             var path = "/" + name;
 
             // This is needed, because Dropbox API will not work otherwise - I do not know why
             using (var newStream = new MemoryStream(stream.ToArray()))
             {
-                client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: newStream).Wait();
+                await client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: newStream);
             }
 
-            var meta = client.Sharing.CreateSharedLinkWithSettingsAsync(path).Result;
+            var meta = await client.Sharing.CreateSharedLinkWithSettingsAsync(path);
 
             return meta.Url;
         }
