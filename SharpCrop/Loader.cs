@@ -21,7 +21,7 @@ namespace SharpCrop
         {
             // Needed to construct this here to be in the right SynchronizationContext
             mainForm = new MainForm(this);
-            
+
             LoadForm(ConfigHelper.Memory.Provider);
         }
 

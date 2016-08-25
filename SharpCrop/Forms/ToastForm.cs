@@ -8,6 +8,7 @@ namespace SharpCrop.Forms
 {
     public partial class ToastForm : Form
     {
+        private readonly int margin = 5;
         private int duration;
 
         /// <summary>
@@ -15,11 +16,13 @@ namespace SharpCrop.Forms
         /// </summary>
         /// <param name="text"></param>
         /// <param name="duration"></param>
-        public ToastForm(string text, int duration)
+        public ToastForm(string text, int duration, int index = 1)
         {
             InitializeComponent();
 
-            Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width - 5, Screen.PrimaryScreen.Bounds.Height - Height - 5);
+            Location = new Point(
+                Screen.PrimaryScreen.Bounds.Width - (Width + margin), 
+                Screen.PrimaryScreen.Bounds.Height - (Height + margin) * index);
 
             this.duration = duration;
             label.Text = text;

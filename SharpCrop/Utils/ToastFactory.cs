@@ -6,6 +6,8 @@ namespace SharpCrop.Utils
 {
     public static class ToastFactory
     {
+        private static int index = 1;
+
         /// <summary>
         /// Create a new toast.
         /// </summary>
@@ -14,12 +16,13 @@ namespace SharpCrop.Utils
         /// <param name="onClose">Closing event callback</param>
         public static void CreateToast(string text, int duration = 3000, Action onClose = null)
         {
-            var form = new ToastForm(text, duration);
+            var form = new ToastForm(text, duration, index++);
 
             if(onClose != null)
             {
                 form.FormClosed += (object sender, FormClosedEventArgs e) => 
                 {
+                    index--;
                     onClose();
                 };
             }
