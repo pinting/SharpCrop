@@ -4,6 +4,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SharpCrop.Forms
 {
@@ -47,7 +49,7 @@ namespace SharpCrop.Forms
             Application.DoEvents();
 
 #if __MonoCS__
-			Thread.Sleep(500);
+            await Task.Delay(500);
 #endif
 
             // Capture and start the upload process
