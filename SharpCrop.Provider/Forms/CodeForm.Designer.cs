@@ -1,6 +1,6 @@
-﻿namespace SharpCrop.Dropbox.Forms
+﻿namespace SharpCrop.Provider.Forms
 {
-    partial class WaitForm
+    partial class CodeForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaitForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CodeForm));
             this.linkLabel = new System.Windows.Forms.LinkLabel();
             this.linkBox = new System.Windows.Forms.TextBox();
-            this.helpLabel = new System.Windows.Forms.Label();
-            this.codeBox = new System.Windows.Forms.TextBox();
             this.stepOneLabel = new System.Windows.Forms.Label();
+            this.codeBox = new System.Windows.Forms.TextBox();
             this.stepTwoLabel = new System.Windows.Forms.Label();
+            this.helpLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // linkLabel
@@ -47,6 +47,7 @@
             this.linkLabel.TabIndex = 3;
             this.linkLabel.TabStop = true;
             this.linkLabel.Text = "Please open the following link!";
+            this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked);
             // 
             // linkBox
             // 
@@ -56,23 +57,6 @@
             this.linkBox.ReadOnly = true;
             this.linkBox.Size = new System.Drawing.Size(403, 20);
             this.linkBox.TabIndex = 2;
-            // 
-            // helpLabel
-            // 
-            this.helpLabel.AutoSize = true;
-            this.helpLabel.Location = new System.Drawing.Point(76, 128);
-            this.helpLabel.Name = "helpLabel";
-            this.helpLabel.Size = new System.Drawing.Size(278, 13);
-            this.helpLabel.TabIndex = 4;
-            this.helpLabel.Text = "Copy the given code bellow to give access to SharpCrop!";
-            // 
-            // codeBox
-            // 
-            this.codeBox.Location = new System.Drawing.Point(6, 144);
-            this.codeBox.Name = "codeBox";
-            this.codeBox.Size = new System.Drawing.Size(403, 20);
-            this.codeBox.TabIndex = 5;
-            this.codeBox.TextChanged += new System.EventHandler(this.CodeBoxChanged);
             // 
             // stepOneLabel
             // 
@@ -85,6 +69,14 @@
             this.stepOneLabel.Text = "1";
             this.stepOneLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // codeBox
+            // 
+            this.codeBox.Location = new System.Drawing.Point(6, 144);
+            this.codeBox.Name = "codeBox";
+            this.codeBox.Size = new System.Drawing.Size(403, 20);
+            this.codeBox.TabIndex = 5;
+            this.codeBox.TextChanged += new System.EventHandler(this.CodeBoxChanged);
+            // 
             // stepTwoLabel
             // 
             this.stepTwoLabel.AutoSize = true;
@@ -96,7 +88,16 @@
             this.stepTwoLabel.Text = "2";
             this.stepTwoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // WaitForm
+            // helpLabel
+            // 
+            this.helpLabel.AutoSize = true;
+            this.helpLabel.Location = new System.Drawing.Point(76, 128);
+            this.helpLabel.Name = "helpLabel";
+            this.helpLabel.Size = new System.Drawing.Size(278, 13);
+            this.helpLabel.TabIndex = 4;
+            this.helpLabel.Text = "Copy the given code bellow to give access to SharpCrop!";
+            // 
+            // CodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -109,7 +110,7 @@
             this.Controls.Add(this.linkBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "WaitForm";
+            this.Name = "CodeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
@@ -122,8 +123,8 @@
         private System.Windows.Forms.LinkLabel linkLabel;
         private System.Windows.Forms.TextBox linkBox;
         private System.Windows.Forms.Label helpLabel;
+        private System.Windows.Forms.Label stepTwoLabel;
         private System.Windows.Forms.TextBox codeBox;
         private System.Windows.Forms.Label stepOneLabel;
-        private System.Windows.Forms.Label stepTwoLabel;
     }
 }

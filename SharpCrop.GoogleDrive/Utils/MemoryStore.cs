@@ -74,7 +74,7 @@ namespace SharpCrop.GoogleDrive.Utils
         /// <returns></returns>
         public Task<T> GetAsync<T>(string key)
         {
-            TaskCompletionSource<T> result = new TaskCompletionSource<T>();
+            var result = new TaskCompletionSource<T>();
 
             if (!string.IsNullOrEmpty(key) && storage.ContainsKey(key))
             {

@@ -78,14 +78,14 @@ namespace SharpCrop
                 {
                     switch (state)
                     {
-                        case ProviderState.ServiceError:
+                        case ProviderState.UnknownError:
                             ToastFactory.CreateToast("Failed to register provider!");
                             break;
                         case ProviderState.UserError:
-                            ToastFactory.CreateToast("User aborted the registration!");
+                            ToastFactory.CreateToast("Registration was aborted!");
                             break;
                         case ProviderState.PermissionError:
-                            ToastFactory.CreateToast("You have no permission to do that!");
+                            ToastFactory.CreateToast("No permission!");
                             break;
                     }
 

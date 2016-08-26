@@ -5,9 +5,9 @@ using Dropbox.Api.Files;
 using System.IO;
 using SharpCrop.Provider.Models;
 using SharpCrop.Provider.Utils;
-using SharpCrop.Dropbox.Forms;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using SharpCrop.Provider.Forms;
 
 namespace SharpCrop.Dropbox
 {
@@ -56,7 +56,7 @@ namespace SharpCrop.Dropbox
                     Obscure.Decode(Constants.AppKey),
                     (string)null);
 
-            var form = new WaitForm(url.ToString());
+            var form = new CodeForm(url.ToString());
             var success = false;
 
             form.OnCode(async code =>
@@ -77,7 +77,7 @@ namespace SharpCrop.Dropbox
                 }
                 else
                 {
-                    onResult(null, ProviderState.ServiceError);
+                    onResult(null, ProviderState.UnknownError);
                 }
             });
 
