@@ -140,6 +140,14 @@
       <Project>{52c62af5-cf9f-4f80-a5a6-13a322975e6c}</Project>
       <Name>SharpCrop.Dropbox</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpCrop.GoogleDrive\SharpCrop.GoogleDrive.csproj">
+      <Project>{1466a67d-99bd-43f6-a806-314008147d6e}</Project>
+      <Name>SharpCrop.GoogleDrive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpCrop.OneDrive\SharpCrop.OneDrive.csproj">
+      <Project>{bafec853-40d1-45b5-ac5d-bc1ff5a23bfd}</Project>
+      <Name>SharpCrop.OneDrive</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpCrop.Provider\SharpCrop.Provider.csproj">
       <Project>{318EE826-9014-4869-B84A-B447980229BC}</Project>
       <Name>SharpCrop.Provider</Name>

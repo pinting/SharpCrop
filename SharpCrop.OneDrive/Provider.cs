@@ -4,7 +4,7 @@ using System.IO;
 using SharpCrop.Provider.Models;
 using System.Threading.Tasks;
 
-namespace SharpCrop.Dropbox
+namespace SharpCrop.OneDrive
 {
     public class Provider : IProvider
     {

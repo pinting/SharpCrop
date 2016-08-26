@@ -1,4 +1,4 @@
-﻿namespace SharpCrop.Dropbox
+﻿namespace SharpCrop.OneDrive
 {
     public static class Constants
     {
