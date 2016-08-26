@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop", "SharpCrop\SharpCrop.csproj", "{B8779394-3FCB-4CCC-96EC-2BF2D4827A16}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -19,6 +19,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.Provider", "SharpCrop.Provider\SharpCrop.Provider.csproj", "{318EE826-9014-4869-B84A-B447980229BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.Dropbox", "SharpCrop.Dropbox\SharpCrop.Dropbox.csproj", "{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.GoogleDrive", "SharpCrop.GoogleDrive\SharpCrop.GoogleDrive.csproj", "{1466A67D-99BD-43F6-A806-314008147D6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.OneDrive", "SharpCrop.OneDrive\SharpCrop.OneDrive.csproj", "{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,14 @@ Global
 		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52C62AF5-CF9F-4F80-A5A6-13A322975E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1466A67D-99BD-43F6-A806-314008147D6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1466A67D-99BD-43F6-A806-314008147D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1466A67D-99BD-43F6-A806-314008147D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1466A67D-99BD-43F6-A806-314008147D6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
