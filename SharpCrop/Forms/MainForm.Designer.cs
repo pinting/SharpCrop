@@ -37,9 +37,10 @@
             // dropboxButton
             // 
             this.dropboxButton.BackColor = System.Drawing.Color.PaleTurquoise;
-            this.dropboxButton.Location = new System.Drawing.Point(17, 23);
+            this.dropboxButton.Location = new System.Drawing.Point(11, 15);
+            this.dropboxButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dropboxButton.Name = "dropboxButton";
-            this.dropboxButton.Size = new System.Drawing.Size(251, 244);
+            this.dropboxButton.Size = new System.Drawing.Size(167, 163);
             this.dropboxButton.TabIndex = 0;
             this.dropboxButton.Text = "Dropbox";
             this.dropboxButton.UseVisualStyleBackColor = false;
@@ -48,10 +49,10 @@
             // googleDriveButton
             // 
             this.googleDriveButton.BackColor = System.Drawing.Color.PaleGreen;
-            this.googleDriveButton.Enabled = false;
-            this.googleDriveButton.Location = new System.Drawing.Point(274, 23);
+            this.googleDriveButton.Location = new System.Drawing.Point(183, 15);
+            this.googleDriveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.googleDriveButton.Name = "googleDriveButton";
-            this.googleDriveButton.Size = new System.Drawing.Size(251, 244);
+            this.googleDriveButton.Size = new System.Drawing.Size(167, 163);
             this.googleDriveButton.TabIndex = 1;
             this.googleDriveButton.Text = "Google Drive";
             this.googleDriveButton.UseVisualStyleBackColor = false;
@@ -61,9 +62,10 @@
             // 
             this.oneDriveButton.BackColor = System.Drawing.Color.SandyBrown;
             this.oneDriveButton.Enabled = false;
-            this.oneDriveButton.Location = new System.Drawing.Point(531, 23);
+            this.oneDriveButton.Location = new System.Drawing.Point(354, 15);
+            this.oneDriveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.oneDriveButton.Name = "oneDriveButton";
-            this.oneDriveButton.Size = new System.Drawing.Size(234, 244);
+            this.oneDriveButton.Size = new System.Drawing.Size(156, 163);
             this.oneDriveButton.TabIndex = 2;
             this.oneDriveButton.Text = "OneDrive";
             this.oneDriveButton.UseVisualStyleBackColor = false;
@@ -71,16 +73,17 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(778, 289);
+            this.ClientSize = new System.Drawing.Size(519, 193);
             this.Controls.Add(this.oneDriveButton);
             this.Controls.Add(this.googleDriveButton);
             this.Controls.Add(this.dropboxButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MainForm";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
 

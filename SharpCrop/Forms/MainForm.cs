@@ -46,7 +46,8 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnGoogleDrive(object sender, EventArgs e)
         {
-            return;
+            loader.LoadForm("GoogleDrive");
+            Hide();
         }
 
         /// <summary>
@@ -56,7 +57,8 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnOneDrive(object sender, EventArgs e)
         {
-            return;
+            loader.LoadForm("OneDrive");
+            Hide();
         }
     }
 }

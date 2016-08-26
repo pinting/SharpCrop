@@ -60,6 +60,12 @@ namespace SharpCrop
                 case "Dropbox":
                     provider = new Dropbox.Provider();
                     break;
+                case "GoogleDrive":
+                    provider = new GoogleDrive.Provider();
+                    break;
+                case "OneDrive":
+                    provider = new OneDrive.Provider();
+                    break;
                 default:
                     onResult(null);
                     return;
