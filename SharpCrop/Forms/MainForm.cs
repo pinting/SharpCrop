@@ -16,10 +16,6 @@ namespace SharpCrop.Forms
             this.loader = loader;
 
             InitializeComponent();
-
-#if __MonoCS__
-            oneDriveButton.Enabled = false;
-#endif
         }
 
         /// <summary>
