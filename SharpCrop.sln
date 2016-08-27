@@ -26,8 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.OneDrive", "Sharp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{634EBB3C-C2FC-4230-8DA2-3240A7897078}"
 	ProjectSection(SolutionItems) = preProject
-		docs\code.html = docs\code.html
-		docs\index.html = docs\index.html
+		docs\Index.html = docs\Index.html
+		docs\OneDrive.html = docs\OneDrive.html
 	EndProjectSection
 EndProject
 Global

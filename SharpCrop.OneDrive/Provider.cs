@@ -44,6 +44,10 @@ namespace SharpCrop.OneDrive
         /// <returns></returns>
         public async Task Register(string token, Action<string, ProviderState> onResult)
         {
+            // https://login.live.com/oauth20_authorize.srf?client_id=3c7e0d4e-0128-4d20-80d1-2fa86a5793ef&scope=wl.signin+onedrive.appfolder&response_type=code&redirect_uri=http://localhost
+
+            
+
             try
             {
                 var result = ProviderState.NewToken;
