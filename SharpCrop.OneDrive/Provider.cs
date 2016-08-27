@@ -4,15 +4,9 @@ using System.IO;
 using SharpCrop.Provider.Models;
 using System.Threading.Tasks;
 using Microsoft.OneDrive.Sdk;
-using SharpCrop.Provider.Utils;
 using Newtonsoft.Json;
 using Microsoft.Graph;
-using System.Net;
-using System.Text;
-using System.Net.Http;
 using SharpCrop.Provider.Forms;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
 using SharpCrop.OneDrive.Utils;
 using SharpCrop.OneDrive.Models;
 
@@ -31,7 +25,7 @@ namespace SharpCrop.OneDrive
         {
             try
             {
-                client = new OneDriveClient(provider);
+                client = new OneDriveClient("https://api.onedrive.com/v1.0", provider);
 
                 await client.Drive.Request().GetAsync();
 
@@ -82,7 +76,7 @@ namespace SharpCrop.OneDrive
                 }
                 else
                 {
-                    onResult(newToken, ProviderState.UnknownError);
+                    onResult(null, ProviderState.UnknownError);
                 }
             });
 
