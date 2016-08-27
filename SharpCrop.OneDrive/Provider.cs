@@ -3,11 +3,18 @@ using System;
 using System.IO;
 using SharpCrop.Provider.Models;
 using System.Threading.Tasks;
-using Microsoft.OneDrive.Sdk.Authentication;
 using Microsoft.OneDrive.Sdk;
 using SharpCrop.Provider.Utils;
 using Newtonsoft.Json;
 using Microsoft.Graph;
+using System.Net;
+using System.Text;
+using System.Net.Http;
+using SharpCrop.Provider.Forms;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+using SharpCrop.OneDrive.Utils;
+using SharpCrop.OneDrive.Models;
 
 namespace SharpCrop.OneDrive
 {
@@ -24,7 +31,7 @@ namespace SharpCrop.OneDrive
         {
             try
             {
-                client = new OneDriveClient("https://api.onedrive.com/v1.0", provider);
+                client = new OneDriveClient(provider);
 
                 await client.Drive.Request().GetAsync();
 
@@ -39,49 +46,56 @@ namespace SharpCrop.OneDrive
         /// <summary>
         /// Get an access token from OneDrive.
         /// </summary>
-        /// <param name="savedState">Serialized TokenResponse from Google Api.</param>
+        /// <param name="token">Serialized TokenResponse from OneDrive Api.</param>
         /// <param name="onResult"></param>
         /// <returns></returns>
         public async Task Register(string token, Action<string, ProviderState> onResult)
         {
-            // https://login.live.com/oauth20_authorize.srf?client_id=3c7e0d4e-0128-4d20-80d1-2fa86a5793ef&scope=wl.signin+onedrive.appfolder&response_type=code&redirect_uri=http://localhost
+            var provider = new AuthProvider();
 
-            
-
-            try
+            if(!string.IsNullOrEmpty(token))
             {
-                var result = ProviderState.NewToken;
-                var cache = new CredentialCache();
-                var provider = new MsaAuthenticationProvider(
-                    Obscure.Decode(Constants.AppKey),
-                    Obscure.Decode(Constants.AppSecret),
-                    Constants.RedirectUrl,
-                    Constants.Scopes,
-                    cache);
+                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(token);
 
-                if (string.IsNullOrEmpty(token))
+                if (await ClientFactory(provider))
                 {
-                    await provider.AuthenticateUserAsync();
+                    onResult(token, ProviderState.RefreshToken);
+                    return;
+                }
+            }
+
+            var form = new CodeForm(provider.Url);
+            var success = false;
+
+            form.OnCode(async code =>
+            {
+                success = true;
+
+                form.Close();
+                provider.ProcessCode(code);
+
+                var newToken = JsonConvert.SerializeObject(provider.Session);
+
+                if (await ClientFactory(provider))
+                {
+                    onResult(newToken, ProviderState.NewToken);
                 }
                 else
                 {
-                    provider.CurrentAccountSession = JsonConvert.DeserializeObject<AccountSession>(token);
-                    result = ProviderState.RefreshToken;
+                    onResult(newToken, ProviderState.UnknownError);
                 }
+            });
 
-                if(await ClientFactory(provider))
-                {
-                    onResult(JsonConvert.SerializeObject(provider.CurrentAccountSession), result);
-                }
-                else
-                {
-                    await Register(null, onResult);
-                }
-            }
-            catch
+            form.FormClosed += (sender, e) =>
             {
-                onResult(null, ProviderState.UnknownError);
-            }
+                if (!success)
+                {
+                    onResult(null, ProviderState.UserError);
+                }
+            };
+
+            System.Diagnostics.Process.Start(provider.Url);
+            form.Show();
         }
 
         /// <summary>
