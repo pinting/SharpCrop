@@ -1,6 +1,7 @@
 ﻿using SharpCrop.Forms;
 using SharpCrop.Provider;
 using SharpCrop.Provider.Models;
+using SharpCrop.Provider.Utils;
 using SharpCrop.Utils;
 using System;
 using System.Threading.Tasks;
@@ -21,7 +22,6 @@ namespace SharpCrop
         {
             // Needed to construct this here to be in the right SynchronizationContext
             mainForm = new MainForm(this);
-
             LoadForm(ConfigHelper.Memory.Provider);
         }
 

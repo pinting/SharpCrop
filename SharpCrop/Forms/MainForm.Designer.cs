@@ -38,7 +38,7 @@
             // 
             this.dropboxButton.BackColor = System.Drawing.Color.PaleTurquoise;
             this.dropboxButton.Location = new System.Drawing.Point(11, 15);
-            this.dropboxButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dropboxButton.Margin = new System.Windows.Forms.Padding(2);
             this.dropboxButton.Name = "dropboxButton";
             this.dropboxButton.Size = new System.Drawing.Size(167, 163);
             this.dropboxButton.TabIndex = 0;
@@ -50,7 +50,7 @@
             // 
             this.googleDriveButton.BackColor = System.Drawing.Color.PaleGreen;
             this.googleDriveButton.Location = new System.Drawing.Point(183, 15);
-            this.googleDriveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.googleDriveButton.Margin = new System.Windows.Forms.Padding(2);
             this.googleDriveButton.Name = "googleDriveButton";
             this.googleDriveButton.Size = new System.Drawing.Size(167, 163);
             this.googleDriveButton.TabIndex = 1;
@@ -61,9 +61,8 @@
             // oneDriveButton
             // 
             this.oneDriveButton.BackColor = System.Drawing.Color.SandyBrown;
-            this.oneDriveButton.Enabled = false;
             this.oneDriveButton.Location = new System.Drawing.Point(354, 15);
-            this.oneDriveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oneDriveButton.Margin = new System.Windows.Forms.Padding(2);
             this.oneDriveButton.Name = "oneDriveButton";
             this.oneDriveButton.Size = new System.Drawing.Size(156, 163);
             this.oneDriveButton.TabIndex = 2;
@@ -81,7 +80,7 @@
             this.Controls.Add(this.dropboxButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
