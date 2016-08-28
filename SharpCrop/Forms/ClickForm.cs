@@ -3,6 +3,7 @@ using SharpCrop.Utils;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
@@ -27,7 +28,7 @@ namespace SharpCrop.Forms
             Location = new Point(0, 0);
             Opacity = 0.005;
 
-            drawForm = new DrawForm(this);
+            drawForm = new DrawForm();
             drawForm.Show();
         }
 

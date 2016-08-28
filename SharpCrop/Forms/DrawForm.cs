@@ -7,8 +7,6 @@ namespace SharpCrop.Forms
 {
     public partial class DrawForm : Form
     {
-        private ClickForm parent;
-
         private Point MouseMovePoint = Point.Empty;
         private bool IsMouseDown = false;
 
@@ -19,10 +17,8 @@ namespace SharpCrop.Forms
         /// <summary>
         /// A nonclickable form which background is transparent - so drawing is possible.
         /// </summary>
-        public DrawForm(ClickForm parent)
+        public DrawForm()
         {
-            this.parent = parent;
-
             InitializeComponent();
 
             ClientSize = Screen.PrimaryScreen.Bounds.Size;

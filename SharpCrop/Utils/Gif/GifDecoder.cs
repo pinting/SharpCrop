@@ -389,7 +389,7 @@ namespace SharpCrop.Utils.Gif
                 name = name.Trim().ToLower();
                 status = Read(new FileInfo(name).OpenRead());
             }
-            catch (IOException e)
+            catch
             {
                 status = STATUS_OPEN_ERROR;
             }
@@ -572,7 +572,7 @@ namespace SharpCrop.Utils.Gif
             {
                 curByte = inStream.ReadByte();
             }
-            catch (IOException e)
+            catch
             {
                 status = STATUS_FORMAT_ERROR;
             }
@@ -601,7 +601,7 @@ namespace SharpCrop.Utils.Gif
                         n += count;
                     }
                 }
-                catch (IOException e)
+                catch
                 {
                 }
 
@@ -629,7 +629,7 @@ namespace SharpCrop.Utils.Gif
             {
                 n = inStream.Read(c, 0, c.Length);
             }
-            catch (IOException e)
+            catch
             {
             }
             if (n < nbytes)
@@ -643,9 +643,9 @@ namespace SharpCrop.Utils.Gif
                 int j = 0;
                 while (i < ncolors)
                 {
-                    int r = ((int)c[j++]) & 0xff;
-                    int g = ((int)c[j++]) & 0xff;
-                    int b = ((int)c[j++]) & 0xff;
+                    long r = ((int)c[j++]) & 0xff;
+                    long g = ((int)c[j++]) & 0xff;
+                    long b = ((int)c[j++]) & 0xff;
                     tab[i++] = (int)(0xff000000 | (r << 16) | (g << 8) | b);
                 }
             }
@@ -879,8 +879,6 @@ namespace SharpCrop.Utils.Gif
             lastImage = image;
             lastBgColor = bgColor;
             //		int dispose = 0;
-            bool transparency = false;
-            int delay = 0;
             lct = null;
         }
 
