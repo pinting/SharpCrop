@@ -4,14 +4,13 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SharpCrop.Forms
 {
     public partial class ClickForm : Form
     {
         private bool configShown = false;
+
         private DrawForm drawForm;
         private IProvider provider;
 
@@ -36,7 +35,7 @@ namespace SharpCrop.Forms
         /// Grab bitmap and upload it to the saved Dropbox account.
         /// </summary>
         /// <param name="r">Bitmap position, size</param>
-        public async void Upload(Rectangle r)
+        private async void CaptureImage(Rectangle r)
         {
             // Hide the UI and prepare to capture and upload
             if (configShown)
@@ -127,6 +126,67 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
+        /// Call DrawForm when mouse is up and upload.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+
+            drawForm.CallOnMouseUp(e);
+
+            var r = CaptureHelper.GetRect(drawForm.MouseDownPoint, drawForm.MouseUpPoint);
+
+            if (r.X < 0 || r.Y < 0 || r.Width < 1 || r.Height < 1)
+            {
+                return;
+            }
+
+            switch(drawForm.MouseButton)
+            {
+                case MouseButtons.Left:
+                    CaptureImage(r);
+                    break;
+                case MouseButtons.Right:
+                    break;
+
+            }
+        }
+
+        /// <summary>
+        /// Call DrawForm on paint event. 
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            drawForm.CallOnPaint(e);
+        }
+
+        /// <summary>
+        /// Call DrawForm when mouse is down.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            drawForm.CallOnMouseDown(e);
+        }
+
+        /// <summary>
+        /// Call DrawForm when mouse moves.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            drawForm.CallOnMouseMove(e);
+        }
+
+        /// <summary>
         /// Hide Form from the Alt + Tab application switcher menu.
         /// </summary>
         protected override CreateParams CreateParams
@@ -138,35 +198,5 @@ namespace SharpCrop.Forms
                 return Params;
             }
         }
-
-        #region Mouse Events
-
-        /* These mouse events are binded to DrawForm */
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            base.OnMouseDown(e);
-            drawForm.CallOnMouseDown(e);
-        }
-
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-            drawForm.CallOnMouseUp(e);
-        }
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-            drawForm.CallOnMouseMove(e);
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            drawForm.CallOnPaint(e);
-        }
-
-        #endregion
     }
 }

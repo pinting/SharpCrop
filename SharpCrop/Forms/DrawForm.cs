@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpCrop.Utils;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,12 +7,14 @@ namespace SharpCrop.Forms
 {
     public partial class DrawForm : Form
     {
-        private Point mouseDown = Point.Empty;
-        private Point mouseMove = Point.Empty;
-        private Point mouseUp = Point.Empty;
-        private bool isMouseDown = false;
-
         private ClickForm parent;
+
+        private Point MouseMovePoint = Point.Empty;
+        private bool IsMouseDown = false;
+
+        public Point MouseDownPoint = Point.Empty;
+        public Point MouseUpPoint = Point.Empty;
+        public MouseButtons MouseButton;
 
         /// <summary>
         /// A nonclickable form which background is transparent - so drawing is possible.
@@ -37,22 +40,7 @@ namespace SharpCrop.Forms
         /// </summary>
         public void Reset()
         {
-            isMouseDown = false;
-        }
-
-        /// <summary>
-        /// Private helper function to construct a rectangle from two points.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="dest"></param>
-        /// <returns></returns>
-        private Rectangle GetRect(Point source, Point dest)
-        {
-            return new Rectangle(
-                Math.Min(source.X, dest.X),
-                Math.Min(source.Y, dest.Y),
-                Math.Abs(source.X - dest.X),
-                Math.Abs(source.Y - dest.Y));
+            IsMouseDown = false;
         }
 
         /// <summary>
@@ -63,8 +51,9 @@ namespace SharpCrop.Forms
         {
             base.OnMouseDown(e);
 
-            isMouseDown = true;
-            mouseUp = mouseMove = mouseDown = e.Location;
+            MouseUpPoint = MouseMovePoint = MouseDownPoint = e.Location;
+            MouseButton = e.Button;
+            IsMouseDown = true;
         }
 
         /// <summary>
@@ -75,15 +64,8 @@ namespace SharpCrop.Forms
         {
             base.OnMouseUp(e);
 
-            isMouseDown = false;
-            mouseUp = e.Location;
-
-            var r = GetRect(mouseDown, mouseUp);
-
-            if (r.X >= 0 && r.Y >= 0 && r.Width >= 1 && r.Height >= 1)
-            {
-                parent.Upload(r);
-            }
+            MouseUpPoint = e.Location;
+            IsMouseDown = false;
         }
 
         /// <summary>
@@ -94,7 +76,9 @@ namespace SharpCrop.Forms
         {
             base.OnMouseMove(e);
 
-            mouseMove = e.Location;
+            MouseMovePoint = e.Location;
+            MouseButton = e.Button;
+
             Invalidate();
         }
 
@@ -106,9 +90,19 @@ namespace SharpCrop.Forms
         {
             base.OnPaint(e);
 
-            if (isMouseDown)
+            if (!IsMouseDown)
             {
-                e.Graphics.FillRectangle(Brushes.RoyalBlue, GetRect(mouseDown, mouseMove));
+                return;
+            }
+
+            switch(MouseButton)
+            {
+                case MouseButtons.Left:
+                    e.Graphics.FillRectangle(Constants.LeftColor, CaptureHelper.GetRect(MouseDownPoint, MouseMovePoint));
+                    break;
+                case MouseButtons.Right:
+                    e.Graphics.FillRectangle(Constants.RightColor, CaptureHelper.GetRect(MouseDownPoint, MouseMovePoint));
+                    break;
             }
         }
 

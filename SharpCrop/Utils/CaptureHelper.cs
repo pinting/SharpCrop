@@ -2,12 +2,26 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace SharpCrop.Utils
 {
     public static class CaptureHelper
     {
+        /// <summary>
+        /// Private helper function to construct a rectangle from two points.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
+        /// <returns></returns>
+        public static Rectangle GetRect(Point source, Point dest)
+        {
+            return new Rectangle(
+                Math.Min(source.X, dest.X),
+                Math.Min(source.Y, dest.Y),
+                Math.Abs(source.X - dest.X),
+                Math.Abs(source.Y - dest.Y));
+        }
+
         /// <summary>
         /// Get a Bitmap from screen in the size of the given rectangle.
         /// </summary>
