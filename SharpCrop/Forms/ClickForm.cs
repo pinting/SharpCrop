@@ -143,12 +143,7 @@ namespace SharpCrop.Forms
 
             var run = true;
 
-            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => 
-            {
-                ToastFactory.CreateToast("Processing...");
-
-                run = false;
-            });
+            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => run = false);
 
             using (var stream = new MemoryStream())
             {
@@ -193,7 +188,7 @@ namespace SharpCrop.Forms
                     gif.Finish();
                 });
 
-                ToastFactory.CreateToast("Uplading...");
+                ToastFactory.CreateToast(string.Format("Uplading... ({0} MB)", stream.Length / (1024 * 1024)));
                 EndNotifcation(await Upload(stream));
             }
         }
