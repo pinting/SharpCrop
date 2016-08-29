@@ -52,8 +52,7 @@ namespace SharpCrop.Utils.Gif
 		protected int repeat = -1; // no repeat
 		protected int delay = 0; // frame delay (hundredths)
 		protected bool started = false; // ready to output frames
-		//	protected BinaryWriter bw;
-		protected FileStream fs;
+		protected MemoryStream fs;
 
 		protected Image image; // current frame
 		protected byte[] pixels; // BGR byte array from frame
@@ -273,7 +272,7 @@ namespace SharpCrop.Utils.Gif
 		 * @param os OutputStream on which GIF images are written.
 		 * @return false if initial write failed.
 		 */
-		public bool Start( FileStream os) 
+		public bool Start(MemoryStream os) 
 		{
 			if (os == null) return false;
 			bool ok = true;
@@ -282,29 +281,6 @@ namespace SharpCrop.Utils.Gif
 			try 
 			{
 				WriteString("GIF89a"); // header
-			} 
-			catch
-			{
-				ok = false;
-			}
-			return started = ok;
-		}
-	
-		/**
-		 * Initiates writing of a GIF file with the specified name.
-		 *
-		 * @param file String containing output file name.
-		 * @return false if open or initial write failed.
-		 */
-		public bool Start(String file) 
-		{
-			bool ok = true;
-			try 
-			{
-				//			bw = new BinaryWriter( new FileStream( file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None ) );
-				fs = new FileStream( file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None );
-				ok = Start(fs);
-				closeStream = true;
 			} 
 			catch
 			{

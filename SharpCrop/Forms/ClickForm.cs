@@ -1,8 +1,12 @@
 ﻿using SharpCrop.Provider;
 using SharpCrop.Utils;
+using SharpCrop.Utils.Gif;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,58 +37,6 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Grab bitmap and upload it to the saved Dropbox account.
-        /// </summary>
-        /// <param name="r">Bitmap position, size</param>
-        private async void CaptureImage(Rectangle r)
-        {
-            // Hide the UI and prepare to capture and upload
-            if (configShown)
-            {
-                return;
-            }
-
-            Hide();
-            drawForm.Hide();
-            Application.DoEvents();
-
-#if __MonoCS__
-            await Task.Delay(500);
-#endif
-
-            // Capture and start the upload process
-            using (var stream = new MemoryStream())
-            {
-                var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
-                var bitmap = CaptureHelper.GetBitmap(r);
-
-                bitmap.Save(stream, ConfigHelper.Memory.FormatType);
-
-                var url = await provider.Upload(name, stream);
-
-                // Copy the URL if needed
-                if (ConfigHelper.Memory.Copy)
-                {
-#if __MonoCS__
-                    var form = new CopyForm(url);
-                    form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
-                    form.Show();
-#else
-                    Clipboard.SetText(url);
-#endif
-                }
-            }
-
-            // Uploaded notification
-            ToastFactory.CreateToast("Uploaded successfully!", 3000, () => 
-            {
-#if !__MonoCS__
-                Application.Exit();
-#endif
-            });
-        }
-
-        /// <summary>
         /// Show ConfigForm and hide ClickForm and DrawForm.
         /// </summary>
         private void ShowConfig()
@@ -105,6 +57,145 @@ namespace SharpCrop.Forms
                 drawForm.Show();
                 Show();
             };
+        }
+
+        /// <summary>
+        /// Hide DrawForm and ClickForm.
+        /// </summary>
+        private void HideInterface()
+        {
+
+            Hide();
+            drawForm.Hide();
+            Application.DoEvents();
+
+#if __MonoCS__
+            Thread.Sleep(500);
+#endif
+        }
+
+        /// <summary>
+        /// Show the end notifcation.
+        /// </summary>
+        /// <param name="url"></param>
+        private void EndNotifcation(string url = null)
+        {
+            if (ConfigHelper.Memory.Copy && url != null)
+            {
+                Clipboard.SetText(url);
+
+#if __MonoCS__
+                var form = new CopyForm(url);
+                form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
+                form.Show();
+#endif
+            }
+
+            ToastFactory.CreateToast("Uploaded successfully!", 3000, () =>
+            {
+#if !__MonoCS__
+                Application.Exit();
+#endif
+            });
+        }
+
+        /// <summary>
+        /// Upload a stream with a generated name.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        private async Task<string> Upload(MemoryStream stream)
+        {
+            var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
+
+            return await provider.Upload(name, stream);
+        }
+
+        /// <summary>
+        /// Capture one Bitmap.
+        /// </summary>
+        /// <param name="r"></param>
+        private async void CaptureImage(Rectangle r)
+        {
+            HideInterface();
+
+            string url;
+
+            using (var stream = new MemoryStream())
+            {
+                var bitmap = CaptureHelper.GetBitmap(r);
+
+                bitmap.Save(stream, ConfigHelper.Memory.FormatType);
+
+                url = await Upload(stream);
+            }
+
+            EndNotifcation(url);
+        }
+
+        /// <summary>
+        /// Capture a lot of Bitmaps. REALLY-REALLY SLOW!
+        /// </summary>
+        /// <param name="r"></param>
+        private async void CaptureGif(Rectangle r)
+        {
+            HideInterface();
+
+            var run = true;
+
+            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => 
+            {
+                ToastFactory.CreateToast("Processing...");
+
+                run = false;
+            });
+
+            using (var stream = new MemoryStream())
+            {
+                await Task.Run(async () =>
+                {
+                    var gif = new AnimatedGifEncoder();
+                    var frames = new List<Bitmap>();
+                    var duration = Stopwatch.StartNew();
+
+                    Stopwatch delay = null;
+
+                    while (run)
+                    {
+                        var wait = 0;
+
+                        if (delay != null)
+                        {
+                            wait = Constants.GifDelay - (int)delay.ElapsedMilliseconds;
+                            wait = wait < 0 ? 0 : wait;
+                        }
+
+                        delay = Stopwatch.StartNew();
+
+                        frames.Add(CaptureHelper.GetBitmap(r));
+                        await Task.Delay(wait);
+
+                        delay.Stop();
+                    }
+
+                    duration.Stop();
+
+                    gif.Start(stream);
+                    gif.SetQuality(Constants.GifQuality);
+                    gif.SetRepeat(Constants.GifRepeat);
+
+                    for (var i = 0; i < frames.Count; i++)
+                    {
+                        gif.AddFrame(frames[i]);
+                    }
+
+                    gif.SetDelay((int)duration.ElapsedMilliseconds / frames.Count);
+                    gif.Finish();
+                });
+
+                ToastFactory.CreateToast("Uplading...");
+                EndNotifcation(await Upload(stream));
+            }
         }
 
         /// <summary>
@@ -136,6 +227,11 @@ namespace SharpCrop.Forms
 
             drawForm.CallOnMouseUp(e);
 
+            if (configShown)
+            {
+                return;
+            }
+
             var r = CaptureHelper.GetRect(drawForm.MouseDownPoint, drawForm.MouseUpPoint);
 
             if (r.X < 0 || r.Y < 0 || r.Width < 1 || r.Height < 1)
@@ -149,6 +245,7 @@ namespace SharpCrop.Forms
                     CaptureImage(r);
                     break;
                 case MouseButtons.Right:
+                    CaptureGif(r);
                     break;
 
             }

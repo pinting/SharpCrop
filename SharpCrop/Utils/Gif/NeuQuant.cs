@@ -121,6 +121,8 @@ namespace SharpCrop.Utils.Gif
 
 		/* Initialise network in range (0,0,0) to (255,255,255) and set parameters
 		   ----------------------------------------------------------------------- */
+		public NeuQuant(byte[] thepic, int len ) : this( thepic, len, 10 ){}
+
 		public NeuQuant(byte[] thepic, int len, int sample) 
 		{
 
@@ -443,7 +445,7 @@ namespace SharpCrop.Utils.Gif
 						p[1] -= (a * (p[1] - g)) / alpharadbias;
 						p[2] -= (a * (p[2] - r)) / alpharadbias;
 					} 
-					catch
+					catch 
 					{
 					}
 				}
