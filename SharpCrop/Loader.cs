@@ -66,6 +66,9 @@ namespace SharpCrop
                 case "OneDrive":
                     provider = new OneDrive.Provider();
                     break;
+                case "LocalFile":
+                    provider = new LocalFile.Provider();
+                    break;
                 default:
                     onResult(null);
                     return;

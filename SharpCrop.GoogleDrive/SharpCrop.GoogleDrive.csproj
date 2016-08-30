@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Provider.cs" />
+    <Compile Include="Utils\CodeReceiver.cs" />
     <Compile Include="Utils\MemoryStore.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{634EBB3C-C
 		docs\OneDrive.html = docs\OneDrive.html
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.LocalFile", "SharpCrop.LocalFile\SharpCrop.LocalFile.csproj", "{A3A39048-9A42-4785-985C-FF9C06684285}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAFEC853-40D1-45B5-AC5D-BC1FF5A23BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3A39048-9A42-4785-985C-FF9C06684285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A39048-9A42-4785-985C-FF9C06684285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A39048-9A42-4785-985C-FF9C06684285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A39048-9A42-4785-985C-FF9C06684285}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

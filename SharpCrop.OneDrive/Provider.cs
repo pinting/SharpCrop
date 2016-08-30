@@ -15,7 +15,7 @@ namespace SharpCrop.OneDrive
     public class Provider : IProvider
     {
         private OneDriveClient client;
-
+        
         /// <summary>
         /// Try to create a new OneDriveClient with the given OneDrive auth provider.
         /// </summary>

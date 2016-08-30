@@ -60,5 +60,16 @@ namespace SharpCrop.Forms
             loader.LoadForm("OneDrive");
             Hide();
         }
+
+        /// <summary>
+        /// When LocalFile link is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLocalFile(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            loader.LoadForm("LocalFile");
+            Hide();
+        }
     }
 }

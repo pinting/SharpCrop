@@ -19,57 +19,7 @@ namespace SharpCrop.GoogleDrive
     public class Provider : IProvider
     {
         private DriveService service;
-
-        /// <summary>
-        /// Code receiver class for Google Drive.
-        /// </summary>
-        private sealed class CodeReceiver : ICodeReceiver
-        {
-            public string RedirectUri
-            {
-                get
-                {
-                    return GoogleAuthConsts.InstalledAppRedirectUri;
-                }
-            }
-
-            /// <summary>
-            /// Waiting for Google Drive code.
-            /// </summary>
-            /// <param name="authUrl"></param>
-            /// <param name="taskCancellationToken"></param>
-            /// <returns></returns>
-            public Task<AuthorizationCodeResponseUrl> ReceiveCodeAsync(AuthorizationCodeRequestUrl authUrl, CancellationToken taskCancellationToken)
-            {
-                var result = new TaskCompletionSource<AuthorizationCodeResponseUrl>();
-                var url = authUrl.Build().ToString();
-
-                var form = new CodeForm(url);
-                var success = false;
-
-                form.OnCode(code =>
-                {
-                    success = true;
-
-                    form.Close();
-                    result.SetResult(new AuthorizationCodeResponseUrl() { Code = code });
-                });
-
-                form.FormClosed += (sender, e) =>
-                {
-                    if (!success)
-                    {
-                        result.SetResult(null);
-                    }
-                };
-
-                System.Diagnostics.Process.Start(url);
-                form.Show();
-
-                return result.Task;
-            }
-        }
-
+        
         /// <summary>
         /// Get an access token from Google Drive.
         /// </summary>

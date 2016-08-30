@@ -32,6 +32,7 @@
             this.dropboxButton = new System.Windows.Forms.Button();
             this.googleDriveButton = new System.Windows.Forms.Button();
             this.oneDriveButton = new System.Windows.Forms.Button();
+            this.localFileLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // dropboxButton
@@ -70,11 +71,23 @@
             this.oneDriveButton.UseVisualStyleBackColor = false;
             this.oneDriveButton.Click += new System.EventHandler(this.OnOneDrive);
             // 
+            // localFileLink
+            // 
+            this.localFileLink.AutoSize = true;
+            this.localFileLink.Location = new System.Drawing.Point(12, 180);
+            this.localFileLink.Name = "localFileLink";
+            this.localFileLink.Size = new System.Drawing.Size(115, 13);
+            this.localFileLink.TabIndex = 3;
+            this.localFileLink.TabStop = true;
+            this.localFileLink.Text = "Save the output locally";
+            this.localFileLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLocalFile);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(519, 193);
+            this.ClientSize = new System.Drawing.Size(519, 199);
+            this.Controls.Add(this.localFileLink);
             this.Controls.Add(this.oneDriveButton);
             this.Controls.Add(this.googleDriveButton);
             this.Controls.Add(this.dropboxButton);
@@ -85,6 +98,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -93,5 +107,6 @@
         private System.Windows.Forms.Button dropboxButton;
         private System.Windows.Forms.Button googleDriveButton;
         private System.Windows.Forms.Button oneDriveButton;
+        private System.Windows.Forms.LinkLabel localFileLink;
     }
 }

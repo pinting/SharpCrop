@@ -14,7 +14,7 @@ namespace SharpCrop.Dropbox
     public class Provider : IProvider
     {
         private DropboxClient client;
-
+        
         /// <summary>
         /// Create a new DropboxClient and test it.
         /// </summary>
