@@ -3,29 +3,33 @@ using System.Windows.Forms;
 
 namespace SharpCrop.Forms
 {
+    /// <summary>
+    /// MainForm gives user a UI to choose a Provider.
+    /// </summary>
     public partial class MainForm : Form
     {
-        private Loader loader;
+        private Controller controller;
 
         /// <summary>
-        /// MainForm gives user a UI to choose a Provider.
+        /// Consturct a MainForm - the Loader is needed, because ClickForm
+        /// is constructed there.
         /// </summary>
-        /// <param name="loader"></param>
-        public MainForm(Loader loader)
+        /// <param name="controller"></param>
+        public MainForm(Controller controller)
         {
-            this.loader = loader;
+            this.controller = controller;
 
             InitializeComponent();
         }
 
         /// <summary>
-        /// Called when closed.
+        /// Focus on MainForm when shown.
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnClosed(EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
-            base.OnClosed(e);
-            Application.Exit();
+            base.OnShown(e);
+            Focus();
         }
 
         /// <summary>
@@ -35,7 +39,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnDropbox(object sender, EventArgs e)
         {
-            loader.LoadForm("Dropbox");
+            controller.LoadProvider("Dropbox");
             Hide();
         }
 
@@ -46,7 +50,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnGoogleDrive(object sender, EventArgs e)
         {
-            loader.LoadForm("GoogleDrive");
+            controller.LoadProvider("GoogleDrive");
             Hide();
         }
 
@@ -57,7 +61,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnOneDrive(object sender, EventArgs e)
         {
-            loader.LoadForm("OneDrive");
+            controller.LoadProvider("OneDrive");
             Hide();
         }
 
@@ -68,7 +72,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnLocalFile(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            loader.LoadForm("LocalFile");
+            controller.LoadProvider("LocalFile");
             Hide();
         }
     }

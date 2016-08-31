@@ -1,9 +1,7 @@
 ﻿using SharpCrop.Provider;
-using System;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using System.IO;
-using SharpCrop.Provider.Models;
 using SharpCrop.Provider.Utils;
 using System.Windows.Forms;
 using System.Threading.Tasks;
@@ -11,6 +9,9 @@ using SharpCrop.Provider.Forms;
 
 namespace SharpCrop.Dropbox
 {
+    /// <summary>
+    /// IProvider implementation for Dropbox.
+    /// </summary>
     public class Provider : IProvider
     {
         private DropboxClient client;
@@ -38,46 +39,46 @@ namespace SharpCrop.Dropbox
         }
 
         /// <summary>
-        /// Register for the service. If an old token was given, it gonna try to use it. If it was not given or it
-        /// was expired, it will try to request a new one. Eventully onResult will be called with the something.
+        /// Get a token from Dropbox.
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="onResult"></param>
-        public async Task Register(string token, Action<string, ProviderState> onResult)
+        public async Task<string> Register(string token)
         {
-            if(await ClientFactory(token))
+            var result = new TaskCompletionSource<string>();
+
+            // Check if the saved token is still usable
+            if (await ClientFactory(token))
             {
-                onResult(token, ProviderState.RefreshToken);
-                return;
+                result.SetResult(token);
+                return await result.Task;
             }
 
+            // If it is not, try to get another one
             var url = DropboxOAuth2Helper.GetAuthorizeUri(
                     OAuthResponseType.Code,
                     Obscure.Decode(Constants.AppKey),
                     (string)null);
 
-            var form = new CodeForm(url.ToString());
+            var form = new CodeForm(url.ToString(), 43);
             var success = false;
 
             form.OnCode(async code =>
             {
                 success = true;
-
                 form.Close();
-                Application.DoEvents();
 
-                var result = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
+                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
                     code,
                     Obscure.Decode(Constants.AppKey),
                     Obscure.Decode(Constants.AppSecret));
 
-                if (result != null && result.AccessToken != null && await ClientFactory(result.AccessToken))
+                if (response != null && response.AccessToken != null && await ClientFactory(response.AccessToken))
                 {
-                    onResult(result.AccessToken, ProviderState.NewToken);
+                    result.SetResult(response.AccessToken);
                 }
                 else
                 {
-                    onResult(null, ProviderState.UnknownError);
+                    result.SetResult(null);
                 }
             });
 
@@ -85,12 +86,14 @@ namespace SharpCrop.Dropbox
             {
                 if (!success)
                 {
-                    onResult(null, ProviderState.UserError);
+                    result.SetResult(null);
                 }
             };
 
             System.Diagnostics.Process.Start(url.ToString());
             form.Show();
+
+            return await result.Task;
         }
 
         /// <summary>

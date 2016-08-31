@@ -1,7 +1,5 @@
 ﻿using SharpCrop.Utils;
-using SharpCrop.Utils.Gif;
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -21,7 +19,7 @@ namespace SharpCrop
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Loader());
+            Application.Run(new Controller());
 
             ConfigHelper.Save();
         }

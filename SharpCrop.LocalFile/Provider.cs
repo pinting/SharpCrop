@@ -1,26 +1,37 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using SharpCrop.Provider;
-using SharpCrop.Provider.Models;
 using SharpCrop.Provider.Forms;
 
 namespace SharpCrop.LocalFile
 {
+    /// <summary>
+    /// This is another IProvider implemantation which writes the output to
+    /// the local disk with File.IO.
+    /// </summary>
     public class Provider : IProvider
     {
         private string path;
 
-        public Task Register(string oldPath, Action<string, ProviderState> onResult)
+        /// <summary>
+        /// Register a path which will be saved as a "token" for this provider.
+        /// </summary>
+        /// <param name="oldPath"></param>
+        /// <returns></returns>
+        public Task<string> Register(string oldPath)
         {
-            if(oldPath != null && Directory.Exists(oldPath))
+            var result = new TaskCompletionSource<string>();
+
+            // Check if given oldPath is still exists - if it is, use it
+            if (oldPath != null && Directory.Exists(oldPath))
             {
                 path = oldPath;
 
-                onResult(oldPath, ProviderState.RefreshToken);
-                return Task.Delay(0);
+                result.SetResult(oldPath);
+                return result.Task;
             }
 
+            // Get a newPath with FolderForm
             var success = false;
             var form = new FolderForm();
 
@@ -29,7 +40,7 @@ namespace SharpCrop.LocalFile
                 success = true;
                 path = newPath;
 
-                onResult(newPath, ProviderState.NewToken);
+                result.SetResult(newPath);
                 form.Close();
             });
 
@@ -37,21 +48,28 @@ namespace SharpCrop.LocalFile
             {
                 if(success == false)
                 {
-                    onResult(null, ProviderState.UserError);
+                    result.SetResult(null);
                 }
             };
 
             form.Show();
-            return Task.Delay(0);
+
+            return result.Task;
         }
 
+        /// <summary>
+        /// Write a MemoryStream with the given name to disk.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public Task<string> Upload(string name, MemoryStream stream)
         {
             var url = Path.Combine(path, name);
 
             File.WriteAllBytes(url, stream.ToArray());
 
-            return Task.FromResult(string.Format("file://{0}", url));
+            return Task.FromResult(string.Format("{0}{1}", Constants.UrlPrefix, url));
         }
     }
 }

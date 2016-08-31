@@ -39,7 +39,7 @@
 
 using System;
 
-namespace SharpCrop.Utils.Gif
+namespace SharpCrop.Utils.NGif
 {
 	public class NeuQuant 
 	{

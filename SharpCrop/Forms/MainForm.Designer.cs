@@ -38,7 +38,7 @@
             // dropboxButton
             // 
             this.dropboxButton.BackColor = System.Drawing.Color.PaleTurquoise;
-            this.dropboxButton.Location = new System.Drawing.Point(11, 15);
+            this.dropboxButton.Location = new System.Drawing.Point(10, 15);
             this.dropboxButton.Margin = new System.Windows.Forms.Padding(2);
             this.dropboxButton.Name = "dropboxButton";
             this.dropboxButton.Size = new System.Drawing.Size(167, 163);
@@ -50,7 +50,7 @@
             // googleDriveButton
             // 
             this.googleDriveButton.BackColor = System.Drawing.Color.PaleGreen;
-            this.googleDriveButton.Location = new System.Drawing.Point(183, 15);
+            this.googleDriveButton.Location = new System.Drawing.Point(182, 15);
             this.googleDriveButton.Margin = new System.Windows.Forms.Padding(2);
             this.googleDriveButton.Name = "googleDriveButton";
             this.googleDriveButton.Size = new System.Drawing.Size(167, 163);
@@ -62,7 +62,7 @@
             // oneDriveButton
             // 
             this.oneDriveButton.BackColor = System.Drawing.Color.SandyBrown;
-            this.oneDriveButton.Location = new System.Drawing.Point(354, 15);
+            this.oneDriveButton.Location = new System.Drawing.Point(353, 15);
             this.oneDriveButton.Margin = new System.Windows.Forms.Padding(2);
             this.oneDriveButton.Name = "oneDriveButton";
             this.oneDriveButton.Size = new System.Drawing.Size(156, 163);
@@ -74,12 +74,12 @@
             // localFileLink
             // 
             this.localFileLink.AutoSize = true;
-            this.localFileLink.Location = new System.Drawing.Point(12, 180);
+            this.localFileLink.Location = new System.Drawing.Point(8, 180);
             this.localFileLink.Name = "localFileLink";
-            this.localFileLink.Size = new System.Drawing.Size(115, 13);
+            this.localFileLink.Size = new System.Drawing.Size(129, 13);
             this.localFileLink.TabIndex = 3;
             this.localFileLink.TabStop = true;
-            this.localFileLink.Text = "Save the output locally";
+            this.localFileLink.Text = "Save output as a local file";
             this.localFileLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLocalFile);
             // 
             // MainForm

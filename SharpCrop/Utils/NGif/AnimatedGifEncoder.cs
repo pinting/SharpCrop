@@ -41,7 +41,7 @@ using System.IO;
  */
 #endregion
 
-namespace SharpCrop.Utils.Gif
+namespace SharpCrop.Utils.NGif
 {
 	public class AnimatedGifEncoder
 	{

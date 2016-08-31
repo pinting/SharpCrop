@@ -7,6 +7,9 @@ using SharpCrop.Provider.Forms;
 
 namespace SharpCrop.GoogleDrive.Utils
 {
+    /// <summary>
+    /// Custom ICodeReceiver implementation which uses the CodeForm to wait for the API code.
+    /// </summary>
     public class CodeReceiver : ICodeReceiver
     {
         public string RedirectUri
@@ -18,7 +21,7 @@ namespace SharpCrop.GoogleDrive.Utils
         }
 
         /// <summary>
-        /// Waiting for Google Drive code.
+        /// Waiting for a Google API code.
         /// </summary>
         /// <param name="authUrl"></param>
         /// <param name="taskCancellationToken"></param>
@@ -28,7 +31,7 @@ namespace SharpCrop.GoogleDrive.Utils
             var result = new TaskCompletionSource<AuthorizationCodeResponseUrl>();
             var url = authUrl.Build().ToString();
 
-            var form = new CodeForm(url);
+            var form = new CodeForm(url, 45);
             var success = false;
 
             form.OnCode(code =>

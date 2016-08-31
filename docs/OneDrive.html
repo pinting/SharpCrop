@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>SharpCrop</title>
@@ -6,23 +6,31 @@
     <style>
         body {
             text-align: center;
-            font-weight: bold;
-            font-size: 2em;
             display: block;
-            margin: 50px;
+            margin: 20px;
+        }
+
+        div {
+            margin: 5px;
         }
     </style>
 </head>
 <body>
-    <noscript>
-        Oops! JavaScript is needed!
-    </noscript>
+    <div>Enter this code into SharpCrop to finish the process.</div>
+    <input type="text" id="code" />
     <script>
-    var pattern = "?code=";
-    
-    if(location.search.indexOf(pattern) >= 0) {
-        document.write(location.search.substr(pattern.length))
-    }
+        var element = document.getElementById("code");
+        var pattern = "?code=";
+
+        function show() {
+            element.value = location.search.substr(pattern.length);
+            element.select();
+        }
+
+        if (location.search.indexOf(pattern) >= 0) {
+            setInterval(show, 100);
+            show();
+        }
     </script>
 </body>
 </html>

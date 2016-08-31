@@ -39,7 +39,7 @@
             // 
             this.browseButton.Location = new System.Drawing.Point(278, 12);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(75, 23);
+            this.browseButton.Size = new System.Drawing.Size(75, 22);
             this.browseButton.TabIndex = 0;
             this.browseButton.Text = "Browse";
             this.browseButton.UseVisualStyleBackColor = true;
@@ -47,7 +47,7 @@
             // 
             // folderBox
             // 
-            this.folderBox.Location = new System.Drawing.Point(12, 12);
+            this.folderBox.Location = new System.Drawing.Point(12, 13);
             this.folderBox.Name = "folderBox";
             this.folderBox.Size = new System.Drawing.Size(260, 20);
             this.folderBox.TabIndex = 1;
@@ -56,7 +56,7 @@
             // 
             this.submitButton.Location = new System.Drawing.Point(359, 12);
             this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(75, 23);
+            this.submitButton.Size = new System.Drawing.Size(75, 22);
             this.submitButton.TabIndex = 2;
             this.submitButton.Text = "Submit";
             this.submitButton.UseVisualStyleBackColor = true;

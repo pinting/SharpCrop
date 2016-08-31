@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using SharpCrop.OneDrive.Models;
 using SharpCrop.Provider.Utils;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -12,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace SharpCrop.OneDrive.Utils
 {
+    /// <summary>
+    /// Custom written OneDrive authentication provider which signs every outgoing request with
+    /// the AccessToken. The user needs to copy the API code into the application manually - so
+    /// this is compatible with Mono.
+    /// </summary>
     public class AuthProvider : IAuthenticationProvider
     {
         public TokenResponse Session;
@@ -32,11 +36,14 @@ namespace SharpCrop.OneDrive.Utils
         }
 
         /// <summary>
-        /// Process a code and obtain an TokenResponse.
+        /// Process a code and obtain a TokenResponse.
         /// </summary>
         /// <param name="code"></param>
         public void ProcessCode(string code)
         {
+            // The redirect_uri redirects the user to the project Github Page where the OneDrive.html
+            // writes the API code to the document.body from the URL. This is needed, because OneDrive
+            // does not support a token request without a callback URL - like Google Drive and Dropbox.
             var request = WebRequest.Create("https://login.live.com/oauth20_token.srf");
             var array = Encoding.UTF8.GetBytes(string.Format(
                 "client_id={0}&client_secret={1}&redirect_uri={2}&code={3}&grant_type=authorization_code",

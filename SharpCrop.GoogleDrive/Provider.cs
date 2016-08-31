@@ -1,7 +1,5 @@
 ﻿using SharpCrop.Provider;
-using System;
 using System.IO;
-using SharpCrop.Provider.Models;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
@@ -9,13 +7,12 @@ using Google.Apis.Services;
 using System.Threading;
 using SharpCrop.Provider.Utils;
 using SharpCrop.GoogleDrive.Utils;
-using Google.Apis.Auth.OAuth2.Responses;
-using Google.Apis.Auth.OAuth2.Requests;
-using SharpCrop.Provider.Forms;
-using System.Windows.Forms;
 
 namespace SharpCrop.GoogleDrive
 {
+    /// <summary>
+    /// An IProvider implementation for Google Drive. 
+    /// </summary>
     public class Provider : IProvider
     {
         private DriveService service;
@@ -23,18 +20,17 @@ namespace SharpCrop.GoogleDrive
         /// <summary>
         /// Get an access token from Google Drive.
         /// </summary>
-        /// <param name="savedState">Serialized TokenResponse from Google Api.</param>
-        /// <param name="onResult"></param>
+        /// <param name="token">Serialized TokenResponse from Google Api.</param>
         /// <returns></returns>
-        public async Task Register(string savedState, Action<string, ProviderState> onResult)
+        public async Task<string> Register(string token)
         {
+            var result = new TaskCompletionSource<string>();
+
             try
             {
-                var store = new MemoryStore(savedState);
+                // Try to use the previously saved TokenResponse
+                var store = new MemoryStore(token);
                 var receiver = new CodeReceiver();
-
-                var oldToken = await store.GetAsync<TokenResponse>("token");
-
                 var secret = new ClientSecrets() { ClientId = Obscure.Decode(Constants.AppKey), ClientSecret = Obscure.Decode(Constants.AppSecret) };
                 var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Constants.Scopes, "token", CancellationToken.None, store, receiver);
 
@@ -44,19 +40,15 @@ namespace SharpCrop.GoogleDrive
                     ApplicationName = "SharpCrop",
                 });
 
-                if (oldToken != null && credential.Token != null && oldToken.AccessToken == credential.Token.AccessToken)
-                {
-                    onResult(store.Export(), ProviderState.RefreshToken);
-                }
-                else
-                {
-                    onResult(store.Export(), ProviderState.NewToken);
-                }
+                // Export the serialized TokenResponse which gonna be saved into the config
+                result.SetResult(store.Export());
             }
             catch
             {
-                onResult(null, ProviderState.UnknownError);
+                result.SetResult(null);
             }
+
+            return await result.Task;
         }
 
         /// <summary>

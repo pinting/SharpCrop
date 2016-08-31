@@ -5,6 +5,10 @@ using System.Windows.Forms;
 
 namespace SharpCrop.Forms
 {
+    /// <summary>
+    /// A nonclickable form which background is transparent. So the helping
+    /// rectangles are drawn here.
+    /// </summary>
     public partial class DrawForm : Form
     {
         private Point MouseMovePoint = Point.Empty;
@@ -15,7 +19,7 @@ namespace SharpCrop.Forms
         public MouseButtons MouseButton;
 
         /// <summary>
-        /// A nonclickable form which background is transparent - so drawing is possible.
+        /// Consturct a new DrawForm.
         /// </summary>
         public DrawForm()
         {

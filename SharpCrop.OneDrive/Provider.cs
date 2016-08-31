@@ -1,7 +1,5 @@
 ﻿using SharpCrop.Provider;
-using System;
 using System.IO;
-using SharpCrop.Provider.Models;
 using System.Threading.Tasks;
 using Microsoft.OneDrive.Sdk;
 using Newtonsoft.Json;
@@ -12,14 +10,17 @@ using SharpCrop.OneDrive.Models;
 
 namespace SharpCrop.OneDrive
 {
+    /// <summary>
+    /// This is a IProvider implementation for Microsoft OneDrive.
+    /// </summary>
     public class Provider : IProvider
     {
         private OneDriveClient client;
         
         /// <summary>
-        /// Try to create a new OneDriveClient with the given OneDrive auth provider.
+        /// Try to create a new OneDriveClient.
         /// </summary>
-        /// <param name="provider"></param>
+        /// <param name="provider">Auth provider which signs every request.</param>
         /// <returns></returns>
         private async Task<bool> ClientFactory(IAuthenticationProvider provider)
         {
@@ -38,27 +39,29 @@ namespace SharpCrop.OneDrive
         }
 
         /// <summary>
-        /// Get an access token from OneDrive.
+        /// Get an AccessToken from OneDrive.
         /// </summary>
-        /// <param name="token">Serialized TokenResponse from OneDrive Api.</param>
-        /// <param name="onResult"></param>
+        /// <param name="token">Previous serialized TokenResponse from OneDrive.</param>
         /// <returns></returns>
-        public async Task Register(string token, Action<string, ProviderState> onResult)
+        public async Task<string> Register(string token = null)
         {
+            var result = new TaskCompletionSource<string>();
             var provider = new AuthProvider();
 
-            if(!string.IsNullOrEmpty(token))
+            // Check if there is a saved token and try to use it
+            if (!string.IsNullOrEmpty(token))
             {
                 provider.Session = JsonConvert.DeserializeObject<TokenResponse>(token);
 
                 if (await ClientFactory(provider))
                 {
-                    onResult(token, ProviderState.RefreshToken);
-                    return;
+                    result.SetResult(token);
+                    return await result.Task;
                 }
             }
-
-            var form = new CodeForm(provider.Url);
+            
+            // Create a CodeForm and open OneDrive token request link to obtain a new token
+            var form = new CodeForm(provider.Url, 37);
             var success = false;
 
             form.OnCode(async code =>
@@ -72,11 +75,11 @@ namespace SharpCrop.OneDrive
 
                 if (await ClientFactory(provider))
                 {
-                    onResult(newToken, ProviderState.NewToken);
+                    result.SetResult(newToken);
                 }
                 else
                 {
-                    onResult(null, ProviderState.UnknownError);
+                    result.SetResult(null);
                 }
             });
 
@@ -84,12 +87,14 @@ namespace SharpCrop.OneDrive
             {
                 if (!success)
                 {
-                    onResult(null, ProviderState.UserError);
+                    result.SetResult(null);
                 }
             };
 
             System.Diagnostics.Process.Start(provider.Url);
             form.Show();
+
+            return await result.Task;
         }
 
         /// <summary>

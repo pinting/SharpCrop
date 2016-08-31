@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
 {
+    /// <summary>
+    /// ToastForm is responsible for the right-bottom side toast boxes.
+    /// </summary>
     public partial class ToastForm : Form
     {
         private readonly int margin = 5;
         private int duration;
 
         /// <summary>
-        /// Toast form which responsible for the right-bottom side toast boxes.
+        /// Construct a new ToastForm. Index is managed by ToastFactory.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="duration"></param>

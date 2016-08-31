@@ -50,7 +50,7 @@
       <DependentUpon>FolderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IProvider.cs" />
-    <Compile Include="Models\ProviderState.cs" />
+    <Compile Include="Utils\HttpServer.cs" />
     <Compile Include="Utils\Obscure.cs" />
   </ItemGroup>
   <ItemGroup>

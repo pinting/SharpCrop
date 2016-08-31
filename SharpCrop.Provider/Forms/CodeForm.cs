@@ -3,18 +3,24 @@ using System.Windows.Forms;
 
 namespace SharpCrop.Provider.Forms
 {
+    /// <summary>
+    /// CodeForm shows the token request link and it waits for the user 
+    /// to copy the API code into its input box.
+    /// </summary>
     public partial class CodeForm : Form
     {
         private Action<string> onCode;
+        private int length;
         
         /// <summary>
-        /// Code paste form.
+        /// Construct a new CodePaste form with an URL.
         /// </summary>
         /// <param name="url"></param>
-        public CodeForm(string url)
+        public CodeForm(string url = "", int length = 128)
         {
             InitializeComponent();
 
+            this.length = length;
             linkBox.Text = url;
         }
 
@@ -28,20 +34,20 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// On code box changed.
+        /// Call callback when the code is copied.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CodeBoxChanged(object sender, EventArgs e)
         {
-            if(codeBox.Text.Length > 1)
+            if(codeBox.Text.Length >= length)
             {
                 onCode(codeBox.Text);
             }
         }
 
         /// <summary>
-        /// On link clicked.
+        /// Open browser when the link was clicked.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

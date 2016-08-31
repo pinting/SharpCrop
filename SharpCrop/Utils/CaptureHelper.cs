@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace SharpCrop.Utils
 {
+    /// <summary>
+    /// Capture helper is responsible for capturing a part of the screen (with or without scaling).
+    /// </summary>
     public static class CaptureHelper
     {
         /// <summary>

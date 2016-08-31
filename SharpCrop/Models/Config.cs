@@ -3,6 +3,9 @@ using System.Drawing.Imaging;
 
 namespace SharpCrop.Models
 {
+    /// <summary>
+    /// The configuration file memory model. The validators are written into this.
+    /// </summary>
     public class Config
     {
         [JsonProperty]

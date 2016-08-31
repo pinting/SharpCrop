@@ -21,7 +21,7 @@
 using System;
 using System.IO;
 
-namespace SharpCrop.Utils.Gif
+namespace SharpCrop.Utils.NGif
 {
 	public class LZWEncoder 
 	{

@@ -5,21 +5,25 @@ using System.Threading.Tasks;
 
 namespace SharpCrop.GoogleDrive.Utils
 {
+    /// <summary>
+    /// A simple in-memory key-value store for Google Drive. This is gonna be serialized and held as
+    /// a token in the main application config.
+    /// </summary>
     public class MemoryStore : IDataStore
     {
         private Dictionary<string, string> storage = new Dictionary<string, string>();
 
         /// <summary>
-        /// A simple in-memory key-value store for Google Drive.
+        /// Consturct a store with an optional previous state.
         /// </summary>
         /// <param name="state"></param>
-        public MemoryStore(string state)
+        public MemoryStore(string state = null)
         {
             Import(state);
         }
 
         /// <summary>
-        /// Export dictionary in a string.
+        /// Export dictionary as a string.
         /// </summary>
         /// <returns></returns>
         public string Export()

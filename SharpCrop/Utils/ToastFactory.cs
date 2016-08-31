@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace SharpCrop.Utils
 {
+    /// <summary>
+    /// ToastFactory creates new ToastForms for the user and handles there numbers.
+    /// </summary>
     public static class ToastFactory
     {
         private static int index = 1;
@@ -18,14 +21,15 @@ namespace SharpCrop.Utils
         {
             var form = new ToastForm(text, duration, index++);
 
-            if(onClose != null)
+            form.FormClosed += (object sender, FormClosedEventArgs e) => 
             {
-                form.FormClosed += (object sender, FormClosedEventArgs e) => 
+                index--;
+
+                if (onClose != null)
                 {
-                    index--;
                     onClose();
-                };
-            }
+                }
+            };
 
             form.Show();
         }

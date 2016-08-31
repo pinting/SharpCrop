@@ -42,7 +42,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace SharpCrop.Utils.Gif
+namespace SharpCrop.Utils.NGif
 {
 	public class GifDecoder 
 	{
