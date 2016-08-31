@@ -18,10 +18,18 @@ namespace SharpCrop.Models
         public string Format { get; set; }
 
         [JsonProperty]
+        public int GifFps { get; set; }
+
+        [JsonProperty]
         public bool NoCopy { get; set; }
 
 		[JsonProperty]
 		public bool NoScaling { get; set; }
+
+        [JsonProperty]
+        public bool NoGifRepeat { get; set; }
+
+        #region Validators
 
         [JsonIgnore]
         public ImageFormat FormatType
@@ -76,5 +84,25 @@ namespace SharpCrop.Models
                 return !NoScaling;
             }
         }
+
+        [JsonIgnore]
+        public int RealGifFps
+        {
+            get
+            {
+                return GifFps > 0 && GifFps <= 30 ? GifFps : 30;
+            }
+        }
+
+        [JsonIgnore]
+        public bool GifRepeat
+        {
+            get
+            {
+                return !NoGifRepeat;
+            }
+        }
+
+        #endregion
     }
 }

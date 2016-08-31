@@ -148,7 +148,7 @@ namespace SharpCrop
 
                     if (delay != null)
                     {
-                        wait = Constants.GifDelay - (int)delay.ElapsedMilliseconds;
+                        wait = ConfigHelper.Memory.RealGifFps - (int)delay.ElapsedMilliseconds;
                         wait = wait < 0 ? 0 : wait;
                     }
 
@@ -164,7 +164,7 @@ namespace SharpCrop
 
                 gif.Start(stream);
                 gif.SetQuality(Constants.GifQuality);
-                gif.SetRepeat(Constants.GifRepeat);
+                gif.SetRepeat(ConfigHelper.Memory.GifRepeat ? 0 : 1);
 
                 for (var i = 0; i < frames.Count; i++)
                 {

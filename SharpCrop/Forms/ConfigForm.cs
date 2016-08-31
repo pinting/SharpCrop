@@ -24,19 +24,11 @@ namespace SharpCrop.Forms
             InitializeComponent();
 
             formatList.Text = ConfigHelper.Memory.FormatExt;
+            gifFpsList.Text = ConfigHelper.Memory.RealGifFps.ToString();
+
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
-        }
-
-        /// <summary>
-        /// Reset application settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ResetClick(object sender, EventArgs e)
-        {
-            ConfigHelper.Reset();
-            Application.Exit();
+            noGifRepeat.Checked = ConfigHelper.Memory.NoGifRepeat;
         }
 
         /// <summary>
@@ -47,6 +39,16 @@ namespace SharpCrop.Forms
         private void FormatChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.Format = formatList.Text;
+        }
+
+        /// <summary>
+        /// Change GIF FPS value.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GifFpsChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.GifFps = int.Parse(gifFpsList.Text);
         }
 
         /// <summary>
@@ -67,6 +69,27 @@ namespace SharpCrop.Forms
         private void NoScalingChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.NoScaling = noScalingCheckBox.Checked;
+        }
+
+        /// <summary>
+        /// Disable or enable GIF repeat.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void noGifRepeat_CheckedChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.NoGifRepeat = noGifRepeat.Checked;
+        }
+
+        /// <summary>
+        /// Reset application settings.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ResetClick(object sender, EventArgs e)
+        {
+            ConfigHelper.Reset();
+            Application.Exit();
         }
     }
 }
