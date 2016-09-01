@@ -34,6 +34,15 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
+        /// Reset the mouse position.
+        /// </summary>
+        private void ResetMouse()
+        {
+            mouseMovePoint = mouseDownPoint = mouseUpPoint = Point.Empty;
+            isMouseDown = false;
+        }
+
+        /// <summary>
         /// When CropForm shown.
         /// </summary>
         /// <param name="e"></param>
@@ -42,6 +51,7 @@ namespace SharpCrop.Forms
             base.OnShown(e);
 
             MakeClickable();
+            ResetMouse();
             Focus();
         }
 
@@ -54,6 +64,7 @@ namespace SharpCrop.Forms
             base.OnLostFocus(e);
 
             MakeClickable();
+            ResetMouse();
             Focus();
         }
 
@@ -99,6 +110,11 @@ namespace SharpCrop.Forms
         {
             base.OnMouseUp(e);
             MakeClickable();
+
+            if(!isMouseDown)
+            {
+                return;
+            }
 
             mouseUpPoint = mouseMovePoint = e.Location;
             mouseButton = e.Button;
