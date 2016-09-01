@@ -80,7 +80,7 @@
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(7, 138);
+            this.resetButton.Location = new System.Drawing.Point(7, 135);
             this.resetButton.Margin = new System.Windows.Forms.Padding(2);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(131, 25);
@@ -139,7 +139,7 @@
             // noFocusCheckBox
             // 
             this.noFocusCheckBox.AutoSize = true;
-            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 117);
+            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 116);
             this.noFocusCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noFocusCheckBox.Name = "noFocusCheckBox";
             this.noFocusCheckBox.Size = new System.Drawing.Size(128, 17);
