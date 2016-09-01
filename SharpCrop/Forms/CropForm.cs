@@ -30,7 +30,31 @@ namespace SharpCrop.Forms
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
 
-            MakeInvisible();
+            MakeClickable();
+        }
+
+        /// <summary>
+        /// When CropForm shown.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            MakeClickable();
+            Focus();
+        }
+
+        /// <summary>
+        /// When CropForm lose focus.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+
+            MakeClickable();
+            Focus();
         }
 
         /// <summary>
@@ -38,15 +62,12 @@ namespace SharpCrop.Forms
         /// </summary>
         private void ShowConfig()
         {
-            MakeInvisible();
-            Hide();
-
             var form = new ConfigForm();
 
+            Hide();
             form.Show();
             form.FormClosed += (object sender, FormClosedEventArgs ev) =>
             {
-                MakeInvisible();
                 Show();
             };
         }
@@ -77,7 +98,7 @@ namespace SharpCrop.Forms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            MakeInvisible();
+            MakeClickable();
 
             mouseUpPoint = mouseMovePoint = e.Location;
             mouseButton = e.Button;
@@ -117,7 +138,7 @@ namespace SharpCrop.Forms
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            MakeVisible();
+            MakeInvisible();
 
             mouseUpPoint = mouseMovePoint = mouseDownPoint = e.Location;
             mouseButton = e.Button;
@@ -165,9 +186,9 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Make the form invisible, including the selecting reactangle.
+        /// Make the form invisible and enable clicking.
         /// </summary>
-        private void MakeInvisible()
+        private void MakeClickable()
         {
 #if !__MonoCS__
             TransparencyKey = Color.White;
@@ -176,10 +197,10 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Make the form visible (the selecting rectangle), but set the 
-        /// background as the TransparencyKey (so it is gonna invisible).
+        /// Make the background invisible (not the selecting rectangle)
+        /// and disable clicking.
         /// </summary>
-        private void MakeVisible()
+        private void MakeInvisible()
         {
 #if !__MonoCS__
             TransparencyKey = Color.Black;
