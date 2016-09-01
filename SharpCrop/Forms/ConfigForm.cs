@@ -30,6 +30,10 @@ namespace SharpCrop.Forms
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
             noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
             noFocusCheckBox.Checked = ConfigHelper.Memory.NoFocus;
+
+#if __MonoCS__
+            noFocusCheckBox.Enabled = false;
+#endif
         }
 
         /// <summary>
