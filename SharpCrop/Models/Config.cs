@@ -68,9 +68,18 @@ namespace SharpCrop.Models
                         return "png";
                 }
             }
-		}
+        }
 
-		[JsonIgnore]
+        [JsonIgnore]
+        public int SafeGifFps
+        {
+            get
+            {
+                return GifFps > 0 && GifFps <= 30 ? GifFps : 30;
+            }
+        }
+
+        [JsonIgnore]
 		public bool Copy
 		{
 			get 
@@ -85,15 +94,6 @@ namespace SharpCrop.Models
             get
             {
                 return !NoScaling;
-            }
-        }
-
-        [JsonIgnore]
-        public int RealGifFps
-        {
-            get
-            {
-                return GifFps > 0 && GifFps <= 30 ? GifFps : 30;
             }
         }
 

@@ -148,7 +148,7 @@ namespace SharpCrop
 
                     if (delay != null)
                     {
-                        wait = (1000 / ConfigHelper.Memory.RealGifFps) - (int)delay.ElapsedMilliseconds;
+                        wait = (1000 / ConfigHelper.Memory.SafeGifFps) - (int)delay.ElapsedMilliseconds;
                         wait = wait < 0 ? 0 : wait;
                     }
 

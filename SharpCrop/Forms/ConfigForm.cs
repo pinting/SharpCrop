@@ -24,7 +24,7 @@ namespace SharpCrop.Forms
             InitializeComponent();
 
             formatList.Text = ConfigHelper.Memory.FormatExt;
-            gifFpsList.Text = ConfigHelper.Memory.RealGifFps.ToString();
+            gifFpsList.Text = ConfigHelper.Memory.SafeGifFps.ToString();
 
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
