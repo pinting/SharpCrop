@@ -223,5 +223,43 @@ namespace SharpCrop.Forms
             Opacity = 0.75D;
 #endif
         }
+
+        /// <summary>
+        /// Do not steal focus from other windows.
+        /// </summary>
+        protected override bool ShowWithoutActivation
+        {
+            get
+            {
+                if (ConfigHelper.Memory.Focus)
+                {
+                    return base.ShowWithoutActivation;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Keep focus for other windows while topmost.
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                if(ConfigHelper.Memory.Focus)
+                {
+                    return base.CreateParams;
+                }
+
+                CreateParams baseParams = base.CreateParams;
+
+                const int WS_EX_NOACTIVATE = 0x08000000;
+                const int WS_EX_TOOLWINDOW = 0x00000080;
+                baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+
+                return baseParams;
+            }
+        }
     }
 }

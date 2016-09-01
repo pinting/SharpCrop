@@ -34,9 +34,10 @@
             this.noScalingCheckBox = new System.Windows.Forms.CheckBox();
             this.resetButton = new System.Windows.Forms.Button();
             this.gifFpsList = new System.Windows.Forms.ComboBox();
-            this.noGifRepeat = new System.Windows.Forms.CheckBox();
+            this.noGifRepeatCheckBox = new System.Windows.Forms.CheckBox();
             this.formatLabel = new System.Windows.Forms.Label();
             this.gifFpsLabel = new System.Windows.Forms.Label();
+            this.noFocusCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // formatList
@@ -79,7 +80,7 @@
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(7, 118);
+            this.resetButton.Location = new System.Drawing.Point(7, 138);
             this.resetButton.Margin = new System.Windows.Forms.Padding(2);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(131, 25);
@@ -105,17 +106,17 @@
             this.gifFpsList.TabIndex = 4;
             this.gifFpsList.SelectedIndexChanged += new System.EventHandler(this.GifFpsChanged);
             // 
-            // noGifRepeat
+            // noGifRepeatCheckBox
             // 
-            this.noGifRepeat.AutoSize = true;
-            this.noGifRepeat.Location = new System.Drawing.Point(8, 97);
-            this.noGifRepeat.Margin = new System.Windows.Forms.Padding(2);
-            this.noGifRepeat.Name = "noGifRepeat";
-            this.noGifRepeat.Size = new System.Drawing.Size(114, 17);
-            this.noGifRepeat.TabIndex = 5;
-            this.noGifRepeat.Text = "Disable GIF repeat";
-            this.noGifRepeat.UseVisualStyleBackColor = true;
-            this.noGifRepeat.CheckedChanged += new System.EventHandler(this.noGifRepeat_CheckedChanged);
+            this.noGifRepeatCheckBox.AutoSize = true;
+            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(8, 97);
+            this.noGifRepeatCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noGifRepeatCheckBox.Name = "noGifRepeatCheckBox";
+            this.noGifRepeatCheckBox.Size = new System.Drawing.Size(114, 17);
+            this.noGifRepeatCheckBox.TabIndex = 5;
+            this.noGifRepeatCheckBox.Text = "Disable GIF repeat";
+            this.noGifRepeatCheckBox.UseVisualStyleBackColor = true;
+            this.noGifRepeatCheckBox.CheckedChanged += new System.EventHandler(this.NoGifRepeatChanged);
             // 
             // formatLabel
             // 
@@ -135,14 +136,27 @@
             this.gifFpsLabel.TabIndex = 7;
             this.gifFpsLabel.Text = "GIF FPS";
             // 
+            // noFocusCheckBox
+            // 
+            this.noFocusCheckBox.AutoSize = true;
+            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 117);
+            this.noFocusCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noFocusCheckBox.Name = "noFocusCheckBox";
+            this.noFocusCheckBox.Size = new System.Drawing.Size(128, 17);
+            this.noFocusCheckBox.TabIndex = 8;
+            this.noFocusCheckBox.Text = "Launch without focus";
+            this.noFocusCheckBox.UseVisualStyleBackColor = true;
+            this.noFocusCheckBox.CheckedChanged += new System.EventHandler(this.NoFocusChanged);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(149, 148);
+            this.ClientSize = new System.Drawing.Size(149, 171);
+            this.Controls.Add(this.noFocusCheckBox);
             this.Controls.Add(this.gifFpsLabel);
             this.Controls.Add(this.formatLabel);
-            this.Controls.Add(this.noGifRepeat);
+            this.Controls.Add(this.noGifRepeatCheckBox);
             this.Controls.Add(this.gifFpsList);
             this.Controls.Add(this.resetButton);
             this.Controls.Add(this.noScalingCheckBox);
@@ -167,8 +181,9 @@
         private System.Windows.Forms.CheckBox noScalingCheckBox;
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.ComboBox gifFpsList;
-        private System.Windows.Forms.CheckBox noGifRepeat;
+        private System.Windows.Forms.CheckBox noGifRepeatCheckBox;
         private System.Windows.Forms.Label formatLabel;
         private System.Windows.Forms.Label gifFpsLabel;
+        private System.Windows.Forms.CheckBox noFocusCheckBox;
     }
 }

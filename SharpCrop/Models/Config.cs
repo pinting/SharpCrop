@@ -29,6 +29,9 @@ namespace SharpCrop.Models
         [JsonProperty]
         public bool NoGifRepeat { get; set; }
 
+        [JsonProperty]
+        public bool NoFocus { get; set; }
+
         #region Validators
 
         [JsonIgnore]
@@ -100,6 +103,15 @@ namespace SharpCrop.Models
             get
             {
                 return !NoGifRepeat;
+            }
+        }
+
+        [JsonIgnore]
+        public bool Focus
+        {
+            get
+            {
+                return !NoFocus;
             }
         }
 

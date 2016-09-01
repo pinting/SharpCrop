@@ -64,7 +64,10 @@ namespace SharpCrop.Forms
         /// </summary>
         protected override bool ShowWithoutActivation
         {
-            get { return true; }
+            get
+            {
+                return true;
+            }
         }
     
         /// <summary>

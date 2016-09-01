@@ -28,7 +28,7 @@ namespace SharpCrop.Forms
 
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
-            noGifRepeat.Checked = ConfigHelper.Memory.NoGifRepeat;
+            noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
         }
 
         /// <summary>
@@ -76,9 +76,19 @@ namespace SharpCrop.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void noGifRepeat_CheckedChanged(object sender, EventArgs e)
+        private void NoGifRepeatChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoGifRepeat = noGifRepeat.Checked;
+            ConfigHelper.Memory.NoGifRepeat = noGifRepeatCheckBox.Checked;
+        }
+
+        /// <summary>
+        /// Disable or enable focus on launch.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NoFocusChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.NoFocus = noFocusCheckBox.Checked;
         }
 
         /// <summary>
