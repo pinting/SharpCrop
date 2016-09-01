@@ -11,10 +11,10 @@ namespace SharpCrop.Forms
     /// </summary>
     public partial class CropForm : Form
     {
+        private MouseButtons mouseButtonUsed = MouseButtons.Left;
         private Point mouseMovePoint = Point.Empty;
         private Point mouseDownPoint = Point.Empty;
         private Point mouseUpPoint = Point.Empty;
-        private MouseButtons mouseButton;
         private bool isMouseDown = false;
         private Controller controller;
 
@@ -117,7 +117,7 @@ namespace SharpCrop.Forms
             }
 
             mouseUpPoint = mouseMovePoint = e.Location;
-            mouseButton = e.Button;
+            mouseButtonUsed = e.Button;
             isMouseDown = false;
             
             var r = CaptureHelper.GetRect(mouseDownPoint, mouseUpPoint);
@@ -136,7 +136,7 @@ namespace SharpCrop.Forms
             Thread.Sleep(50);
 #endif
 
-            switch (mouseButton)
+            switch (mouseButtonUsed)
             {
                 case MouseButtons.Left:
                     controller.CaptureImage(r);
@@ -157,7 +157,7 @@ namespace SharpCrop.Forms
             MakeInvisible();
 
             mouseUpPoint = mouseMovePoint = mouseDownPoint = e.Location;
-            mouseButton = e.Button;
+            mouseButtonUsed = e.Button;
             isMouseDown = true;
         }
 
@@ -170,7 +170,7 @@ namespace SharpCrop.Forms
             base.OnMouseMove(e);
 
             mouseMovePoint = e.Location;
-            mouseButton = e.Button;
+            mouseButtonUsed = e.Button;
 
             Invalidate();
         }
@@ -190,7 +190,7 @@ namespace SharpCrop.Forms
 
             var rect = CaptureHelper.GetRect(mouseDownPoint, mouseMovePoint);
 
-            switch (mouseButton)
+            switch (mouseButtonUsed)
             {
                 case MouseButtons.Left:
                     e.Graphics.FillRectangle(Constants.LeftColor, rect);
