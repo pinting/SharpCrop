@@ -136,7 +136,7 @@ namespace SharpCrop.Forms
             Thread.Sleep(50);
 #endif
 
-            switch (mouseButtonUsed)
+            switch (e.Button)
             {
                 case MouseButtons.Left:
                     controller.CaptureImage(r);
