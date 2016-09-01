@@ -59,23 +59,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Forms\ClickForm.cs">
+    <Compile Include="Forms\CropForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ClickForm.Designer.cs">
-      <DependentUpon>ClickForm.cs</DependentUpon>
+    <Compile Include="Forms\CropForm.Designer.cs">
+      <DependentUpon>CropForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\DrawForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DrawForm.Designer.cs">
-      <DependentUpon>DrawForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -106,14 +100,11 @@
     <Compile Include="Utils\NGif\LZWEncoder.cs" />
     <Compile Include="Utils\NGif\NeuQuant.cs" />
     <Compile Include="Utils\ToastFactory.cs" />
-    <EmbeddedResource Include="Forms\ClickForm.resx">
-      <DependentUpon>ClickForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\CropForm.resx">
+      <DependentUpon>CropForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConfigForm.resx">
       <DependentUpon>ConfigForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DrawForm.resx">
-      <DependentUpon>DrawForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

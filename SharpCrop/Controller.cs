@@ -28,7 +28,7 @@ namespace SharpCrop
         public Controller()
         {
             // Needed to construct these here to be in the right SynchronizationContext
-            clickForm = new ClickForm(this);
+            clickForm = new CropForm(this);
             clickForm.FormClosed += (s, e) => Application.Exit();
 
             LoadProvider(ConfigHelper.Memory.Provider);

@@ -1,6 +1,6 @@
 ﻿namespace SharpCrop.Forms
 {
-    partial class DrawForm
+    partial class CropForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,24 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DrawForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CropForm));
             this.SuspendLayout();
             // 
-            // DrawForm
+            // CropForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(278, 244);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(185, 163);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "DrawForm";
-            this.Opacity = 0.75D;
-            this.ShowInTaskbar = false;
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Name = "CropForm";
+            this.Opacity = 0.25D;
             this.Text = "SharpCrop";
             this.TopMost = true;
-            this.TransparencyKey = System.Drawing.Color.White;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 

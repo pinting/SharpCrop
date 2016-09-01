@@ -11,7 +11,7 @@ namespace SharpCrop.Forms
         private Controller controller;
 
         /// <summary>
-        /// Consturct a MainForm - the Loader is needed, because ClickForm
+        /// Consturct a MainForm - the Loader is needed, because CropForm
         /// is constructed there.
         /// </summary>
         /// <param name="controller"></param>
