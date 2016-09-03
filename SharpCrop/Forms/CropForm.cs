@@ -30,13 +30,8 @@ namespace SharpCrop.Forms
 
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
-
-            if (ConfigHelper.Memory.NoTransparency)
-            {
-                BackgroundImage = CaptureHelper.GetBitmap(Screen.PrimaryScreen.Bounds);
-                Opacity = 1.0D;
-            }
-
+            
+            RefreshBackground();
             MakeClickable();
         }
 
@@ -86,7 +81,22 @@ namespace SharpCrop.Forms
             form.Show();
             form.FormClosed += (object sender, FormClosedEventArgs ev) =>
             {
-                Show();
+                if (ConfigHelper.Memory.Transparency)
+                {
+                    Show();
+                    return;
+                }
+
+                Task.Run(() =>
+                {
+                    // Wait for the form to disappear
+                    Thread.Sleep(500);
+                    Invoke(new Action(() => 
+                    {
+                        RefreshBackground();
+                        Show();
+                    }));
+                });
             };
         }
         
@@ -239,6 +249,18 @@ namespace SharpCrop.Forms
             TransparencyKey = Color.Black;
             Opacity = 0.75D;
 #endif
+        }
+
+        /// <summary>
+        /// Refresh the background if transparency is disabled.
+        /// </summary>
+        private void RefreshBackground()
+        {
+            if (ConfigHelper.Memory.NoTransparency)
+            {
+                BackgroundImage = CaptureHelper.GetBitmap(Screen.PrimaryScreen.Bounds);
+                Opacity = 1.0D;
+            }
         }
 
         /// <summary>
