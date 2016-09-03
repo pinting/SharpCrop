@@ -1,7 +1,6 @@
 ﻿using SharpCrop.Forms;
 using SharpCrop.Provider;
 using SharpCrop.Utils;
-using SharpCrop.Utils.NGif;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -129,51 +128,11 @@ namespace SharpCrop
         /// <param name="rect"></param>
         public async void CaptureGif(Rectangle rect)
         {
-            var stream = new MemoryStream();
-            var run = true;
+            var gif = new GifFactory();
 
-            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => run = false);
-            
-            await Task.Run(async () =>
-            {
-                var gif = new AnimatedGifEncoder();
-                var frames = new List<Bitmap>();
-                var duration = Stopwatch.StartNew();
+            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => gif.Stop());
 
-                Stopwatch delay = null;
-
-                while (run)
-                {
-                    var wait = 0;
-
-                    if (delay != null)
-                    {
-                        wait = (1000 / ConfigHelper.Memory.SafeGifFps) - (int)delay.ElapsedMilliseconds;
-                        wait = wait < 0 ? 0 : wait;
-                    }
-
-                    delay = Stopwatch.StartNew();
-
-                    frames.Add(CaptureHelper.GetBitmap(rect));
-                    await Task.Delay(wait);
-
-                    delay.Stop();
-                }
-
-                duration.Stop();
-
-                gif.Start(stream);
-                gif.SetQuality(Constants.GifQuality);
-                gif.SetRepeat(ConfigHelper.Memory.GifRepeat ? 0 : 1);
-
-                for (var i = 0; i < frames.Count; i++)
-                {
-                    gif.AddFrame(frames[i]);
-                }
-
-                gif.SetDelay((int)duration.ElapsedMilliseconds / frames.Count);
-                gif.Finish();
-            });
+            var stream = await gif.Record(rect);
 
             ToastFactory.CreateToast(string.Format("Uploading... ({0:0.00} MB)", (double)stream.Length / (1024 * 1024)));
 
