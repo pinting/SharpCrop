@@ -16,6 +16,16 @@ namespace SharpCrop.Utils
         private bool running = false;
 
         /// <summary>
+        /// Check if a frame exists.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        private bool FrameExists(int i)
+        {
+            return frames.Count > i && frames[i] != null;
+        }
+
+        /// <summary>
         /// Start capturing frames with CaptureHelper.
         /// </summary>
         /// <param name="rect"></param>
@@ -75,6 +85,38 @@ namespace SharpCrop.Utils
             return true;
         }
 
+#if __MonoCS__
+        
+        /// <summary>
+        /// Old NGif encoder for Mono.
+        /// </summary>
+        private void EncodeGif()
+        {
+            var stream = new MemoryStream();
+            var gif = new NGif.AnimatedGifEncoder();
+
+            gif.Start(stream);
+            gif.SetQuality(Constants.GifQuality);
+            gif.SetRepeat(ConfigHelper.Memory.GifRepeat ? 0 : 1);
+
+            while (running || frames.Count > 0)
+            {
+                if (FrameExists(0))
+                {
+                    gif.AddFrame(frames[0].Image);
+                    frames.RemoveAt(0);
+                }
+            }
+
+            gif.SetDelay(1000 / ConfigHelper.Memory.SafeGifFps);
+            gif.Finish();
+            Stop();
+
+            result.SetResult(stream);
+        }
+
+#else
+
         /// <summary>
         /// Start encoding GIF while waiting for new frames. If the capture process is still running, the algorithm
         /// waits for minimum 2 frames, then it will compares them. If they are the same, there is no need to save
@@ -82,10 +124,8 @@ namespace SharpCrop.Utils
         /// </summary>
         private void EncodeGif()
         {
-            var exists = new Func<int, bool>(i => frames.Count > i && frames[i] != null);
-
             // Wait for the first frame
-            while (!exists(0)) continue;
+            while (!FrameExists(0)) continue;
             
             var stream = new MemoryStream();
             var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.GifRepeat ? 0 : 1);
@@ -93,7 +133,7 @@ namespace SharpCrop.Utils
             while(running || frames.Count > 0)
             {
                 // Check if it is possible to remove a frame
-                if (exists(1) && Compare(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
+                if (FrameExists(1) && Compare(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
                 {
                     frames[0].Delay += frames[1].Delay;
                     frames.RemoveAt(1);
@@ -102,7 +142,7 @@ namespace SharpCrop.Utils
                 // Save a frame to the Gif
                 // - if 0 and 1 are different
                 // - if there is one last frame left (and the capture process is stopped)
-                else if (exists(1) || exists(0) && !running)
+                else if (FrameExists(1) || FrameExists(0) && !running)
                 {
                     gif.AddFrame(frames[0].Image, 0, 0, TimeSpan.FromMilliseconds(frames[0].Delay));
                     frames.RemoveAt(0);
@@ -114,6 +154,8 @@ namespace SharpCrop.Utils
 
             result.SetResult(stream);
         }
+
+#endif
 
         /// <summary>
         /// Start a recording with a rectangle.
