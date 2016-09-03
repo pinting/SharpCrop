@@ -122,8 +122,7 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Capture a lot of Bitmaps and convert them to Gif. 
-        /// REALLY-REALLY SLOW!
+        /// Capture a lot of Bitmaps and convert them to Gif.
         /// </summary>
         /// <param name="rect"></param>
         public async void CaptureGif(Rectangle rect)
