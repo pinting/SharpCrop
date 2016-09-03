@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace SharpCrop.Utils
 {
-    public class GifFactory
+    public static class GifFactory
     {
-        private TaskCompletionSource<MemoryStream> result;
-        private List<GifFrame> frames = new List<GifFrame>();
-        private bool running = false;
+        private static TaskCompletionSource<MemoryStream> result;
+        private static List<GifFrame> frames = new List<GifFrame>();
+        private static bool running = false;
 
         /// <summary>
         /// Check if a frame exists.
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        private bool FrameExists(int i)
+        private static bool FrameExists(int i)
         {
             return frames.Count > i && frames[i] != null;
         }
@@ -29,7 +29,7 @@ namespace SharpCrop.Utils
         /// Start capturing frames with CaptureHelper.
         /// </summary>
         /// <param name="rect"></param>
-        private void CaptureFrames(Rectangle rect)
+        private static void CaptureFrames(Rectangle rect)
         {
             var freq = (1000 / ConfigHelper.Memory.SafeGifFps);
             var wait = 0;
@@ -61,7 +61,7 @@ namespace SharpCrop.Utils
         /// <param name="step">Distance between tested pixels</param>
         /// <param name="diff">Maximum difference in colors</param>
         /// <returns></returns>
-        private bool Compare(GifFrame a, GifFrame b, int step = 1, int diff = 0)
+        private static bool Compare(GifFrame a, GifFrame b, int step = 1, int diff = 0)
         {
             if (!a.Image.Size.Equals(b.Image.Size))
             {
@@ -90,7 +90,7 @@ namespace SharpCrop.Utils
         /// <summary>
         /// Old NGif encoder for Mono.
         /// </summary>
-        private void EncodeGif()
+        private static void EncodeGif()
         {
             var stream = new MemoryStream();
             var gif = new NGif.AnimatedGifEncoder();
@@ -122,7 +122,7 @@ namespace SharpCrop.Utils
         /// waits for minimum 2 frames, then it will compares them. If they are the same, there is no need to save
         /// each, the first one gonna have an additional delay, while the second one will be deleted.
         /// </summary>
-        private void EncodeGif()
+        private static void EncodeGif()
         {
             // Wait for the first frame
             while (!FrameExists(0)) continue;
@@ -162,7 +162,7 @@ namespace SharpCrop.Utils
         /// </summary>
         /// <param name="rect"></param>
         /// <returns></returns>
-        public Task<MemoryStream> Record(Rectangle rect)
+        public static Task<MemoryStream> Record(Rectangle rect)
         {
             if(result != null && !result.Task.IsCompleted)
             {
@@ -182,7 +182,7 @@ namespace SharpCrop.Utils
         /// <summary>
         /// Request stop - EncodeGif will finish captured frames before it terminates.
         /// </summary>
-        public void Stop()
+        public static void Stop()
         {
             running = false;
         }

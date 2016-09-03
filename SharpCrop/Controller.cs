@@ -127,11 +127,13 @@ namespace SharpCrop
         /// <param name="rect"></param>
         public async void CaptureGif(Rectangle rect)
         {
-            var gif = new GifFactory();
+            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => 
+            {
+                ToastFactory.CreateToast("Encoding...");
+                GifFactory.Stop();
+            });
 
-            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => gif.Stop());
-
-            var stream = await gif.Record(rect);
+            var stream = await GifFactory.Record(rect);
 
             ToastFactory.CreateToast(string.Format("Uploading... ({0:0.00} MB)", (double)stream.Length / (1024 * 1024)));
 
