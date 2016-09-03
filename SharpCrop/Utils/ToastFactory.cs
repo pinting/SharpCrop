@@ -1,5 +1,7 @@
 ﻿using SharpCrop.Forms;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace SharpCrop.Utils
@@ -9,21 +11,27 @@ namespace SharpCrop.Utils
     /// </summary>
     public static class ToastFactory
     {
+        private static Dictionary<int, Form> toasts = new Dictionary<int, Form>();
         private static int index = 1;
+        private static int id = 0;
 
         /// <summary>
         /// Create a new toast.
         /// </summary>
-        /// <param name="text">Text of the toast</param>
-        /// <param name="duration">Duration in ms</param>
-        /// <param name="onClose">Closing event callback</param>
-        public static void CreateToast(string text, int duration = 3000, Action onClose = null)
+        /// <param name="text"></param>
+        /// <param name="color">Background color</param>
+        /// <param name="duration">Toast duration (0 is infinite)</param>
+        /// <param name="onClose">On close callback</param>
+        /// <returns></returns>
+        public static int Create(string text, Color color, int duration = 3000, Action onClose = null)
         {
-            var form = new ToastForm(text, duration, index++);
+            var form = new ToastForm(text, color, duration, index++);
+            var currentId = id++;
 
-            form.FormClosed += (object sender, FormClosedEventArgs e) => 
+            form.FormClosed += (object sender, FormClosedEventArgs e) =>
             {
                 index--;
+                toasts.Remove(currentId);
 
                 if (onClose != null)
                 {
@@ -32,6 +40,33 @@ namespace SharpCrop.Utils
             };
 
             form.Show();
+            toasts.Add(currentId, form);
+
+            return currentId;
+        }
+
+        /// <summary>
+        /// Create a new toast with white background.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="duration"></param>
+        /// <param name="onClose"></param>
+        /// <returns></returns>
+        public static int Create(string text, int duration = 3000, Action onClose = null)
+        {
+            return Create(text, Color.White, duration, onClose);
+        }
+
+        /// <summary>
+        /// Close an existing toast.
+        /// </summary>
+        /// <param name="id"></param>
+        public static void Remove(int id)
+        {
+            if(toasts.ContainsKey(id))
+            {
+                toasts[id].Close();
+            }
         }
     }
 }

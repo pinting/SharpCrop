@@ -88,7 +88,7 @@ namespace SharpCrop
 
             if (token == null)
             {
-                ToastFactory.CreateToast("Failed to register provider!");
+                ToastFactory.Create("Failed to register provider!");
                 return null;
             }
 
@@ -97,7 +97,7 @@ namespace SharpCrop
             {
                 ConfigHelper.Memory.Provider = name;
                 ConfigHelper.Memory.Token = token;
-                ToastFactory.CreateToast("Successfully registered provider!");
+                ToastFactory.Create("Successfully registered provider!");
             }
             
             return provider;
@@ -127,18 +127,24 @@ namespace SharpCrop
         /// <param name="rect"></param>
         public async void CaptureGif(Rectangle rect)
         {
-            ToastFactory.CreateToast("Click here to stop!", 1000 * 60, () => 
+            var toast = -1;
+
+            ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () => 
             {
-                ToastFactory.CreateToast("Encoding...");
+                toast = ToastFactory.Create("Encoding...", 0);
                 GifFactory.Stop();
             });
 
             var stream = await GifFactory.Record(rect);
 
-            ToastFactory.CreateToast(string.Format("Uploading... ({0:0.00} MB)", (double)stream.Length / (1024 * 1024)));
+            ToastFactory.Remove(toast);
+
+            toast = ToastFactory.Create(string.Format("Uploading... ({0:0.00} MB)", (double)stream.Length / (1024 * 1024)), 0);
 
             var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".gif";
             var url = await provider.Upload(name, stream);
+            
+            ToastFactory.Remove(toast);
 
             stream.Dispose();
             Success(url);
@@ -161,7 +167,7 @@ namespace SharpCrop
 #endif
             }
 
-            ToastFactory.CreateToast("Uploaded successfully!", 3000, () =>
+            ToastFactory.Create("Uploaded successfully!", 3000, () =>
             {
 #if !__MonoCS__
                 Application.Exit();

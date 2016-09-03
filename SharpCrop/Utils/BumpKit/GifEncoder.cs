@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
-namespace SharpCrop.Utils
+namespace SharpCrop.Utils.BumpKit
 {
     /// Written by DataDink/Bumpkit: https://github.com/DataDink/Bumpkit
 

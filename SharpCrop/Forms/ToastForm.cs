@@ -11,14 +11,15 @@ namespace SharpCrop.Forms
     public partial class ToastForm : Form
     {
         private readonly int margin = 5;
-        private int duration;
 
         /// <summary>
         /// Construct a new ToastForm. Index is managed by ToastFactory.
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="back"></param>
         /// <param name="duration"></param>
-        public ToastForm(string text, int duration, int index = 1)
+        /// <param name="index"></param>
+        public ToastForm(string text, Color back, int duration = 0, int index = 1)
         {
             InitializeComponent();
 
@@ -26,27 +27,21 @@ namespace SharpCrop.Forms
                 Screen.PrimaryScreen.Bounds.Width - (Width + margin), 
                 Screen.PrimaryScreen.Bounds.Height - (Height + margin) * index);
 
-            this.duration = duration;
+            BackColor = back;
             label.Text = text;
-        }
 
-        /// <summary>
-        /// Start duration timer.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            Task.Run(async () =>
+            if(duration > 0)
             {
-                await Task.Delay(duration);
-
-                if (!IsDisposed)
+                Task.Run(async () =>
                 {
-                    Invoke(new Action(() => Close()));
-                }
-            });
+                    await Task.Delay(duration);
+
+                    if (!IsDisposed)
+                    {
+                        Invoke(new Action(() => Close()));
+                    }
+                });
+            }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using SharpCrop.Models;
+using SharpCrop.Utils.BumpKit;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
