@@ -38,6 +38,7 @@
             this.formatLabel = new System.Windows.Forms.Label();
             this.gifFpsLabel = new System.Windows.Forms.Label();
             this.noFocusCheckBox = new System.Windows.Forms.CheckBox();
+            this.noTransparencyCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // formatList
@@ -80,7 +81,7 @@
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(7, 135);
+            this.resetButton.Location = new System.Drawing.Point(7, 157);
             this.resetButton.Margin = new System.Windows.Forms.Padding(2);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(131, 25);
@@ -148,11 +149,24 @@
             this.noFocusCheckBox.UseVisualStyleBackColor = true;
             this.noFocusCheckBox.CheckedChanged += new System.EventHandler(this.NoFocusChanged);
             // 
+            // noTransparencyCheckBox
+            // 
+            this.noTransparencyCheckBox.AutoSize = true;
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(8, 136);
+            this.noTransparencyCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
+            this.noTransparencyCheckBox.Size = new System.Drawing.Size(125, 17);
+            this.noTransparencyCheckBox.TabIndex = 9;
+            this.noTransparencyCheckBox.Text = "Disable transparency";
+            this.noTransparencyCheckBox.UseVisualStyleBackColor = true;
+            this.noTransparencyCheckBox.CheckedChanged += new System.EventHandler(this.NoTransparencyChanged);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(149, 171);
+            this.ClientSize = new System.Drawing.Size(146, 190);
+            this.Controls.Add(this.noTransparencyCheckBox);
             this.Controls.Add(this.noFocusCheckBox);
             this.Controls.Add(this.gifFpsLabel);
             this.Controls.Add(this.formatLabel);
@@ -185,5 +199,6 @@
         private System.Windows.Forms.Label formatLabel;
         private System.Windows.Forms.Label gifFpsLabel;
         private System.Windows.Forms.CheckBox noFocusCheckBox;
+        private System.Windows.Forms.CheckBox noTransparencyCheckBox;
     }
 }

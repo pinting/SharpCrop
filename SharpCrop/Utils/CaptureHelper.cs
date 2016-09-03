@@ -16,7 +16,7 @@ namespace SharpCrop.Utils
         /// <param name="source"></param>
         /// <param name="dest"></param>
         /// <returns></returns>
-        public static Rectangle GetRect(Point source, Point dest)
+        public static Rectangle GetRectangle(Point source, Point dest)
         {
             return new Rectangle(
                 Math.Min(source.X, dest.X),
@@ -32,8 +32,12 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static Bitmap GetBitmap(Rectangle r)
         {
-            var s = ConfigHelper.Memory.NoScaling ? 1.0f : GetScaling();
-            var rs = new Rectangle((int)((float)r.X * s), (int)((float)r.Y * s), (int)((float)r.Width * s), (int)((float)r.Height * s));
+            var s = GetScaling();
+            var rs = new Rectangle(
+                (int)(r.X * s), 
+                (int)(r.Y * s), 
+                (int)(r.Width * s), 
+                (int)(r.Height * s));
 
             var bitmap = new Bitmap(rs.Width, rs.Height, PixelFormat.Format32bppArgb);
             var gfx = Graphics.FromImage(bitmap);
@@ -51,6 +55,11 @@ namespace SharpCrop.Utils
 		/// <returns></returns>
 		public static float GetScaling()
 		{
+            if(ConfigHelper.Memory.NoScaling)
+            {
+                return 1.0f;
+            }
+            
             float result;
 
             using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
@@ -69,6 +78,11 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static float GetScaling()
         {
+            if(ConfigHelper.Memory.NoScaling)
+            {
+                return 1.0f;
+            }
+
             Graphics gfx = Graphics.FromHwnd(IntPtr.Zero);
             IntPtr desktop = gfx.GetHdc();
 

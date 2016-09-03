@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System;
+using System.Threading.Tasks;
 
 namespace SharpCrop.Forms
 {
@@ -29,6 +30,12 @@ namespace SharpCrop.Forms
 
             ClientSize = Screen.PrimaryScreen.Bounds.Size;
             Location = new Point(0, 0);
+
+            if (ConfigHelper.Memory.NoTransparency)
+            {
+                BackgroundImage = CaptureHelper.GetBitmap(Screen.PrimaryScreen.Bounds);
+                Opacity = 1.0D;
+            }
 
             MakeClickable();
         }
@@ -120,7 +127,7 @@ namespace SharpCrop.Forms
             mouseButtonUsed = e.Button;
             isMouseDown = false;
             
-            var r = CaptureHelper.GetRect(mouseDownPoint, mouseUpPoint);
+            var r = CaptureHelper.GetRectangle(mouseDownPoint, mouseUpPoint);
 
             if (r.X < 0 || r.Y < 0 || r.Width < 1 || r.Height < 1)
             {
@@ -188,7 +195,7 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            var rect = CaptureHelper.GetRect(mouseDownPoint, mouseMovePoint);
+            var rect = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
 
             switch (mouseButtonUsed)
             {
@@ -207,6 +214,11 @@ namespace SharpCrop.Forms
         private void MakeClickable()
         {
 #if !__MonoCS__
+            if(ConfigHelper.Memory.NoTransparency)
+            {
+                return;
+            }
+
             TransparencyKey = Color.White;
             Opacity = 0.005D;
 #endif
@@ -219,6 +231,11 @@ namespace SharpCrop.Forms
         private void MakeInvisible()
         {
 #if !__MonoCS__
+            if (ConfigHelper.Memory.NoTransparency)
+            {
+                return;
+            }
+
             TransparencyKey = Color.Black;
             Opacity = 0.75D;
 #endif

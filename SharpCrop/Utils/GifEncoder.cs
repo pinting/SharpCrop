@@ -10,7 +10,7 @@ namespace SharpCrop.Utils
 
     /// <summary>
     /// Encodes multiple images as an animated gif to a stream. 
-    /// ALWAYS ALWAYS ALWAYS wire this up   in a using block 
+    /// ALWAYS ALWAYS ALWAYS wire this up in a using block 
     /// Disposing the encoder will complete the file. 
     /// Uses default .net GIF encoding and adds animation headers.
     /// </summary>

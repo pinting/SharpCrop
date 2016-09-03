@@ -30,6 +30,7 @@ namespace SharpCrop.Forms
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
             noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
             noFocusCheckBox.Checked = ConfigHelper.Memory.NoFocus;
+            noTransparencyCheckBox.Checked = ConfigHelper.Memory.NoTransparency;
 
 #if __MonoCS__
             noFocusCheckBox.Enabled = false;
@@ -94,6 +95,11 @@ namespace SharpCrop.Forms
         private void NoFocusChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.NoFocus = noFocusCheckBox.Checked;
+        }
+
+        private void NoTransparencyChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.NoTransparency = noTransparencyCheckBox.Checked;
         }
 
         /// <summary>

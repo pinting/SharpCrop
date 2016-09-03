@@ -32,6 +32,9 @@ namespace SharpCrop.Models
         [JsonProperty]
         public bool NoFocus { get; set; }
 
+        [JsonProperty]
+        public bool NoTransparency { get; set; }
+
         #region Validators
 
         [JsonIgnore]
@@ -112,6 +115,15 @@ namespace SharpCrop.Models
             get
             {
                 return !NoFocus;
+            }
+        }
+
+        [JsonIgnore]
+        public bool Transparency
+        {
+            get
+            {
+                return !NoTransparency;
             }
         }
 
