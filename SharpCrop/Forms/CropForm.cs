@@ -26,11 +26,8 @@ namespace SharpCrop.Forms
         {
             this.controller = controller;
 
-            InitializeComponent();
+			InitializeComponent();
 
-            ClientSize = Screen.PrimaryScreen.Bounds.Size;
-            Location = new Point(0, 0);
-            
             RefreshBackground();
             MakeClickable();
         }
@@ -252,14 +249,18 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Refresh the background if transparency is disabled.
+        /// Refresh the background if transparency is disabled, and 
+		/// set location and window state every time.
         /// </summary>
         private void RefreshBackground()
-        {
+		{
+			Location = new Point(0, 0);
+			WindowState = FormWindowState.Maximized;
+
             if (ConfigHelper.Memory.NoTransparency)
             {
-                BackgroundImage = CaptureHelper.GetBitmap(Screen.PrimaryScreen.Bounds);
-                Opacity = 1.0D;
+                BackgroundImage = CaptureHelper.GetBitmap(Bounds);
+				Opacity = 1.0D;
             }
         }
 

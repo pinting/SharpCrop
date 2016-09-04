@@ -35,7 +35,6 @@
             // label
             // 
             this.label.AutoSize = true;
-            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.label.Location = new System.Drawing.Point(9, 11);
             this.label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label.Name = "label";
