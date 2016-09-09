@@ -274,18 +274,7 @@ namespace SharpCrop.Forms
         /// <summary>
         /// Do not steal focus from other windows.
         /// </summary>
-        protected override bool ShowWithoutActivation
-        {
-            get
-            {
-                if (ConfigHelper.Memory.Focus)
-                {
-                    return base.ShowWithoutActivation;
-                }
-
-                return true;
-            }
-        }
+        protected override bool ShowWithoutActivation => !ConfigHelper.Memory.Focus || base.ShowWithoutActivation;
 
         /// <summary>
         /// Keep focus for other windows while topmost.
@@ -299,11 +288,11 @@ namespace SharpCrop.Forms
                     return base.CreateParams;
                 }
 
-                CreateParams baseParams = base.CreateParams;
+                var baseParams = base.CreateParams;
 
                 const int wsExNoactivate = 0x08000000;
                 const int wsExToolwindow = 0x00000080;
-                baseParams.ExStyle |= (int)(wsExNoactivate | wsExToolwindow);
+                baseParams.ExStyle |= wsExNoactivate | wsExToolwindow;
 
                 return baseParams;
             }

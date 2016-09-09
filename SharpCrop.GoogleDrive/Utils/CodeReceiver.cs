@@ -12,13 +12,7 @@ namespace SharpCrop.GoogleDrive.Utils
     /// </summary>
     public class CodeReceiver : ICodeReceiver
     {
-        public string RedirectUri
-        {
-            get
-            {
-                return GoogleAuthConsts.InstalledAppRedirectUri;
-            }
-        }
+        public string RedirectUri => GoogleAuthConsts.InstalledAppRedirectUri;
 
         /// <summary>
         /// Waiting for a Google API code.
