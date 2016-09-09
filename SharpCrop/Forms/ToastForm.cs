@@ -21,13 +21,13 @@ namespace SharpCrop.Forms
         /// <param name="index"></param>
         public ToastForm(string text, Color color, int duration = 0, int index = 1)
         {
-            BackColor = color;
-            label.Text = text;
-            Location = new Point(
-                Screen.PrimaryScreen.Bounds.Width - (Width + margin), 
-                Screen.PrimaryScreen.Bounds.Height - (Height + margin) * index);
-
             InitializeComponent();
+
+            label.Text = text;
+            BackColor = color;
+            Location = new Point(
+                Screen.PrimaryScreen.Bounds.Width - (Width + margin),
+                Screen.PrimaryScreen.Bounds.Height - (Height + margin) * index);
 
             if (duration > 0)
             {

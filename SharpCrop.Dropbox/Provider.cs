@@ -71,7 +71,7 @@ namespace SharpCrop.Dropbox
                     Obscure.Decode(Constants.AppKey),
                     Obscure.Decode(Constants.AppSecret));
 
-                if (response != null && response.AccessToken != null && await ClientFactory(response.AccessToken))
+                if (response?.AccessToken != null && await ClientFactory(response.AccessToken))
                 {
                     result.SetResult(response.AccessToken);
                 }

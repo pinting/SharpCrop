@@ -36,7 +36,7 @@ namespace SharpCrop.Forms
                 screens.Max(s => s.Bounds.Y + s.Bounds.Height));
 
             Location = screen.Location;
-            Size = screen.Size;
+            ClientSize = Size = screen.Size;
 
             InitializeComponent();
             RefreshBackground();
