@@ -69,7 +69,7 @@ namespace SharpCrop.LocalFile
 
             File.WriteAllBytes(url, stream.ToArray());
 
-            return Task.FromResult(string.Format("{0}{1}", Constants.UrlPrefix, url));
+            return Task.FromResult($"{Constants.UrlPrefix}{url}");
         }
     }
 }

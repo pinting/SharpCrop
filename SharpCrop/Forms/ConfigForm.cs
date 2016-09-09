@@ -1,12 +1,5 @@
 ﻿using SharpCrop.Utils;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
@@ -23,9 +16,11 @@ namespace SharpCrop.Forms
         {
             InitializeComponent();
 
+            // Set lists
             formatList.Text = ConfigHelper.Memory.FormatExt;
             gifFpsList.Text = ConfigHelper.Memory.SafeGifFps.ToString();
 
+            // Set checkboxes
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
             noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;

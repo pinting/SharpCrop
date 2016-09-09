@@ -1,3 +1,5 @@
+// ReSharper disable All
+
 namespace SharpCrop.Utils.NGif
 {
     /// <summary>

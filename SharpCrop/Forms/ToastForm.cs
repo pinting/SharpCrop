@@ -10,27 +10,26 @@ namespace SharpCrop.Forms
     /// </summary>
     public partial class ToastForm : Form
     {
-        private readonly int margin = 5;
+        private const int margin = 5;
 
         /// <summary>
         /// Construct a new ToastForm. Index is managed by ToastFactory.
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="back"></param>
+        /// <param name="color"></param>
         /// <param name="duration"></param>
         /// <param name="index"></param>
-        public ToastForm(string text, Color back, int duration = 0, int index = 1)
+        public ToastForm(string text, Color color, int duration = 0, int index = 1)
         {
-            InitializeComponent();
-
+            BackColor = color;
+            label.Text = text;
             Location = new Point(
                 Screen.PrimaryScreen.Bounds.Width - (Width + margin), 
                 Screen.PrimaryScreen.Bounds.Height - (Height + margin) * index);
 
-            BackColor = back;
-            label.Text = text;
+            InitializeComponent();
 
-            if(duration > 0)
+            if (duration > 0)
             {
                 Task.Run(async () =>
                 {
@@ -38,9 +37,25 @@ namespace SharpCrop.Forms
 
                     if (!IsDisposed)
                     {
-                        Invoke(new Action(() => Close()));
+                        Invoke(new Action(Close));
                     }
                 });
+            }
+        }
+
+        /// <summary>
+        /// Access virtual property in constructor.
+        /// </summary>
+        public sealed override Color BackColor
+        {
+            get
+            {
+                return base.BackColor;
+            }
+
+            set
+            {
+                base.BackColor = value;
             }
         }
 
@@ -57,14 +72,8 @@ namespace SharpCrop.Forms
         /// <summary>
         /// Do not steal focus from other windows.
         /// </summary>
-        protected override bool ShowWithoutActivation
-        {
-            get
-            {
-                return true;
-            }
-        }
-    
+        protected override bool ShowWithoutActivation => true;
+
         /// <summary>
         /// Keep focus for other windows while topmost.
         /// </summary>
@@ -72,11 +81,11 @@ namespace SharpCrop.Forms
         {
             get
             {
-                CreateParams baseParams = base.CreateParams;
+                var baseParams = base.CreateParams;
 
-                const int WS_EX_NOACTIVATE = 0x08000000;
-                const int WS_EX_TOOLWINDOW = 0x00000080;
-                baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+                const int wsExNoactivate = 0x08000000;
+                const int wsExToolwindow = 0x00000080;
+                baseParams.ExStyle |= wsExNoactivate | wsExToolwindow;
 
                 return baseParams;
             }

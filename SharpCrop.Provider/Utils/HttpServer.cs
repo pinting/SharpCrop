@@ -4,6 +4,8 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
+// ReSharper disable FunctionNeverReturns
+
 namespace SharpCrop.Provider.Utils
 {
     /// <summary>
@@ -11,7 +13,7 @@ namespace SharpCrop.Provider.Utils
     /// </summary>
     public class HttpServer
     {
-        private static IDictionary<string, string> mimeTypeMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
+        private readonly IDictionary<string, string> mimeTypeMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
             {".html", "text/html"}
         };
 
@@ -19,10 +21,10 @@ namespace SharpCrop.Provider.Utils
             "index.html"
         };
 
-        private Action<HttpListenerRequest> onRequest;
-        private HttpListener listener;
-        private Thread thread;
-        private string root;
+        private readonly Action<HttpListenerRequest> onRequest;
+        private readonly HttpListener listener;
+        private readonly Thread thread;
+        private readonly string root;
 
         /// <summary>
         /// Construct a HTTP server with given port.
@@ -56,7 +58,7 @@ namespace SharpCrop.Provider.Utils
                 }
                 catch
                 {
-                    continue;
+                    // Ignored
                 }
             }
         }
@@ -73,13 +75,15 @@ namespace SharpCrop.Provider.Utils
 
             if (string.IsNullOrEmpty(filename))
             {
-                foreach (string indexFile in indexFiles)
+                foreach (var indexFile in indexFiles)
                 {
-                    if (File.Exists(Path.Combine(root, indexFile)))
+                    if (!File.Exists(Path.Combine(root, indexFile)))
                     {
-                        filename = indexFile;
-                        break;
+                        continue;
                     }
+
+                    filename = indexFile;
+                    break;
                 }
             }
 

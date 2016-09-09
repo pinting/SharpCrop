@@ -12,9 +12,9 @@ namespace SharpCrop.Utils
 {
     public static class GifFactory
     {
+        private static readonly List<GifFrame> frames = new List<GifFrame>();
         private static TaskCompletionSource<MemoryStream> result;
-        private static List<GifFrame> frames = new List<GifFrame>();
-        private static bool running = false;
+        private static bool running;
 
         /// <summary>
         /// Check if a frame exists.
@@ -69,9 +69,9 @@ namespace SharpCrop.Utils
                 return false;
             }
 
-            for (int x = 0; x < a.Image.Width; x += step)
+            for (var x = 0; x < a.Image.Width; x += step)
             {
-                for (int y = 0; y < a.Image.Height; y += step)
+                for (var y = 0; y < a.Image.Height; y += step)
                 {
                     var p = a.Image.GetPixel(x, y);
                     var q = b.Image.GetPixel(x, y);
@@ -102,11 +102,13 @@ namespace SharpCrop.Utils
 
             while (running || frames.Count > 0)
             {
-                if (FrameExists(0))
+                if (!FrameExists(0))
                 {
-                    gif.AddFrame(frames[0].Image);
-                    frames.RemoveAt(0);
+                    continue;
                 }
+
+                gif.AddFrame(frames[0].Image);
+                frames.RemoveAt(0);
             }
 
             gif.SetDelay(1000 / ConfigHelper.Memory.SafeGifFps);
@@ -126,8 +128,8 @@ namespace SharpCrop.Utils
         private static void EncodeGif()
         {
             // Wait for the first frame
-            while (!FrameExists(0)) continue;
-            
+            while (!FrameExists(0)) { }
+
             var stream = new MemoryStream();
             var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.GifRepeat ? 0 : 1);
             

@@ -62,7 +62,7 @@ namespace SharpCrop.Utils
             
             float result;
 
-            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
             {
                 result = graphics.DpiX / 96;
             }
@@ -83,17 +83,17 @@ namespace SharpCrop.Utils
                 return 1.0f;
             }
 
-            Graphics gfx = Graphics.FromHwnd(IntPtr.Zero);
-            IntPtr desktop = gfx.GetHdc();
+            var gfx = Graphics.FromHwnd(IntPtr.Zero);
+            var desktop = gfx.GetHdc();
 
-            int logicalHeight = GetDeviceCaps(desktop, 10);
-            int physicalHeight = GetDeviceCaps(desktop, 117);
+            var logicalHeight = GetDeviceCaps(desktop, 10);
+            var physicalHeight = GetDeviceCaps(desktop, 117);
 
-            return (float)physicalHeight / (float)logicalHeight;
+            return (float)physicalHeight / logicalHeight;
         }
 
         [DllImport("gdi32.dll")]
-        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
 #endif
 

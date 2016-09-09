@@ -9,6 +9,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
+// ReSharper disable UseStringInterpolation
+
 namespace SharpCrop.OneDrive.Utils
 {
     /// <summary>
@@ -23,17 +25,11 @@ namespace SharpCrop.OneDrive.Utils
         /// <summary>
         /// Construct the authorization URL.
         /// </summary>
-        public string Url
-        {
-            get
-            {
-                return string.Format(
-                    "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope={1}&response_type=code&redirect_uri={2}",
-                    Obscure.Decode(Constants.AppKey),
-                    string.Join("+", Constants.Scopes),
-                    Constants.RedirectUrl);
-            }
-        }
+        public string Url => string.Format(
+            "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope={1}&response_type=code&redirect_uri={2}",
+            Obscure.Decode(Constants.AppKey),
+            string.Join("+", Constants.Scopes),
+            Constants.RedirectUrl);
 
         /// <summary>
         /// Process a code and obtain a TokenResponse.
@@ -65,13 +61,17 @@ namespace SharpCrop.OneDrive.Utils
 
             stream = response.GetResponseStream();
 
-            var reader = new StreamReader(stream);
-            var responseData = reader.ReadToEnd();
+            if (stream != null)
+            {
+                var reader = new StreamReader(stream);
+                var responseData = reader.ReadToEnd();
 
-            Session = JsonConvert.DeserializeObject<TokenResponse>(responseData);
+                Session = JsonConvert.DeserializeObject<TokenResponse>(responseData);
 
-            reader.Close();
-            stream.Close();
+                reader.Close();
+                stream.Close();
+            }
+            
             response.Close();
         }
 

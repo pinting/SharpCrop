@@ -2,8 +2,6 @@
 using SharpCrop.Provider;
 using SharpCrop.Utils;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
@@ -17,8 +15,8 @@ namespace SharpCrop
     /// </summary>
     public class Controller : ApplicationContext
     {
+        private readonly Form clickForm;
         private IProvider provider;
-        private Form clickForm;
         private Form mainForm;
 
         /// <summary>
@@ -62,29 +60,29 @@ namespace SharpCrop
         /// <param name="name"></param>
         private async Task<IProvider> GetProvider(string name)
         {
-            IProvider provider;
+            IProvider newProvider;
 
             // Translate name into a real instance.
             switch (name)
             {
                 case "Dropbox":
-                    provider = new Dropbox.Provider();
+                    newProvider = new Dropbox.Provider();
                     break;
                 case "GoogleDrive":
-                    provider = new GoogleDrive.Provider();
+                    newProvider = new GoogleDrive.Provider();
                     break;
                 case "OneDrive":
-                    provider = new OneDrive.Provider();
+                    newProvider = new OneDrive.Provider();
                     break;
                 case "LocalFile":
-                    provider = new LocalFile.Provider();
+                    newProvider = new LocalFile.Provider();
                     break;
                 default:
                     return null;
             }
 
             // Try to register Provider
-            var token = await provider.Register(ConfigHelper.Memory.Token);
+            var token = await newProvider.Register(ConfigHelper.Memory.Token);
 
             if (token == null)
             {
@@ -100,7 +98,7 @@ namespace SharpCrop
                 ToastFactory.Create("Successfully registered provider!");
             }
             
-            return provider;
+            return newProvider;
         }
 
         /// <summary>
@@ -139,7 +137,7 @@ namespace SharpCrop
 
             ToastFactory.Remove(toast);
 
-            toast = ToastFactory.Create(string.Format("Uploading... ({0:0.00} MB)", (double)stream.Length / (1024 * 1024)), 0);
+            toast = ToastFactory.Create($"Uploading... ({(double) stream.Length/(1024*1024):0.00} MB)", 0);
 
             var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".gif";
             var url = await provider.Upload(name, stream);

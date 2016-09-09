@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.IO;
 
+// ReSharper disable All
+
 namespace SharpCrop.Utils.NGif
 {
     /// <summary>

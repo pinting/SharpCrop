@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SharpCrop.Forms
@@ -12,12 +13,13 @@ namespace SharpCrop.Forms
     /// </summary>
     public partial class CropForm : Form
     {
+        private readonly Controller controller;
+
         private MouseButtons mouseButtonUsed = MouseButtons.Left;
         private Point mouseMovePoint = Point.Empty;
         private Point mouseDownPoint = Point.Empty;
         private Point mouseUpPoint = Point.Empty;
-        private bool isMouseDown = false;
-        private Controller controller;
+        private bool isMouseDown;
 
         /// <summary>
         /// Consturct a new CropForm with the given provider.
@@ -26,11 +28,17 @@ namespace SharpCrop.Forms
         {
             this.controller = controller;
 
-            InitializeComponent();
+            var screens = Screen.AllScreens.ToList();
+            var screen = new Rectangle(
+                screens.Min(s => s.Bounds.X),
+                screens.Min(s => s.Bounds.Y),
+                screens.Max(s => s.Bounds.X + s.Bounds.Width),
+                screens.Max(s => s.Bounds.Y + s.Bounds.Height));
 
-            ClientSize = Screen.PrimaryScreen.Bounds.Size;
-            Location = new Point(0, 0);
-            
+            Location = screen.Location;
+            Size = screen.Size;
+
+            InitializeComponent();
             RefreshBackground();
             MakeClickable();
         }
@@ -79,7 +87,7 @@ namespace SharpCrop.Forms
 
             Hide();
             form.Show();
-            form.FormClosed += (object sender, FormClosedEventArgs ev) =>
+            form.FormClosed += (sender, ev) =>
             {
                 if (ConfigHelper.Memory.Transparency)
                 {
@@ -293,9 +301,9 @@ namespace SharpCrop.Forms
 
                 CreateParams baseParams = base.CreateParams;
 
-                const int WS_EX_NOACTIVATE = 0x08000000;
-                const int WS_EX_TOOLWINDOW = 0x00000080;
-                baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+                const int wsExNoactivate = 0x08000000;
+                const int wsExToolwindow = 0x00000080;
+                baseParams.ExStyle |= (int)(wsExNoactivate | wsExToolwindow);
 
                 return baseParams;
             }

@@ -11,9 +11,9 @@ namespace SharpCrop.Utils
     /// </summary>
     public static class ToastFactory
     {
-        private static Dictionary<int, Form> toasts = new Dictionary<int, Form>();
+        private static readonly Dictionary<int, Form> toasts = new Dictionary<int, Form>();
         private static int index = 1;
-        private static int id = 0;
+        private static int counter;
 
         /// <summary>
         /// Create a new toast.
@@ -26,17 +26,14 @@ namespace SharpCrop.Utils
         public static int Create(string text, Color color, int duration = 3000, Action onClose = null)
         {
             var form = new ToastForm(text, color, duration, index++);
-            var currentId = id++;
+            var currentId = counter++;
 
-            form.FormClosed += (object sender, FormClosedEventArgs e) =>
+            form.FormClosed += (sender, e) =>
             {
                 index--;
                 toasts.Remove(currentId);
 
-                if (onClose != null)
-                {
-                    onClose();
-                }
+                onClose?.Invoke();
             };
 
             form.Show();

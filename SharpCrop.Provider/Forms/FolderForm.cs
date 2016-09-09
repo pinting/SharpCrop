@@ -21,10 +21,10 @@ namespace SharpCrop.Provider.Forms
         /// <summary>
         /// Register for callback.
         /// </summary>
-        /// <param name="onResult"></param>
-        public void OnResult(Action<string> onResult)
+        /// <param name="callback"></param>
+        public void OnResult(Action<string> callback)
         {
-            this.onResult = onResult;
+            onResult = callback;
         }
 
         /// <summary>

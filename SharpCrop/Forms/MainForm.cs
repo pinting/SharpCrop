@@ -8,7 +8,7 @@ namespace SharpCrop.Forms
     /// </summary>
     public partial class MainForm : Form
     {
-        private Controller controller;
+        private readonly Controller controller;
 
         /// <summary>
         /// Consturct a MainForm - the Loader is needed, because CropForm

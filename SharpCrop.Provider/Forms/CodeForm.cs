@@ -10,12 +10,13 @@ namespace SharpCrop.Provider.Forms
     public partial class CodeForm : Form
     {
         private Action<string> onCode;
-        private int length;
-        
+        private readonly int length;
+
         /// <summary>
         /// Construct a new CodePaste form with an URL.
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="length"></param>
         public CodeForm(string url = "", int length = 128)
         {
             InitializeComponent();
@@ -27,10 +28,10 @@ namespace SharpCrop.Provider.Forms
         /// <summary>
         /// Register for callback.
         /// </summary>
-        /// <param name="onCode"></param>
-        public void OnCode(Action<string> onCode)
+        /// <param name="callback"></param>
+        public void OnCode(Action<string> callback)
         {
-            this.onCode = onCode;
+            onCode = callback;
         }
 
         /// <summary>

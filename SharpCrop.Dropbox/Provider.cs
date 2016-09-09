@@ -3,7 +3,6 @@ using Dropbox.Api;
 using Dropbox.Api.Files;
 using System.IO;
 using SharpCrop.Provider.Utils;
-using System.Windows.Forms;
 using System.Threading.Tasks;
 using SharpCrop.Provider.Forms;
 

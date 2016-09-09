@@ -4,6 +4,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
+// ReSharper disable All
+
 namespace SharpCrop.Utils.BumpKit
 {
     /// Written by DataDink/Bumpkit: https://github.com/DataDink/Bumpkit
