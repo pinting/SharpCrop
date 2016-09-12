@@ -14,6 +14,7 @@ namespace SharpCrop.Forms
     public partial class CropForm : Form
     {
         private readonly Controller controller;
+        private readonly Rectangle screen;
 
         private MouseButtons mouseButtonUsed = MouseButtons.Left;
         private Point mouseMovePoint = Point.Empty;
@@ -24,17 +25,11 @@ namespace SharpCrop.Forms
         /// <summary>
         /// Consturct a new CropForm with the given provider.
         /// </summary>
-        public CropForm(Controller controller)
+        public CropForm(Controller controller, Rectangle screen)
         {
             this.controller = controller;
-
-            var screens = Screen.AllScreens.ToList();
-            var screen = new Rectangle(
-                screens.Min(s => s.Bounds.X),
-                screens.Min(s => s.Bounds.Y),
-                screens.Max(s => s.Bounds.X + s.Bounds.Width),
-                screens.Max(s => s.Bounds.Y + s.Bounds.Height));
-
+            this.screen = screen;
+            
             Location = screen.Location;
             ClientSize = Size = screen.Size;
 
@@ -62,7 +57,11 @@ namespace SharpCrop.Forms
 
             MakeClickable();
             ResetMouse();
-            Focus();
+
+            if(controller.CropForms.Count == 1)
+            {
+                Focus();
+            }
         }
 
         /// <summary>
@@ -75,7 +74,11 @@ namespace SharpCrop.Forms
 
             MakeClickable();
             ResetMouse();
-            Focus();
+
+            if (controller.CropForms.Count == 1)
+            {
+                Focus();
+            }
         }
 
         /// <summary>
@@ -85,13 +88,13 @@ namespace SharpCrop.Forms
         {
             var form = new ConfigForm();
 
-            Hide();
+            HideAll();
             form.Show();
             form.FormClosed += (sender, ev) =>
             {
                 if (ConfigHelper.Memory.Transparency)
                 {
-                    Show();
+                    ShowAll();
                     return;
                 }
 
@@ -102,7 +105,7 @@ namespace SharpCrop.Forms
                     Invoke(new Action(() => 
                     {
                         RefreshBackground();
-                        Show();
+                        ShowAll();
                     }));
                 });
             };
@@ -152,7 +155,10 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            Hide();
+            r.X += screen.X;
+            r.Y += screen.Y;
+
+            HideAll();
             Application.DoEvents();
 
 #if __MonoCS__
@@ -266,7 +272,7 @@ namespace SharpCrop.Forms
         {
             if (ConfigHelper.Memory.NoTransparency)
             {
-                BackgroundImage = CaptureHelper.GetBitmap(Screen.PrimaryScreen.Bounds);
+                BackgroundImage = CaptureHelper.GetBitmap(screen);
                 Opacity = 1.0D;
             }
         }
@@ -295,6 +301,28 @@ namespace SharpCrop.Forms
                 baseParams.ExStyle |= wsExNoactivate | wsExToolwindow;
 
                 return baseParams;
+            }
+        }
+
+        /// <summary>
+        /// Hide every CropForm - if more than one monitor is used.
+        /// </summary>
+        private void HideAll()
+        {
+            foreach(var form in controller.CropForms)
+            {
+                form.Hide();
+            }
+        }
+
+        /// <summary>
+        /// Show every CropForm.
+        /// </summary>
+        private void ShowAll()
+        {
+            foreach (var form in controller.CropForms)
+            {
+                form.Show();
             }
         }
     }

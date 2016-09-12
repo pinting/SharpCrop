@@ -32,7 +32,13 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static Bitmap GetBitmap(Rectangle r)
         {
-            var s = GetScaling();
+            var s = 1.0f;
+
+            if (ConfigHelper.Memory.Scaling)
+            {
+                s = GetScaling();
+            }
+
             var rs = new Rectangle(
                 (int)(r.X * s), 
                 (int)(r.Y * s), 
@@ -55,11 +61,6 @@ namespace SharpCrop.Utils
 		/// <returns></returns>
 		public static float GetScaling()
 		{
-            if(ConfigHelper.Memory.NoScaling)
-            {
-                return 1.0f;
-            }
-            
             float result;
 
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
@@ -78,11 +79,6 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static float GetScaling()
         {
-            if(ConfigHelper.Memory.NoScaling)
-            {
-                return 1.0f;
-            }
-
             var gfx = Graphics.FromHwnd(IntPtr.Zero);
             var desktop = gfx.GetHdc();
 

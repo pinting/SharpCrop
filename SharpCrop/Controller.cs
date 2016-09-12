@@ -2,6 +2,7 @@
 using SharpCrop.Provider;
 using SharpCrop.Utils;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,20 +16,35 @@ namespace SharpCrop
     /// </summary>
     public class Controller : ApplicationContext
     {
-        private readonly Form clickForm;
+        private readonly List<Form> cropForms = new List<Form>();
         private IProvider provider;
         private Form mainForm;
-
+        
         /// <summary>
         /// Construct a new Controller class.
         /// </summary>
         public Controller()
         {
-            // Needed to construct these here to be in the right SynchronizationContext
-            clickForm = new CropForm(this);
-            clickForm.FormClosed += (s, e) => Application.Exit();
+            foreach (var screen in Screen.AllScreens)
+            {
+                var form = new CropForm(this, screen.Bounds);
+
+                form.FormClosed += (s, e) => Application.Exit();
+                cropForms.Add(form);
+            }
 
             LoadProvider(ConfigHelper.Memory.Provider);
+        }
+
+        /// <summary>
+        /// Protect cropForms from external modification.
+        /// </summary>
+        public IReadOnlyList<Form> CropForms
+        {
+            get
+            {
+                return cropForms;
+            }
         }
 
         /// <summary>
@@ -41,7 +57,7 @@ namespace SharpCrop
 
             if (provider != null)
             {
-                clickForm.Show();
+                cropForms.ForEach(form => form.Show());
                 return;
             }
 

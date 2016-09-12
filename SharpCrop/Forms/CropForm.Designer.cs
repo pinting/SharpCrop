@@ -33,7 +33,6 @@
             // 
             // CropForm
             // 
-            this.Location = new System.Drawing.Point(0, 0);
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
