@@ -129,13 +129,15 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Reset application settings.
+        /// Unlink application from provider.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ResetClick(object sender, EventArgs e)
+        private void UnlinkClick(object sender, EventArgs e)
         {
-            ConfigHelper.Reset();
+            ConfigHelper.Memory.Provider = null;
+            ConfigHelper.Memory.Token = null;
+
             Application.Exit();
         }
     }

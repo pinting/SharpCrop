@@ -32,7 +32,7 @@
             this.formatList = new System.Windows.Forms.ComboBox();
             this.noCopyCheckBox = new System.Windows.Forms.CheckBox();
             this.noScalingCheckBox = new System.Windows.Forms.CheckBox();
-            this.resetButton = new System.Windows.Forms.Button();
+            this.unlinkButton = new System.Windows.Forms.Button();
             this.gifFpsList = new System.Windows.Forms.ComboBox();
             this.noGifRepeatCheckBox = new System.Windows.Forms.CheckBox();
             this.formatLabel = new System.Windows.Forms.Label();
@@ -81,16 +81,16 @@
             this.noScalingCheckBox.UseVisualStyleBackColor = true;
             this.noScalingCheckBox.CheckedChanged += new System.EventHandler(this.NoScalingChanged);
             // 
-            // resetButton
+            // unlinkButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(7, 186);
-            this.resetButton.Margin = new System.Windows.Forms.Padding(2);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(188, 25);
-            this.resetButton.TabIndex = 3;
-            this.resetButton.Text = "Reset";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.ResetClick);
+            this.unlinkButton.Location = new System.Drawing.Point(7, 186);
+            this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
+            this.unlinkButton.Name = "unlinkButton";
+            this.unlinkButton.Size = new System.Drawing.Size(188, 25);
+            this.unlinkButton.TabIndex = 3;
+            this.unlinkButton.Text = "Unlink";
+            this.unlinkButton.UseVisualStyleBackColor = true;
+            this.unlinkButton.Click += new System.EventHandler(this.UnlinkClick);
             // 
             // gifFpsList
             // 
@@ -193,7 +193,7 @@
             this.Controls.Add(this.formatLabel);
             this.Controls.Add(this.noGifRepeatCheckBox);
             this.Controls.Add(this.gifFpsList);
-            this.Controls.Add(this.resetButton);
+            this.Controls.Add(this.unlinkButton);
             this.Controls.Add(this.noScalingCheckBox);
             this.Controls.Add(this.noCopyCheckBox);
             this.Controls.Add(this.formatList);
@@ -214,7 +214,7 @@
         private System.Windows.Forms.ComboBox formatList;
         private System.Windows.Forms.CheckBox noCopyCheckBox;
         private System.Windows.Forms.CheckBox noScalingCheckBox;
-        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Button unlinkButton;
         private System.Windows.Forms.ComboBox gifFpsList;
         private System.Windows.Forms.CheckBox noGifRepeatCheckBox;
         private System.Windows.Forms.Label formatLabel;
