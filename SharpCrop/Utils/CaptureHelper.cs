@@ -13,6 +13,24 @@ namespace SharpCrop.Utils
         public static float ManualScaling = 0.0f;
 
         /// <summary>
+        /// Resize a Bitmap.
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <returns></returns>
+        public static Bitmap ResizeBitmap(Bitmap bitmap, int w, int h)
+        {
+            var result = new Bitmap(w, h);
+            var graph = Graphics.FromImage(result);
+            
+            graph.FillRectangle(Brushes.Black, new RectangleF(0, 0, w, h));
+            graph.DrawImage(bitmap, new Rectangle(0, 0, w, h));
+
+            return result;
+        }
+
+        /// <summary>
         /// Private helper function to construct a rectangle from two points.
         /// </summary>
         /// <param name="source"></param>

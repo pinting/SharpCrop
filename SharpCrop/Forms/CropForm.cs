@@ -272,14 +272,17 @@ namespace SharpCrop.Forms
         /// </summary>
         private void RefreshBackground()
         {
-            if (ConfigHelper.Memory.NoTransparency)
+            if (!ConfigHelper.Memory.NoTransparency)
             {
-                CaptureHelper.SetManualScaling(index);
-
-                BackgroundImageLayout = ImageLayout.Stretch;
-                BackgroundImage = CaptureHelper.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
-                Opacity = 1.0D;
+                return;
             }
+
+            CaptureHelper.SetManualScaling(index);
+
+            var bitmap = CaptureHelper.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
+
+            BackgroundImage = CaptureHelper.ResizeBitmap(bitmap, Width, Height);
+            Opacity = 1.0D;
         }
 
         /// <summary>
@@ -303,6 +306,7 @@ namespace SharpCrop.Forms
 
                 const int wsExNoactivate = 0x08000000;
                 const int wsExToolwindow = 0x00000080;
+
                 baseParams.ExStyle |= wsExNoactivate | wsExToolwindow;
 
                 return baseParams;

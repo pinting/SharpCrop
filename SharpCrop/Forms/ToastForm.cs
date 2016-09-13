@@ -85,6 +85,7 @@ namespace SharpCrop.Forms
 
                 const int wsExNoactivate = 0x08000000;
                 const int wsExToolwindow = 0x00000080;
+
                 baseParams.ExStyle |= wsExNoactivate | wsExToolwindow;
 
                 return baseParams;
