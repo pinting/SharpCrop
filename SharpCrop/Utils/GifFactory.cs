@@ -98,7 +98,7 @@ namespace SharpCrop.Utils
 
             gif.Start(stream);
             gif.SetQuality(Constants.GifQuality);
-            gif.SetRepeat(ConfigHelper.Memory.GifRepeat ? 0 : 1);
+            gif.SetRepeat(ConfigHelper.Memory.NoGifRepeat ? 1 : 0);
 
             while (running || frames.Count > 0)
             {
@@ -111,7 +111,7 @@ namespace SharpCrop.Utils
                 frames.RemoveAt(0);
             }
 
-            gif.SetDelay(1000 / ConfigHelper.Memory.SafeGifFps);
+            gif.SetDelay(1000 / ConfigHelper.Memory.SafeGifSpeed);
             gif.Finish();
             Stop();
 
