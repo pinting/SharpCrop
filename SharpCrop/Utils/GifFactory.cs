@@ -32,7 +32,7 @@ namespace SharpCrop.Utils
         /// <param name="rect"></param>
         private static void CaptureFrames(Rectangle rect)
         {
-            var freq = (1000 / ConfigHelper.Memory.SafeGifFps);
+            var freq = (1000 / ConfigHelper.Memory.SafeGifSpeed);
             var wait = 0;
 
             while (running)
@@ -131,7 +131,7 @@ namespace SharpCrop.Utils
             while (!FrameExists(0)) { }
 
             var stream = new MemoryStream();
-            var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.GifRepeat ? 0 : 1);
+            var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.NoGifRepeat ? 1 : 0);
             
             while(running || frames.Count > 0)
             {

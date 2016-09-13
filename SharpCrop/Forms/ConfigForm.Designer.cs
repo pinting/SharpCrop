@@ -39,6 +39,8 @@
             this.gifFpsLabel = new System.Windows.Forms.Label();
             this.noFocusCheckBox = new System.Windows.Forms.CheckBox();
             this.noTransparencyCheckBox = new System.Windows.Forms.CheckBox();
+            this.manualScallingBox = new System.Windows.Forms.TextBox();
+            this.manualScallingLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // formatList
@@ -51,14 +53,14 @@
             this.formatList.Location = new System.Drawing.Point(8, 8);
             this.formatList.Margin = new System.Windows.Forms.Padding(2);
             this.formatList.Name = "formatList";
-            this.formatList.Size = new System.Drawing.Size(57, 21);
+            this.formatList.Size = new System.Drawing.Size(100, 21);
             this.formatList.TabIndex = 0;
             this.formatList.SelectedIndexChanged += new System.EventHandler(this.FormatChanged);
             // 
             // noCopyCheckBox
             // 
             this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 59);
+            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 88);
             this.noCopyCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noCopyCheckBox.Name = "noCopyCheckBox";
             this.noCopyCheckBox.Size = new System.Drawing.Size(112, 17);
@@ -70,21 +72,21 @@
             // noScalingCheckBox
             // 
             this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 78);
+            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 107);
             this.noScalingCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noScalingCheckBox.Name = "noScalingCheckBox";
-            this.noScalingCheckBox.Size = new System.Drawing.Size(130, 17);
+            this.noScalingCheckBox.Size = new System.Drawing.Size(132, 17);
             this.noScalingCheckBox.TabIndex = 2;
-            this.noScalingCheckBox.Text = "Disable scaling check";
+            this.noScalingCheckBox.Text = "Enable manual scaling";
             this.noScalingCheckBox.UseVisualStyleBackColor = true;
             this.noScalingCheckBox.CheckedChanged += new System.EventHandler(this.NoScalingChanged);
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(7, 157);
+            this.resetButton.Location = new System.Drawing.Point(7, 186);
             this.resetButton.Margin = new System.Windows.Forms.Padding(2);
             this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(131, 25);
+            this.resetButton.Size = new System.Drawing.Size(188, 25);
             this.resetButton.TabIndex = 3;
             this.resetButton.Text = "Reset";
             this.resetButton.UseVisualStyleBackColor = true;
@@ -103,14 +105,14 @@
             this.gifFpsList.Location = new System.Drawing.Point(8, 33);
             this.gifFpsList.Margin = new System.Windows.Forms.Padding(2);
             this.gifFpsList.Name = "gifFpsList";
-            this.gifFpsList.Size = new System.Drawing.Size(57, 21);
+            this.gifFpsList.Size = new System.Drawing.Size(100, 21);
             this.gifFpsList.TabIndex = 4;
             this.gifFpsList.SelectedIndexChanged += new System.EventHandler(this.GifFpsChanged);
             // 
             // noGifRepeatCheckBox
             // 
             this.noGifRepeatCheckBox.AutoSize = true;
-            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(8, 97);
+            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(8, 126);
             this.noGifRepeatCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noGifRepeatCheckBox.Name = "noGifRepeatCheckBox";
             this.noGifRepeatCheckBox.Size = new System.Drawing.Size(114, 17);
@@ -122,7 +124,7 @@
             // formatLabel
             // 
             this.formatLabel.AutoSize = true;
-            this.formatLabel.Location = new System.Drawing.Point(70, 13);
+            this.formatLabel.Location = new System.Drawing.Point(117, 13);
             this.formatLabel.Name = "formatLabel";
             this.formatLabel.Size = new System.Drawing.Size(68, 13);
             this.formatLabel.TabIndex = 6;
@@ -131,7 +133,7 @@
             // gifFpsLabel
             // 
             this.gifFpsLabel.AutoSize = true;
-            this.gifFpsLabel.Location = new System.Drawing.Point(70, 37);
+            this.gifFpsLabel.Location = new System.Drawing.Point(117, 37);
             this.gifFpsLabel.Name = "gifFpsLabel";
             this.gifFpsLabel.Size = new System.Drawing.Size(47, 13);
             this.gifFpsLabel.TabIndex = 7;
@@ -140,7 +142,7 @@
             // noFocusCheckBox
             // 
             this.noFocusCheckBox.AutoSize = true;
-            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 116);
+            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 145);
             this.noFocusCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noFocusCheckBox.Name = "noFocusCheckBox";
             this.noFocusCheckBox.Size = new System.Drawing.Size(128, 17);
@@ -152,7 +154,7 @@
             // noTransparencyCheckBox
             // 
             this.noTransparencyCheckBox.AutoSize = true;
-            this.noTransparencyCheckBox.Location = new System.Drawing.Point(8, 136);
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(8, 165);
             this.noTransparencyCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
             this.noTransparencyCheckBox.Size = new System.Drawing.Size(125, 17);
@@ -161,11 +163,30 @@
             this.noTransparencyCheckBox.UseVisualStyleBackColor = true;
             this.noTransparencyCheckBox.CheckedChanged += new System.EventHandler(this.NoTransparencyChanged);
             // 
+            // manualScallingBox
+            // 
+            this.manualScallingBox.Location = new System.Drawing.Point(8, 59);
+            this.manualScallingBox.Name = "manualScallingBox";
+            this.manualScallingBox.Size = new System.Drawing.Size(100, 20);
+            this.manualScallingBox.TabIndex = 10;
+            this.manualScallingBox.TextChanged += new System.EventHandler(this.ManualScalingChanged);
+            // 
+            // manualScallingLabel
+            // 
+            this.manualScallingLabel.AutoSize = true;
+            this.manualScallingLabel.Location = new System.Drawing.Point(117, 62);
+            this.manualScallingLabel.Name = "manualScallingLabel";
+            this.manualScallingLabel.Size = new System.Drawing.Size(78, 13);
+            this.manualScallingLabel.TabIndex = 11;
+            this.manualScallingLabel.Text = "Manual scaling";
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(146, 190);
+            this.ClientSize = new System.Drawing.Size(201, 221);
+            this.Controls.Add(this.manualScallingLabel);
+            this.Controls.Add(this.manualScallingBox);
             this.Controls.Add(this.noTransparencyCheckBox);
             this.Controls.Add(this.noFocusCheckBox);
             this.Controls.Add(this.gifFpsLabel);
@@ -200,5 +221,7 @@
         private System.Windows.Forms.Label gifFpsLabel;
         private System.Windows.Forms.CheckBox noFocusCheckBox;
         private System.Windows.Forms.CheckBox noTransparencyCheckBox;
+        private System.Windows.Forms.TextBox manualScallingBox;
+        private System.Windows.Forms.Label manualScallingLabel;
     }
 }

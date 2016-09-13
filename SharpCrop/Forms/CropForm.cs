@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SharpCrop.Forms
@@ -15,6 +14,7 @@ namespace SharpCrop.Forms
     {
         private readonly Controller controller;
         private readonly Rectangle screen;
+        private readonly int index;
 
         private MouseButtons mouseButtonUsed = MouseButtons.Left;
         private Point mouseMovePoint = Point.Empty;
@@ -25,10 +25,14 @@ namespace SharpCrop.Forms
         /// <summary>
         /// Consturct a new CropForm with the given provider.
         /// </summary>
-        public CropForm(Controller controller, Rectangle screen)
+        /// <param name="controller"></param>
+        /// <param name="screen">Screen bounds</param>
+        /// <param name="index">Screen index in Screen.AllScreens</param>
+        public CropForm(Controller controller, Rectangle screen, int index = -1)
         {
             this.controller = controller;
             this.screen = screen;
+            this.index = index;
             
             Location = screen.Location;
             ClientSize = Size = screen.Size;
@@ -92,7 +96,7 @@ namespace SharpCrop.Forms
             form.Show();
             form.FormClosed += (sender, ev) =>
             {
-                if (ConfigHelper.Memory.Transparency)
+                if (!ConfigHelper.Memory.NoTransparency)
                 {
                     ShowAll();
                     return;
@@ -160,6 +164,7 @@ namespace SharpCrop.Forms
 
             HideAll();
             Application.DoEvents();
+            CaptureHelper.SetManualScaling(index);
 
 #if __MonoCS__
             Thread.Sleep(500);
@@ -272,6 +277,8 @@ namespace SharpCrop.Forms
         {
             if (ConfigHelper.Memory.NoTransparency)
             {
+                CaptureHelper.SetManualScaling(index);
+
                 BackgroundImage = CaptureHelper.GetBitmap(screen);
                 Opacity = 1.0D;
             }
@@ -280,7 +287,7 @@ namespace SharpCrop.Forms
         /// <summary>
         /// Do not steal focus from other windows.
         /// </summary>
-        protected override bool ShowWithoutActivation => !ConfigHelper.Memory.Focus || base.ShowWithoutActivation;
+        protected override bool ShowWithoutActivation => ConfigHelper.Memory.NoFocus || base.ShowWithoutActivation;
 
         /// <summary>
         /// Keep focus for other windows while topmost.
@@ -289,7 +296,7 @@ namespace SharpCrop.Forms
         {
             get
             {
-                if(ConfigHelper.Memory.Focus)
+                if(!ConfigHelper.Memory.NoFocus)
                 {
                     return base.CreateParams;
                 }

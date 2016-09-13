@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 
 namespace SharpCrop.Models
@@ -18,13 +19,16 @@ namespace SharpCrop.Models
         public string Format { get; set; }
 
         [JsonProperty]
-        public int GifFps { get; set; }
+        public List<int> ManualScaling { get; set; }
+
+        [JsonProperty]
+        public int GifSpeed { get; set; }
 
         [JsonProperty]
         public bool NoCopy { get; set; }
 
 		[JsonProperty]
-		public bool NoScaling { get; set; }
+		public bool NoAutoScaling { get; set; }
 
         [JsonProperty]
         public bool NoGifRepeat { get; set; }
@@ -74,56 +78,25 @@ namespace SharpCrop.Models
         }
 
         [JsonIgnore]
-        public int SafeGifFps
+        public int SafeGifSpeed
         {
             get
             {
-                return GifFps > 0 && GifFps <= 30 ? GifFps : 30;
+                return GifSpeed > 0 && GifSpeed <= 30 ? GifSpeed : 30;
             }
         }
 
         [JsonIgnore]
-		public bool Copy
-		{
-			get 
-			{
-				return !NoCopy;
-			}
-        }
-
-        [JsonIgnore]
-        public bool Scaling
+        public List<int> SafeManualScaling
         {
             get
             {
-                return !NoScaling;
-            }
-        }
+                if(ManualScaling == null)
+                {
+                    return new List<int>();
+                }
 
-        [JsonIgnore]
-        public bool GifRepeat
-        {
-            get
-            {
-                return !NoGifRepeat;
-            }
-        }
-
-        [JsonIgnore]
-        public bool Focus
-        {
-            get
-            {
-                return !NoFocus;
-            }
-        }
-
-        [JsonIgnore]
-        public bool Transparency
-        {
-            get
-            {
-                return !NoTransparency;
+                return ManualScaling;
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿using SharpCrop.Utils;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SharpCrop.Forms
@@ -16,13 +18,13 @@ namespace SharpCrop.Forms
         {
             InitializeComponent();
 
-            // Set lists
             formatList.Text = ConfigHelper.Memory.FormatExt;
-            gifFpsList.Text = ConfigHelper.Memory.SafeGifFps.ToString();
+            gifFpsList.Text = ConfigHelper.Memory.SafeGifSpeed.ToString();
 
-            // Set checkboxes
+            ConfigHelper.Memory.SafeManualScaling.ForEach(s => manualScallingBox.Text += $"{s} ");
+            
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
-            noScalingCheckBox.Checked = ConfigHelper.Memory.NoScaling;
+            noScalingCheckBox.Checked = ConfigHelper.Memory.NoAutoScaling;
             noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
             noFocusCheckBox.Checked = ConfigHelper.Memory.NoFocus;
             noTransparencyCheckBox.Checked = ConfigHelper.Memory.NoTransparency;
@@ -49,7 +51,36 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void GifFpsChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.GifFps = int.Parse(gifFpsList.Text);
+            try
+            {
+                ConfigHelper.Memory.GifSpeed = int.Parse(gifFpsList.Text);
+            }
+            catch
+            {
+                gifFpsList.Text = string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Change manual scaling list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ManualScalingChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var list = manualScallingBox.Text
+                    .Split(' ')
+                    .Select(s => int.Parse(s))
+                    .ToList();
+
+                ConfigHelper.Memory.ManualScaling = list;
+            }
+            catch
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -69,7 +100,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void NoScalingChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoScaling = noScalingCheckBox.Checked;
+            ConfigHelper.Memory.NoAutoScaling = noScalingCheckBox.Checked;
         }
 
         /// <summary>

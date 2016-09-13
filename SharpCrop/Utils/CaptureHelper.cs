@@ -10,6 +10,8 @@ namespace SharpCrop.Utils
     /// </summary>
     public static class CaptureHelper
     {
+        public static float ManualScaling = 0.0f;
+
         /// <summary>
         /// Private helper function to construct a rectangle from two points.
         /// </summary>
@@ -29,12 +31,17 @@ namespace SharpCrop.Utils
         /// Get a Bitmap from screen in the size of the given rectangle.
         /// </summary>
         /// <param name="r"></param>
+        /// <param name="scaling"></param>
         /// <returns></returns>
         public static Bitmap GetBitmap(Rectangle r)
         {
-            var s = 1.0f;
+            float s;
 
-            if (ConfigHelper.Memory.Scaling)
+            if(ConfigHelper.Memory.NoAutoScaling && ManualScaling > 0.0f)
+            {
+                s = ManualScaling;
+            }
+            else
             {
                 s = GetScaling();
             }
@@ -51,6 +58,21 @@ namespace SharpCrop.Utils
             gfx.CopyFromScreen(rs.X, rs.Y, 0, 0, new Size(rs.Width, rs.Height), CopyPixelOperation.SourceCopy);
 
             return bitmap;
+        }
+        
+        /// <summary>
+        /// Set manual scalling from the ConfigHelper by screen index.
+        /// </summary>
+        /// <param name="index"></param>
+        public static void SetManualScaling(int index)
+        {
+            var list = ConfigHelper.Memory.SafeManualScaling;
+
+            if (index < list.Count)
+            {
+                // ManualScalling is in percentage
+                ManualScaling = list[index] / 100.0f;
+            }
         }
 
 #if __MonoCS__

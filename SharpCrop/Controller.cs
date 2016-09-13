@@ -25,9 +25,11 @@ namespace SharpCrop
         /// </summary>
         public Controller()
         {
-            foreach (var screen in Screen.AllScreens)
+            // Open a CropForm for every screen
+            for (var i = 0; i < Screen.AllScreens.Length; i++)
             {
-                var form = new CropForm(this, screen.Bounds);
+                var screen = Screen.AllScreens[i];
+                var form = new CropForm(this, screen.Bounds, i);
 
                 form.FormClosed += (s, e) => Application.Exit();
                 cropForms.Add(form);
@@ -37,7 +39,7 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Protect cropForms from external modification.
+        /// Protect list from external modification.
         /// </summary>
         public IReadOnlyList<Form> CropForms
         {
@@ -120,10 +122,10 @@ namespace SharpCrop
         /// <summary>
         /// Capture one Bitmap.
         /// </summary>
-        /// <param name="rect"></param>
-        public async void CaptureImage(Rectangle rect)
+        /// <param name="rectangle"></param>
+        public async void CaptureImage(Rectangle rectangle)
         {
-            var bitmap = CaptureHelper.GetBitmap(rect);
+            var bitmap = CaptureHelper.GetBitmap(rectangle);
             var stream = new MemoryStream();
 
             bitmap.Save(stream, ConfigHelper.Memory.FormatType);
@@ -138,8 +140,8 @@ namespace SharpCrop
         /// <summary>
         /// Capture a lot of Bitmaps and convert them to Gif.
         /// </summary>
-        /// <param name="rect"></param>
-        public async void CaptureGif(Rectangle rect)
+        /// <param name="rectangle"></param>
+        public async void CaptureGif(Rectangle rectangle)
         {
             var toast = -1;
 
@@ -149,7 +151,7 @@ namespace SharpCrop
                 GifFactory.Stop();
             });
 
-            var stream = await GifFactory.Record(rect);
+            var stream = await GifFactory.Record(rectangle);
 
             ToastFactory.Remove(toast);
 
@@ -170,7 +172,7 @@ namespace SharpCrop
         /// <param name="url"></param>
         private void Success(string url = null)
         {
-            if (ConfigHelper.Memory.Copy && url != null)
+            if (!ConfigHelper.Memory.NoCopy && url != null)
             {
                 Clipboard.SetText(url);
 
