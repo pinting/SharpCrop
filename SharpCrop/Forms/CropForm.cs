@@ -326,13 +326,6 @@ namespace SharpCrop.Forms
 #endif
         }
 
-#if !__MonoCS__
-
-        /// <summary>
-        /// Do not steal focus from other windows.
-        /// </summary>
-        protected override bool ShowWithoutActivation => ConfigHelper.Memory.NoFocus || base.ShowWithoutActivation;
-
         /// <summary>
         /// Keep focus for other windows while topmost.
         /// </summary>
@@ -356,7 +349,9 @@ namespace SharpCrop.Forms
             }
         }
 
-#endif
-
+        /// <summary>
+        /// Do not steal focus from other windows.
+        /// </summary>
+        protected override bool ShowWithoutActivation => ConfigHelper.Memory.NoFocus || base.ShowWithoutActivation;
     }
 }
