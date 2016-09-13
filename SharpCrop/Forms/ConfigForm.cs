@@ -21,7 +21,7 @@ namespace SharpCrop.Forms
             // Init lists and boxes
             formatList.Text = ConfigHelper.Memory.FormatExt;
             gifFpsList.Text = ConfigHelper.Memory.SafeGifSpeed.ToString();
-            manualScallingBox.Text = ConfigHelper.Memory.SafeManualScaling.Select(s => s.ToString()).Aggregate((a, b) => $"{a} {b}");
+            manualScallingBox.Text = string.Join(" ", ConfigHelper.Memory.SafeManualScaling);
 
             // Init checkboxes
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
