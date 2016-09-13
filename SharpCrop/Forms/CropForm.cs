@@ -207,7 +207,6 @@ namespace SharpCrop.Forms
 
             Invalidate();
         }
-
         /// <summary>
         /// Paint the rectangle if the mouse button is down.
         /// </summary>
@@ -221,15 +220,35 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            var rect = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
+            var draw = new Action<Brush, Rectangle>((color, r) => 
+            {
+                if (!ConfigHelper.Memory.NoTransparency)
+                {
+                    e.Graphics.FillRectangle(color, r);
+                    return;
+                }
+
+                var path = new Point[]
+                {
+                    new Point { X = r.X, Y = r.Y },
+                    new Point { X = r.X + r.Width , Y = r.Y },
+                    new Point { X = r.X + r.Width , Y = r.Y + r.Height },
+                    new Point { X = r.X , Y = r.Y + r.Height },
+                    new Point { X = r.X, Y = r.Y }
+                };
+
+                e.Graphics.DrawLines(new Pen(color, Constants.PenWidth), path);
+            });
+
+            var rectangle = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
 
             switch (mouseButtonUsed)
             {
                 case MouseButtons.Left:
-                    e.Graphics.FillRectangle(Constants.LeftColor, rect);
+                    draw(Constants.LeftColor, rectangle);
                     break;
                 case MouseButtons.Right:
-                    e.Graphics.FillRectangle(Constants.RightColor, rect);
+                    draw(Constants.RightColor, rectangle);
                     break;
             }
         }

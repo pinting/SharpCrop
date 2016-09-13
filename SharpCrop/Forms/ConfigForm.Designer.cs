@@ -60,7 +60,7 @@
             // noCopyCheckBox
             // 
             this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 88);
+            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 107);
             this.noCopyCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noCopyCheckBox.Name = "noCopyCheckBox";
             this.noCopyCheckBox.Size = new System.Drawing.Size(112, 17);
@@ -72,7 +72,7 @@
             // noScalingCheckBox
             // 
             this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 107);
+            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 88);
             this.noScalingCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noScalingCheckBox.Name = "noScalingCheckBox";
             this.noScalingCheckBox.Size = new System.Drawing.Size(132, 17);

@@ -18,11 +18,12 @@ namespace SharpCrop.Forms
         {
             InitializeComponent();
 
+            // Init lists and boxes
             formatList.Text = ConfigHelper.Memory.FormatExt;
             gifFpsList.Text = ConfigHelper.Memory.SafeGifSpeed.ToString();
+            manualScallingBox.Text = ConfigHelper.Memory.SafeManualScaling.Select(s => s.ToString()).Aggregate((a, b) => $"{a} {b}");
 
-            ConfigHelper.Memory.SafeManualScaling.ForEach(s => manualScallingBox.Text += $"{s} ");
-            
+            // Init checkboxes
             noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
             noScalingCheckBox.Checked = ConfigHelper.Memory.NoAutoScaling;
             noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
@@ -84,16 +85,6 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Disable or enable URL copy.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NoCopyChanged(object sender, EventArgs e)
-        {
-            ConfigHelper.Memory.NoCopy = noCopyCheckBox.Checked;
-        }
-
-        /// <summary>
         /// Disable or enable scaling checker.
         /// </summary>
         /// <param name="sender"></param>
@@ -101,6 +92,16 @@ namespace SharpCrop.Forms
         private void NoScalingChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.NoAutoScaling = noScalingCheckBox.Checked;
+        }
+
+        /// <summary>
+        /// Disable or enable URL copy.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NoCopyChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.NoCopy = noCopyCheckBox.Checked;
         }
 
         /// <summary>
@@ -123,6 +124,11 @@ namespace SharpCrop.Forms
             ConfigHelper.Memory.NoFocus = noFocusCheckBox.Checked;
         }
 
+        /// <summary>
+        /// Disable on enable transparency.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NoTransparencyChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.NoTransparency = noTransparencyCheckBox.Checked;
