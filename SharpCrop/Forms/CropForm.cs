@@ -254,6 +254,46 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
+        /// Hide every CropForm - if more than one monitor is used.
+        /// </summary>
+        private void HideAll()
+        {
+            foreach (var form in controller.CropForms)
+            {
+                form.Hide();
+            }
+        }
+
+        /// <summary>
+        /// Show every CropForm.
+        /// </summary>
+        private void ShowAll()
+        {
+            foreach (var form in controller.CropForms)
+            {
+                form.Show();
+            }
+        }
+
+        /// <summary>
+        /// Refresh the background if transparency is disabled.
+        /// </summary>
+        private void RefreshBackground()
+        {
+            if (!ConfigHelper.Memory.NoTransparency)
+            {
+                return;
+            }
+
+            CaptureHelper.SetManualScaling(index);
+
+            var bitmap = CaptureHelper.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
+
+            BackgroundImage = CaptureHelper.ResizeBitmap(bitmap, Width, Height);
+            Opacity = 1.0D;
+        }
+
+        /// <summary>
         /// Make the form invisible and enable clicking.
         /// </summary>
         private void MakeClickable()
@@ -286,23 +326,7 @@ namespace SharpCrop.Forms
 #endif
         }
 
-        /// <summary>
-        /// Refresh the background if transparency is disabled.
-        /// </summary>
-        private void RefreshBackground()
-        {
-            if (!ConfigHelper.Memory.NoTransparency)
-            {
-                return;
-            }
-
-            CaptureHelper.SetManualScaling(index);
-
-            var bitmap = CaptureHelper.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
-
-            BackgroundImage = CaptureHelper.ResizeBitmap(bitmap, Width, Height);
-            Opacity = 1.0D;
-        }
+#if !__MonoCS__
 
         /// <summary>
         /// Do not steal focus from other windows.
@@ -332,26 +356,7 @@ namespace SharpCrop.Forms
             }
         }
 
-        /// <summary>
-        /// Hide every CropForm - if more than one monitor is used.
-        /// </summary>
-        private void HideAll()
-        {
-            foreach(var form in controller.CropForms)
-            {
-                form.Hide();
-            }
-        }
+#endif
 
-        /// <summary>
-        /// Show every CropForm.
-        /// </summary>
-        private void ShowAll()
-        {
-            foreach (var form in controller.CropForms)
-            {
-                form.Show();
-            }
-        }
     }
 }

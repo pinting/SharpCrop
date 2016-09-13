@@ -25,22 +25,25 @@ namespace SharpCrop.Forms
 
             label.Text = text;
             BackColor = color;
+
             Location = new Point(
                 Screen.PrimaryScreen.Bounds.Width - (Width + margin),
                 Screen.PrimaryScreen.Bounds.Height - (Height + margin) * index);
 
-            if (duration > 0)
+            if (duration <= 0)
             {
-                Task.Run(async () =>
-                {
-                    await Task.Delay(duration);
-
-                    if (!IsDisposed)
-                    {
-                        Invoke(new Action(Close));
-                    }
-                });
+                return;
             }
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(duration);
+
+                if (!IsDisposed)
+                {
+                    Invoke(new Action(Close));
+                }
+            });
         }
 
         /// <summary>
@@ -69,10 +72,7 @@ namespace SharpCrop.Forms
             Close();
         }
 
-        /// <summary>
-        /// Do not steal focus from other windows.
-        /// </summary>
-        protected override bool ShowWithoutActivation => true;
+#if !__MonoCS__
 
         /// <summary>
         /// Keep focus for other windows while topmost.
@@ -91,5 +91,13 @@ namespace SharpCrop.Forms
                 return baseParams;
             }
         }
+
+        /// <summary>
+        /// Do not steal focus from other windows.
+        /// </summary>
+        protected override bool ShowWithoutActivation => true;
+
+#endif
+
     }
 }
