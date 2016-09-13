@@ -123,9 +123,9 @@ namespace SharpCrop
         /// Capture one Bitmap.
         /// </summary>
         /// <param name="rectangle"></param>
-        public async void CaptureImage(Rectangle rectangle)
+        public async void CaptureImage(Rectangle rectangle, Point offset)
         {
-            var bitmap = CaptureHelper.GetBitmap(rectangle);
+            var bitmap = CaptureHelper.GetBitmap(rectangle, offset);
             var stream = new MemoryStream();
 
             bitmap.Save(stream, ConfigHelper.Memory.FormatType);
@@ -141,7 +141,7 @@ namespace SharpCrop
         /// Capture a lot of Bitmaps and convert them to Gif.
         /// </summary>
         /// <param name="rectangle"></param>
-        public async void CaptureGif(Rectangle rectangle)
+        public async void CaptureGif(Rectangle rectangle, Point offset)
         {
             var toast = -1;
 
@@ -151,7 +151,7 @@ namespace SharpCrop
                 GifFactory.Stop();
             });
 
-            var stream = await GifFactory.Record(rectangle);
+            var stream = await GifFactory.Record(rectangle, offset);
 
             ToastFactory.Remove(toast);
 

@@ -29,8 +29,8 @@ namespace SharpCrop.Utils
         /// <summary>
         /// Start capturing frames with CaptureHelper.
         /// </summary>
-        /// <param name="rect"></param>
-        private static void CaptureFrames(Rectangle rect)
+        /// <param name="rectangle"></param>
+        private static void CaptureFrames(Rectangle rectangle, Point offset)
         {
             var freq = (1000 / ConfigHelper.Memory.SafeGifSpeed);
             var wait = 0;
@@ -40,7 +40,7 @@ namespace SharpCrop.Utils
                 Thread.Sleep(wait < 0 ? 0 : wait);
 
                 var delay = Stopwatch.StartNew();
-                var image = CaptureHelper.GetBitmap(rect);
+                var image = CaptureHelper.GetBitmap(rectangle, offset);
 
                 delay.Stop();
 
@@ -163,9 +163,9 @@ namespace SharpCrop.Utils
         /// <summary>
         /// Start a recording with a rectangle.
         /// </summary>
-        /// <param name="rect"></param>
+        /// <param name="rectrectangle"></param>
         /// <returns></returns>
-        public static Task<MemoryStream> Record(Rectangle rect)
+        public static Task<MemoryStream> Record(Rectangle rectrectangle, Point offset)
         {
             if(result != null && !result.Task.IsCompleted)
             {
@@ -176,7 +176,7 @@ namespace SharpCrop.Utils
             result = new TaskCompletionSource<MemoryStream>();
 
             // Run the two process in the same time
-            Task.Run(() => CaptureFrames(rect));
+            Task.Run(() => CaptureFrames(rectrectangle, offset));
             Task.Run(() => EncodeGif());
 
             return result.Task;

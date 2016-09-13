@@ -152,15 +152,12 @@ namespace SharpCrop.Forms
             mouseButtonUsed = e.Button;
             isMouseDown = false;
             
-            var r = CaptureHelper.GetRectangle(mouseDownPoint, mouseUpPoint);
+            var rectangle = CaptureHelper.GetRectangle(mouseDownPoint, mouseUpPoint);
 
-            if (r.X < 0 || r.Y < 0 || r.Width < 1 || r.Height < 1)
+            if (rectangle.X < 0 || rectangle.Y < 0 || rectangle.Width < 1 || rectangle.Height < 1)
             {
                 return;
             }
-
-            r.X += screen.X;
-            r.Y += screen.Y;
 
             HideAll();
             Application.DoEvents();
@@ -175,10 +172,10 @@ namespace SharpCrop.Forms
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    controller.CaptureImage(r);
+                    controller.CaptureImage(rectangle, screen.Location);
                     break;
                 case MouseButtons.Right:
-                    controller.CaptureGif(r);
+                    controller.CaptureGif(rectangle, screen.Location);
                     break;
             }
         }
@@ -279,7 +276,8 @@ namespace SharpCrop.Forms
             {
                 CaptureHelper.SetManualScaling(index);
 
-                BackgroundImage = CaptureHelper.GetBitmap(screen);
+                BackgroundImageLayout = ImageLayout.Stretch;
+                BackgroundImage = CaptureHelper.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
                 Opacity = 1.0D;
             }
         }
