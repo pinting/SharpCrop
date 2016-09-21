@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="IProvider.cs" />
     <Compile Include="Utils\HttpServer.cs" />
+    <Compile Include="Utils\MimeLookup.cs" />
     <Compile Include="Utils\Obscure.cs" />
   </ItemGroup>
   <ItemGroup>

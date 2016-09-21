@@ -10,10 +10,12 @@ namespace SharpCrop
         [STAThread]
         public static void Main()
         {
+#if !__MonoCS__
             if (Environment.OSVersion.Version.Major >= 6)
             {
                 SetProcessDPIAware();
             }
+#endif
 
             ConfigHelper.Load();
 

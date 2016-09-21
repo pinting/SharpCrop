@@ -152,9 +152,9 @@ namespace SharpCrop.Forms
             mouseButtonUsed = e.Button;
             isMouseDown = false;
             
-            var rectangle = CaptureHelper.GetRectangle(mouseDownPoint, mouseUpPoint);
+            var region = CaptureHelper.GetRectangle(mouseDownPoint, mouseUpPoint);
 
-            if (rectangle.X < 0 || rectangle.Y < 0 || rectangle.Width < 1 || rectangle.Height < 1)
+            if (region.X < 0 || region.Y < 0 || region.Width < 1 || region.Height < 1)
             {
                 return;
             }
@@ -172,10 +172,10 @@ namespace SharpCrop.Forms
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    controller.CaptureImage(rectangle, screen.Location);
+                    controller.CaptureImage(region, screen.Location);
                     break;
                 case MouseButtons.Right:
-                    controller.CaptureGif(rectangle, screen.Location);
+                    controller.CaptureGif(region, screen.Location);
                     break;
             }
         }
@@ -240,15 +240,15 @@ namespace SharpCrop.Forms
                 e.Graphics.DrawLines(new Pen(color, Constants.PenWidth), path);
             });
 
-            var rectangle = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
+            var region = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
 
             switch (mouseButtonUsed)
             {
                 case MouseButtons.Left:
-                    draw(Constants.LeftColor, rectangle);
+                    draw(Constants.LeftColor, region);
                     break;
                 case MouseButtons.Right:
-                    draw(Constants.RightColor, rectangle);
+                    draw(Constants.RightColor, region);
                     break;
             }
         }

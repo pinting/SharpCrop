@@ -60,8 +60,7 @@ namespace SharpCrop.GoogleDrive
         public async Task<string> Upload(string name, MemoryStream stream)
         {
             var body = new Google.Apis.Drive.v3.Data.File() { Name = name };
-            var ext = Path.GetExtension(name);
-            var type = ext != null ? $"image/{ext.Substring(1)}" : "application/octet-stream";
+            var type = $"image/{MimeLookup.Find(Path.GetExtension(name))}";
             var request = service.Files.Create(body, stream, type);
 
             await request.UploadAsync();

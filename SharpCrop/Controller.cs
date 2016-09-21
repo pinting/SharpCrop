@@ -122,10 +122,10 @@ namespace SharpCrop
         /// <summary>
         /// Capture one Bitmap.
         /// </summary>
-        /// <param name="rectangle"></param>
-        public async void CaptureImage(Rectangle rectangle, Point offset)
+        /// <param name="region"></param>
+        public async void CaptureImage(Rectangle region, Point offset)
         {
-            var bitmap = CaptureHelper.GetBitmap(rectangle, offset);
+            var bitmap = CaptureHelper.GetBitmap(region, offset);
             var stream = new MemoryStream();
 
             bitmap.Save(stream, ConfigHelper.Memory.FormatType);
@@ -140,24 +140,34 @@ namespace SharpCrop
         /// <summary>
         /// Capture a lot of Bitmaps and convert them to Gif.
         /// </summary>
-        /// <param name="rectangle"></param>
-        public async void CaptureGif(Rectangle rectangle, Point offset)
+        /// <param name="region"></param>
+        public async void CaptureGif(Rectangle region, Point offset)
         {
+            MemoryStream stream;
             var toast = -1;
 
+            // Create a new toast which closing event gonna stop the recording
             ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () => 
             {
                 toast = ToastFactory.Create("Encoding...", 0);
-                GifFactory.Stop();
+                VideoFactory.Stop();
             });
 
-            var stream = await GifFactory.Record(rectangle, offset);
-
+            // Use Mpeg if enabled
+            if (ConfigHelper.Memory.EnableMpeg)
+            {
+                stream = await VideoFactory.RecordMpeg(region, offset);
+            }
+            else
+            {
+                stream = await VideoFactory.RecordGif(region, offset);
+            }
+            
             ToastFactory.Remove(toast);
-
+            
             toast = ToastFactory.Create($"Uploading... ({(double) stream.Length/(1024*1024):0.00} MB)", 0);
 
-            var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".gif";
+            var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}";
             var url = await provider.Upload(name, stream);
             
             ToastFactory.Remove(toast);

@@ -20,7 +20,7 @@ namespace SharpCrop.Forms
 
             // Init lists and boxes
             formatList.Text = ConfigHelper.Memory.FormatExt;
-            gifFpsList.Text = ConfigHelper.Memory.SafeGifSpeed.ToString();
+            videoFpsList.Text = ConfigHelper.Memory.SafeVideoFPS.ToString();
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Memory.SafeManualScaling);
 
             // Init checkboxes
@@ -29,6 +29,7 @@ namespace SharpCrop.Forms
             noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
             noFocusCheckBox.Checked = ConfigHelper.Memory.NoFocus;
             noTransparencyCheckBox.Checked = ConfigHelper.Memory.NoTransparency;
+            enableMpegCheckbox.Checked = ConfigHelper.Memory.EnableMpeg;
 
 #if __MonoCS__
             noFocusCheckBox.Enabled = false;
@@ -54,11 +55,11 @@ namespace SharpCrop.Forms
         {
             try
             {
-                ConfigHelper.Memory.GifSpeed = int.Parse(gifFpsList.Text);
+                ConfigHelper.Memory.VideoFPS = int.Parse(videoFpsList.Text);
             }
             catch
             {
-                gifFpsList.Text = string.Empty;
+                videoFpsList.Text = string.Empty;
             }
         }
 
@@ -132,6 +133,16 @@ namespace SharpCrop.Forms
         private void NoTransparencyChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.NoTransparency = noTransparencyCheckBox.Checked;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EnableMpegChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.EnableMpeg = enableMpegCheckbox.Checked;
         }
 
         /// <summary>

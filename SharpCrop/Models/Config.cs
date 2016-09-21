@@ -22,7 +22,7 @@ namespace SharpCrop.Models
         public List<int> ManualScaling { get; set; }
 
         [JsonProperty]
-        public int GifSpeed { get; set; }
+        public int VideoFPS { get; set; }
 
         [JsonProperty]
         public bool NoCopy { get; set; }
@@ -38,6 +38,9 @@ namespace SharpCrop.Models
 
         [JsonProperty]
         public bool NoTransparency { get; set; }
+
+        [JsonProperty]
+        public bool EnableMpeg { get; set; }
 
         #region Validators
 
@@ -78,11 +81,11 @@ namespace SharpCrop.Models
         }
 
         [JsonIgnore]
-        public int SafeGifSpeed
+        public int SafeVideoFPS
         {
             get
             {
-                return GifSpeed > 0 && GifSpeed <= 30 ? GifSpeed : 30;
+                return VideoFPS > 0 && VideoFPS <= 30 ? VideoFPS : 30;
             }
         }
 

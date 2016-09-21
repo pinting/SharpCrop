@@ -33,7 +33,7 @@
             this.noCopyCheckBox = new System.Windows.Forms.CheckBox();
             this.noScalingCheckBox = new System.Windows.Forms.CheckBox();
             this.unlinkButton = new System.Windows.Forms.Button();
-            this.gifFpsList = new System.Windows.Forms.ComboBox();
+            this.videoFpsList = new System.Windows.Forms.ComboBox();
             this.noGifRepeatCheckBox = new System.Windows.Forms.CheckBox();
             this.formatLabel = new System.Windows.Forms.Label();
             this.gifFpsLabel = new System.Windows.Forms.Label();
@@ -41,6 +41,7 @@
             this.noTransparencyCheckBox = new System.Windows.Forms.CheckBox();
             this.manualScallingBox = new System.Windows.Forms.TextBox();
             this.manualScallingLabel = new System.Windows.Forms.Label();
+            this.enableMpegCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // formatList
@@ -50,20 +51,18 @@
             "jpg",
             "png",
             "bmp"});
-            this.formatList.Location = new System.Drawing.Point(8, 8);
-            this.formatList.Margin = new System.Windows.Forms.Padding(2);
+            this.formatList.Location = new System.Drawing.Point(12, 12);
             this.formatList.Name = "formatList";
-            this.formatList.Size = new System.Drawing.Size(100, 21);
+            this.formatList.Size = new System.Drawing.Size(148, 28);
             this.formatList.TabIndex = 0;
             this.formatList.SelectedIndexChanged += new System.EventHandler(this.FormatChanged);
             // 
             // noCopyCheckBox
             // 
             this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 107);
-            this.noCopyCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noCopyCheckBox.Location = new System.Drawing.Point(12, 165);
             this.noCopyCheckBox.Name = "noCopyCheckBox";
-            this.noCopyCheckBox.Size = new System.Drawing.Size(112, 17);
+            this.noCopyCheckBox.Size = new System.Drawing.Size(155, 24);
             this.noCopyCheckBox.TabIndex = 1;
             this.noCopyCheckBox.Text = "Disable URL copy";
             this.noCopyCheckBox.UseVisualStyleBackColor = true;
@@ -72,10 +71,9 @@
             // noScalingCheckBox
             // 
             this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 88);
-            this.noScalingCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noScalingCheckBox.Location = new System.Drawing.Point(12, 135);
             this.noScalingCheckBox.Name = "noScalingCheckBox";
-            this.noScalingCheckBox.Size = new System.Drawing.Size(132, 17);
+            this.noScalingCheckBox.Size = new System.Drawing.Size(187, 24);
             this.noScalingCheckBox.TabIndex = 2;
             this.noScalingCheckBox.Text = "Enable manual scaling";
             this.noScalingCheckBox.UseVisualStyleBackColor = true;
@@ -83,39 +81,36 @@
             // 
             // unlinkButton
             // 
-            this.unlinkButton.Location = new System.Drawing.Point(7, 186);
-            this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
+            this.unlinkButton.Location = new System.Drawing.Point(10, 316);
             this.unlinkButton.Name = "unlinkButton";
-            this.unlinkButton.Size = new System.Drawing.Size(188, 25);
+            this.unlinkButton.Size = new System.Drawing.Size(282, 38);
             this.unlinkButton.TabIndex = 3;
             this.unlinkButton.Text = "Unlink";
             this.unlinkButton.UseVisualStyleBackColor = true;
             this.unlinkButton.Click += new System.EventHandler(this.UnlinkClick);
             // 
-            // gifFpsList
+            // videoFpsList
             // 
-            this.gifFpsList.FormattingEnabled = true;
-            this.gifFpsList.Items.AddRange(new object[] {
+            this.videoFpsList.FormattingEnabled = true;
+            this.videoFpsList.Items.AddRange(new object[] {
             "5",
             "10",
             "15",
             "20",
             "25",
             "30"});
-            this.gifFpsList.Location = new System.Drawing.Point(8, 33);
-            this.gifFpsList.Margin = new System.Windows.Forms.Padding(2);
-            this.gifFpsList.Name = "gifFpsList";
-            this.gifFpsList.Size = new System.Drawing.Size(100, 21);
-            this.gifFpsList.TabIndex = 4;
-            this.gifFpsList.SelectedIndexChanged += new System.EventHandler(this.GifFpsChanged);
+            this.videoFpsList.Location = new System.Drawing.Point(12, 51);
+            this.videoFpsList.Name = "videoFpsList";
+            this.videoFpsList.Size = new System.Drawing.Size(148, 28);
+            this.videoFpsList.TabIndex = 4;
+            this.videoFpsList.SelectedIndexChanged += new System.EventHandler(this.GifFpsChanged);
             // 
             // noGifRepeatCheckBox
             // 
             this.noGifRepeatCheckBox.AutoSize = true;
-            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(8, 126);
-            this.noGifRepeatCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(12, 194);
             this.noGifRepeatCheckBox.Name = "noGifRepeatCheckBox";
-            this.noGifRepeatCheckBox.Size = new System.Drawing.Size(114, 17);
+            this.noGifRepeatCheckBox.Size = new System.Drawing.Size(163, 24);
             this.noGifRepeatCheckBox.TabIndex = 5;
             this.noGifRepeatCheckBox.Text = "Disable GIF repeat";
             this.noGifRepeatCheckBox.UseVisualStyleBackColor = true;
@@ -124,28 +119,29 @@
             // formatLabel
             // 
             this.formatLabel.AutoSize = true;
-            this.formatLabel.Location = new System.Drawing.Point(117, 13);
+            this.formatLabel.Location = new System.Drawing.Point(176, 20);
+            this.formatLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.formatLabel.Name = "formatLabel";
-            this.formatLabel.Size = new System.Drawing.Size(68, 13);
+            this.formatLabel.Size = new System.Drawing.Size(104, 20);
             this.formatLabel.TabIndex = 6;
             this.formatLabel.Text = "Image format";
             // 
             // gifFpsLabel
             // 
             this.gifFpsLabel.AutoSize = true;
-            this.gifFpsLabel.Location = new System.Drawing.Point(117, 37);
+            this.gifFpsLabel.Location = new System.Drawing.Point(176, 57);
+            this.gifFpsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.gifFpsLabel.Name = "gifFpsLabel";
-            this.gifFpsLabel.Size = new System.Drawing.Size(47, 13);
+            this.gifFpsLabel.Size = new System.Drawing.Size(85, 20);
             this.gifFpsLabel.TabIndex = 7;
-            this.gifFpsLabel.Text = "GIF FPS";
+            this.gifFpsLabel.Text = "Video FPS";
             // 
             // noFocusCheckBox
             // 
             this.noFocusCheckBox.AutoSize = true;
-            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 145);
-            this.noFocusCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noFocusCheckBox.Location = new System.Drawing.Point(12, 223);
             this.noFocusCheckBox.Name = "noFocusCheckBox";
-            this.noFocusCheckBox.Size = new System.Drawing.Size(128, 17);
+            this.noFocusCheckBox.Size = new System.Drawing.Size(179, 24);
             this.noFocusCheckBox.TabIndex = 8;
             this.noFocusCheckBox.Text = "Launch without focus";
             this.noFocusCheckBox.UseVisualStyleBackColor = true;
@@ -154,10 +150,9 @@
             // noTransparencyCheckBox
             // 
             this.noTransparencyCheckBox.AutoSize = true;
-            this.noTransparencyCheckBox.Location = new System.Drawing.Point(8, 165);
-            this.noTransparencyCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(12, 254);
             this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
-            this.noTransparencyCheckBox.Size = new System.Drawing.Size(125, 17);
+            this.noTransparencyCheckBox.Size = new System.Drawing.Size(177, 24);
             this.noTransparencyCheckBox.TabIndex = 9;
             this.noTransparencyCheckBox.Text = "Disable transparency";
             this.noTransparencyCheckBox.UseVisualStyleBackColor = true;
@@ -165,26 +160,40 @@
             // 
             // manualScallingBox
             // 
-            this.manualScallingBox.Location = new System.Drawing.Point(8, 59);
+            this.manualScallingBox.Location = new System.Drawing.Point(12, 91);
+            this.manualScallingBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.manualScallingBox.Name = "manualScallingBox";
-            this.manualScallingBox.Size = new System.Drawing.Size(100, 20);
+            this.manualScallingBox.Size = new System.Drawing.Size(148, 26);
             this.manualScallingBox.TabIndex = 10;
             this.manualScallingBox.TextChanged += new System.EventHandler(this.ManualScalingChanged);
             // 
             // manualScallingLabel
             // 
             this.manualScallingLabel.AutoSize = true;
-            this.manualScallingLabel.Location = new System.Drawing.Point(117, 62);
+            this.manualScallingLabel.Location = new System.Drawing.Point(176, 95);
+            this.manualScallingLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.manualScallingLabel.Name = "manualScallingLabel";
-            this.manualScallingLabel.Size = new System.Drawing.Size(78, 13);
+            this.manualScallingLabel.Size = new System.Drawing.Size(114, 20);
             this.manualScallingLabel.TabIndex = 11;
             this.manualScallingLabel.Text = "Manual scaling";
             // 
+            // enableMpegCheckbox
+            // 
+            this.enableMpegCheckbox.AutoSize = true;
+            this.enableMpegCheckbox.Location = new System.Drawing.Point(12, 284);
+            this.enableMpegCheckbox.Name = "enableMpegCheckbox";
+            this.enableMpegCheckbox.Size = new System.Drawing.Size(273, 24);
+            this.enableMpegCheckbox.TabIndex = 12;
+            this.enableMpegCheckbox.Text = "Record in MPEG (ffmpeg required)";
+            this.enableMpegCheckbox.UseVisualStyleBackColor = true;
+            this.enableMpegCheckbox.CheckedChanged += new System.EventHandler(this.EnableMpegChanged);
+            // 
             // ConfigForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(201, 221);
+            this.ClientSize = new System.Drawing.Size(302, 361);
+            this.Controls.Add(this.enableMpegCheckbox);
             this.Controls.Add(this.manualScallingLabel);
             this.Controls.Add(this.manualScallingBox);
             this.Controls.Add(this.noTransparencyCheckBox);
@@ -192,14 +201,13 @@
             this.Controls.Add(this.gifFpsLabel);
             this.Controls.Add(this.formatLabel);
             this.Controls.Add(this.noGifRepeatCheckBox);
-            this.Controls.Add(this.gifFpsList);
+            this.Controls.Add(this.videoFpsList);
             this.Controls.Add(this.unlinkButton);
             this.Controls.Add(this.noScalingCheckBox);
             this.Controls.Add(this.noCopyCheckBox);
             this.Controls.Add(this.formatList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ConfigForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
@@ -215,7 +223,7 @@
         private System.Windows.Forms.CheckBox noCopyCheckBox;
         private System.Windows.Forms.CheckBox noScalingCheckBox;
         private System.Windows.Forms.Button unlinkButton;
-        private System.Windows.Forms.ComboBox gifFpsList;
+        private System.Windows.Forms.ComboBox videoFpsList;
         private System.Windows.Forms.CheckBox noGifRepeatCheckBox;
         private System.Windows.Forms.Label formatLabel;
         private System.Windows.Forms.Label gifFpsLabel;
@@ -223,5 +231,6 @@
         private System.Windows.Forms.CheckBox noTransparencyCheckBox;
         private System.Windows.Forms.TextBox manualScallingBox;
         private System.Windows.Forms.Label manualScallingLabel;
+        private System.Windows.Forms.CheckBox enableMpegCheckbox;
     }
 }
