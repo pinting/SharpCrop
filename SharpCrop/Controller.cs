@@ -125,16 +125,19 @@ namespace SharpCrop
         /// <param name="region"></param>
         public async void CaptureImage(Rectangle region, Point offset)
         {
-            var bitmap = CaptureHelper.GetBitmap(region, offset);
-            var stream = new MemoryStream();
-
-            bitmap.Save(stream, ConfigHelper.Memory.FormatType);
-
             var name = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt;
-            var url = await provider.Upload(name, stream);
 
-            stream.Dispose();
-            Success(url);
+            using (var stream = new MemoryStream())
+            {
+                using (var bitmap = CaptureHelper.GetBitmap(region, offset))
+                {
+                    bitmap.Save(stream, ConfigHelper.Memory.FormatType);
+                }
+
+                var url = await provider.Upload(name, stream);
+                
+                Success(url);
+            }
         }
 
         /// <summary>

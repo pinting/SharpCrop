@@ -133,30 +133,29 @@ namespace SharpCrop.Utils
             // Wait for the first frame
             while (!FrameExists(0)) { }
 
-            var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.NoGifRepeat ? 1 : 0);
-            
-            while(running || frames.Count > 0)
+            using (var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.NoGifRepeat ? 1 : 0))
             {
-                // Check if it is possible to remove a frame
-                if (FrameExists(1) && Compare(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
+                while (running || frames.Count > 0)
                 {
-                    frames[0].Delay += frames[1].Delay;
-                    frames.RemoveAt(1);
-                }
+                    // Check if it is possible to remove a frame
+                    if (FrameExists(1) && Compare(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
+                    {
+                        frames[0].Delay += frames[1].Delay;
+                        frames.RemoveAt(1);
+                    }
 
-                // Save a frame to the Gif
-                // - if 0 and 1 are different
-                // - if there is one last frame left (and the capture process is stopped)
-                else if (FrameExists(1) || FrameExists(0) && !running)
-                {
-                    gif.AddFrame(frames[0].Image, 0, 0, TimeSpan.FromMilliseconds(frames[0].Delay));
-                    frames.RemoveAt(0);
+                    // Save a frame to the Gif
+                    // - if 0 and 1 are different
+                    // - if there is one last frame left (and the capture process is stopped)
+                    else if (FrameExists(1) || FrameExists(0) && !running)
+                    {
+                        gif.AddFrame(frames[0].Image, 0, 0, TimeSpan.FromMilliseconds(frames[0].Delay));
+                        frames.RemoveAt(0);
+                    }
                 }
             }
-
-            gif.Dispose();
+            
             Stop();
-
             result.SetResult(stream);
         }
 
@@ -169,53 +168,66 @@ namespace SharpCrop.Utils
         private static void EncodeMpeg()
         {
             var temp = Guid.NewGuid().ToString();
-
-            using (var ffmpeg = new Process())
-            {
-                ffmpeg.StartInfo.FileName = "ffmpeg";
-                ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Memory.SafeVideoFPS} -an -y -f mp4 {temp}";
-                ffmpeg.StartInfo.RedirectStandardInput = true;
-                ffmpeg.StartInfo.UseShellExecute = false;
-                ffmpeg.StartInfo.CreateNoWindow = true;
-
-                ffmpeg.Start();
-
-                while (running || frames.Count > 0)
-                {
-                    if (!FrameExists(0))
-                    {
-                        continue;
-                    }
-
-                    using (var stream = new MemoryStream())
-                    {
-                        frames[0].Image.Save(stream, ImageFormat.Bmp);
-                        stream.WriteTo(ffmpeg.StandardInput.BaseStream);
-                        frames.RemoveAt(0);
-                    }
-                }
-
-                ffmpeg.StandardInput.BaseStream.Close();
-                ffmpeg.WaitForExit();
-            }
-
             var output = new MemoryStream();
-            
-            // TODO: Experiment with something
-            using (var file = new FileStream(temp, FileMode.Open))
+
+            try
             {
-                var buffer = new byte[512];
-
-                while (file.Read(buffer, 0, buffer.Length) > 0)
+                using (var ffmpeg = new Process())
                 {
-                    output.Write(buffer, 0, buffer.Length);
+                    ffmpeg.StartInfo.FileName = "ffmpeg";
+                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Memory.SafeVideoFPS} -an -y -f mp4 {temp}";
+                    ffmpeg.StartInfo.RedirectStandardInput = true;
+                    ffmpeg.StartInfo.UseShellExecute = false;
+                    ffmpeg.StartInfo.CreateNoWindow = true;
+
+                    ffmpeg.Start();
+
+                    while (running || frames.Count > 0)
+                    {
+                        if (!FrameExists(0))
+                        {
+                            continue;
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            frames[0].Image.Save(stream, ImageFormat.Bmp);
+                            stream.WriteTo(ffmpeg.StandardInput.BaseStream);
+                            frames.RemoveAt(0);
+                        }
+                    }
+
+                    ffmpeg.StandardInput.BaseStream.Close();
+                    ffmpeg.WaitForExit();
                 }
+
+                // TODO: Experiment with something
+                using (var file = new FileStream(temp, FileMode.Open))
+                {
+                    var buffer = new byte[512];
+
+                    while (file.Read(buffer, 0, buffer.Length) > 0)
+                    {
+                        output.Write(buffer, 0, buffer.Length);
+                    }
+                }
+
+                result.SetResult(output);
             }
+            catch
+            {
+                output.Dispose();
+                result.SetResult(new MemoryStream(0));
+            }
+            finally
+            {
+                if(File.Exists(temp))
+                {
+                    File.Delete(temp);
+                }
 
-            File.Delete(temp);
-            Stop();
-
-            result.SetResult(output);
+                Stop();
+            }
         }
 
         /// <summary>
