@@ -150,7 +150,7 @@ namespace SharpCrop
             var toast = -1;
 
             // Create a new toast which closing event gonna stop the recording
-            ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () => 
+            toast = ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () => 
             {
                 toast = ToastFactory.Create("Encoding...", 0);
                 VideoFactory.Stop();
