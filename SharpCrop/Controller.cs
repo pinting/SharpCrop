@@ -16,18 +16,18 @@ namespace SharpCrop
     /// </summary>
     public class Controller : ApplicationContext
     {
-        public readonly List<IProvider> Providers = new List<IProvider>();
-        public readonly List<Form> CropForms = new List<Form>();
-        public Form ConfigForm;
-        
+        private readonly Dictionary<string, IProvider> loadedProviders = new Dictionary<string, IProvider>();
+        private readonly List<Form> cropForms = new List<Form>();
+        private Form configForm;
+
         /// <summary>
         /// Construct a new Controller class.
         /// </summary>
         public Controller()
         {
             // Open ConfigForm
-            ConfigForm = new ConfigForm(this);
-            ConfigForm.FormClosed += (s, e) => Application.Exit();
+            configForm = new ConfigForm(this);
+            configForm.FormClosed += (s, e) => Application.Exit();
 
             // Open a CropForm for every screen
             for (var i = 0; i < Screen.AllScreens.Length; i++)
@@ -36,46 +36,123 @@ namespace SharpCrop
                 var form = new CropForm(this, screen.Bounds, i);
 
                 form.FormClosed += (s, e) => Application.Exit();
-                CropForms.Add(form);
+                cropForms.Add(form);
             }
 
-            // Load providers
-            foreach (var name in ConfigHelper.Memory.SafeProvider.Keys)
+            // Add an advanced closing event for ConfigForm
+            // - If there are any loaded providers, the config will be hidden
+            // - Else the config will be closed (along with the whole application)
+            configForm.FormClosing += (s, e) =>
             {
-                var provider = GetProvider(name).Result;
-
-                if (provider != null)
+                if(e.CloseReason == CloseReason.UserClosing && loadedProviders.Count > 0)
                 {
-                    Providers.Add(provider);
+                    e.Cancel = true;
+                    configForm.Hide();
                 }
-            }
+            };
 
-            if(Providers.Count > 0)
+            // Load previously saved providers
+            LoadSavedProviders();
+        }
+
+        /// <summary>
+        /// Protect list from external modification.
+        /// </summary>
+        public IReadOnlyDictionary<string, IProvider> LoadedProviders
+        {
+            get
             {
-                CropForms.ForEach(form => form.Show());
-            }
-            else
-            {
-                ConfigForm.Show();
+                return loadedProviders;
             }
         }
 
         /// <summary>
-        /// Load the required form for the given Provider.
+        /// Protect list from external modification.
+        /// </summary>
+        public IReadOnlyList<Form> CropForms
+        {
+            get
+            {
+                return cropForms;
+            }
+        }
+
+        /// <summary>
+        /// Protect variable from external modification.
+        /// </summary>
+        public Form ConfigForm
+        {
+            get
+            {
+                return configForm;
+            }
+        }
+
+        /// <summary>
+        /// Load the required Provider with the registration form.
         /// </summary>
         /// <param name="name"></param>
         public async void LoadProvider(string name)
         {
-            var provider = await GetProvider(name);
+            var provider = await GetProvider(name, null);
 
             if (provider == null)
             {
-                ConfigForm.Show();
+                configForm.Show();
             }
             else
             {
-                Providers.Add(provider);
-                CropForms.ForEach(form => form.Show());
+                loadedProviders[name] = provider;
+            }
+        }
+
+        /// <summary>
+        /// Remove the given provider.
+        /// </summary>
+        /// <param name="name"></param>
+        public void ClearProvider(string name)
+        {
+            if (loadedProviders.ContainsKey(name))
+            {
+                loadedProviders.Remove(name);
+            }
+
+            if (ConfigHelper.Memory.SafeProvider.ContainsKey(name))
+            {
+                ConfigHelper.Memory.SafeProvider.Remove(name);
+            }
+        }
+
+        /// <summary>
+        /// Load saved providers from the config.
+        /// </summary>
+        private async void LoadSavedProviders()
+        {
+            var remove = new List<string>();
+
+            foreach (var e in ConfigHelper.Memory.SafeProvider)
+            {
+                var provider = await GetProvider(e.Key, e.Value, false);
+
+                if (provider != null)
+                {
+                    loadedProviders[e.Key] = provider;
+                }
+                else
+                {
+                    remove.Add(e.Key);
+                }
+            }
+
+            remove.ForEach(provider => ClearProvider(provider));
+
+            if (loadedProviders.Count > 0)
+            {
+                cropForms.ForEach(form => form.Show());
+            }
+            else
+            {
+                configForm.Show();
             }
         }
 
@@ -83,36 +160,20 @@ namespace SharpCrop
         /// Get a Provider by name and give it back with a callback function.
         /// </summary>
         /// <param name="name"></param>
-        private async Task<IProvider> GetProvider(string name)
+        private async Task<IProvider> GetProvider(string name, string savedState, bool showForm = true)
         {
-            IProvider newProvider;
-
-            // Translate name into a real instance.
-            switch (name)
+            if(!Constants.Providers.ContainsKey(name))
             {
-                case "Dropbox":
-                    newProvider = new Dropbox.Provider();
-                    break;
-                case "GoogleDrive":
-                    newProvider = new GoogleDrive.Provider();
-                    break;
-                case "OneDrive":
-                    newProvider = new OneDrive.Provider();
-                    break;
-                case "LocalFile":
-                    newProvider = new LocalFile.Provider();
-                    break;
-                default:
-                    return null;
+                return null;
             }
 
-            // Try to register Provider
-            var savedState = ConfigHelper.Memory.SafeProvider.ContainsKey(name) ? ConfigHelper.Memory.SafeProvider[name] : null;
-            var state = await newProvider.Register(savedState);
+            // Translate name into a real instance and try to load the provider form saved state
+            var provider = (IProvider)Activator.CreateInstance(Constants.Providers[name]);
+            var state = await provider.Register(savedState, showForm);
 
             if (state == null)
             {
-                ToastFactory.Create("Failed to register provider!");
+                ToastFactory.Create($"Failed to register \"{name}\" provider!");
                 return null;
             }
 
@@ -120,10 +181,10 @@ namespace SharpCrop
             if (state != savedState)
             {
                 ConfigHelper.Memory.SafeProvider[name] = state;
-                ToastFactory.Create("Successfully registered provider!");
+                ToastFactory.Create($"Successfully registered \"{name}\" provider!");
             }
             
-            return newProvider;
+            return provider;
         }
 
         /// <summary>
@@ -143,9 +204,10 @@ namespace SharpCrop
 
                 var url = "";
 
-                Providers.ForEach(async delegate(IProvider provider) {
+                foreach(var provider in loadedProviders.Values)
+                {
                     url = await provider.Upload(name, stream);
-                });
+                }
                 
                 Success(url);
             }
@@ -184,10 +246,11 @@ namespace SharpCrop
             var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}";
             var url = "";
 
-            Providers.ForEach(async delegate (IProvider provider) {
+            foreach (var provider in loadedProviders.Values)
+            {
                 url = await provider.Upload(name, stream);
-            });
-            
+            }
+
             ToastFactory.Remove(toast);
 
             stream.Dispose();

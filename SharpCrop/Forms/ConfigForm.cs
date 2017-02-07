@@ -21,6 +21,9 @@ namespace SharpCrop.Forms
 
             InitializeComponent();
 
+            // Update add/remove provider list
+            UpdateProviderList();
+
             // Init lists and boxes
             formatList.Text = ConfigHelper.Memory.FormatExt;
             videoFpsList.Text = ConfigHelper.Memory.SafeVideoFPS.ToString();
@@ -39,6 +42,24 @@ namespace SharpCrop.Forms
 #endif
         }
 
+        /// <summary>
+        /// Update the add/remove provider list the reflect the current state.
+        /// </summary>
+        private void UpdateProviderList()
+        {
+            addProviderBox.Items.Clear();
+            removeProviderBox.Items.Clear();
+
+            controller.LoadedProviders.Keys
+                .ToList()
+                .ForEach(p => removeProviderBox.Items.Add(p));
+
+            Constants.Providers.Keys
+                .Where(p => !controller.LoadedProviders.Keys.Contains(p))
+                .ToList()
+                .ForEach(p => addProviderBox.Items.Add(p));
+        }
+        
         /// <summary>
         /// Change image format.
         /// </summary>
@@ -166,51 +187,52 @@ namespace SharpCrop.Forms
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+
             Focus();
         }
 
         /// <summary>
-        /// When Dropbox button is clicked.
+        /// Update provider list on activation.
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnDropbox(object sender, EventArgs e)
+        protected override void OnActivated(EventArgs e)
         {
-            controller.LoadProvider("Dropbox");
-            Hide();
+            base.OnActivated(e);
+
+            UpdateProviderList();
         }
 
         /// <summary>
-        /// When Google Drive button is clicked.
+        /// Add new provider.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnGoogleDrive(object sender, EventArgs e)
+        private void OnAddProvider(object sender, EventArgs e)
         {
-            controller.LoadProvider("GoogleDrive");
-            Hide();
+            if(addProviderBox.SelectedItem == null)
+            {
+                return;
+            }
+            
+            controller.LoadProvider(addProviderBox.SelectedItem.ToString());
+            addProviderBox.ClearSelected();
         }
 
         /// <summary>
-        /// When OneDrive button is clicked.
+        /// Remove existing provider.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnOneDrive(object sender, EventArgs e)
+        private void OnRemoveProvider(object sender, EventArgs e)
         {
-            controller.LoadProvider("OneDrive");
-            Hide();
-        }
+            if (removeProviderBox.SelectedItem == null)
+            {
+                return;
+            }
 
-        /// <summary>
-        /// When LocalFile link is clicked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnLocalFile(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            controller.LoadProvider("LocalFile");
-            Hide();
+            controller.ClearProvider(removeProviderBox.SelectedItem.ToString());
+            removeProviderBox.ClearSelected();
+            UpdateProviderList();
         }
     }
 }

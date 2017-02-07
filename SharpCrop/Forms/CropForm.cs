@@ -41,24 +41,30 @@ namespace SharpCrop.Forms
             RefreshBackground();
             MakeClickable();
 
-            controller.ConfigForm.FormClosed += (sender, ev) =>
+            controller.ConfigForm.VisibleChanged += (sender, ev) =>
             {
-                if (!ConfigHelper.Memory.NoTransparency)
+                if(controller.ConfigForm.Visible)
                 {
-                    ShowAll();
                     return;
                 }
 
-                Task.Run(() =>
+                if (ConfigHelper.Memory.NoTransparency)
                 {
-                    // Wait for the form to disappear
-                    Thread.Sleep(500);
-                    Invoke(new Action(() =>
+                    Task.Run(() =>
                     {
-                        RefreshBackground();
-                        ShowAll();
-                    }));
-                });
+                        // Wait for the form to disappear
+                        Thread.Sleep(500);
+                        Invoke(new Action(() =>
+                        {
+                            RefreshBackground();
+                            ShowAll();
+                        }));
+                    });
+                }
+                else
+                {
+                    ShowAll();
+                }
             };
         }
 

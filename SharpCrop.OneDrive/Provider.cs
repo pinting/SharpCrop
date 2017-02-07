@@ -7,6 +7,7 @@ using Microsoft.Graph;
 using SharpCrop.Provider.Forms;
 using SharpCrop.OneDrive.Utils;
 using SharpCrop.OneDrive.Models;
+using SharpCrop.Provider.Utils;
 
 namespace SharpCrop.OneDrive
 {
@@ -43,7 +44,7 @@ namespace SharpCrop.OneDrive
         /// </summary>
         /// <param name="savedState">Previous serialized TokenResponse from OneDrive.</param>
         /// <returns></returns>
-        public async Task<string> Register(string savedState)
+        public async Task<string> Register(string savedState, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
             var provider = new AuthProvider();
@@ -51,13 +52,20 @@ namespace SharpCrop.OneDrive
             // Check if there is a saved token and try to use it
             if (!string.IsNullOrEmpty(savedState))
             {
-                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(savedState);
+                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(Obscure.Decode(savedState));
 
                 if (await ClientFactory(provider))
                 {
                     result.SetResult(savedState);
                     return await result.Task;
                 }
+            }
+
+            // If the saved token was not usable and showForm is false, return failure
+            if(!showForm)
+            {
+                result.SetResult(null);
+                return await result.Task;
             }
             
             // Create a CodeForm and open OneDrive token request link to obtain a new token
@@ -71,11 +79,9 @@ namespace SharpCrop.OneDrive
                 form.Close();
                 provider.ProcessCode(code);
 
-                var newToken = JsonConvert.SerializeObject(provider.Session);
-
                 if (await ClientFactory(provider))
                 {
-                    result.SetResult(newToken);
+                    result.SetResult(Obscure.Encode(JsonConvert.SerializeObject(provider.Session)));
                 }
                 else
                 {

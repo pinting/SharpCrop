@@ -18,7 +18,7 @@ namespace SharpCrop.LocalFile
         /// </summary>
         /// <param name="oldPath"></param>
         /// <returns></returns>
-        public Task<string> Register(string oldPath)
+        public Task<string> Register(string oldPath, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -28,6 +28,13 @@ namespace SharpCrop.LocalFile
                 path = oldPath;
 
                 result.SetResult(oldPath);
+                return result.Task;
+            }
+
+            // If the saved token was not usable and showForm is false, return failure
+            if (!showForm)
+            {
+                result.SetResult(null);
                 return result.Task;
             }
 

@@ -1,9 +1,20 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace SharpCrop
 {
     public static class Constants
     {
+        /// All available providers.
+        public static readonly IReadOnlyDictionary<string, Type> Providers = new Dictionary<string, Type>()
+        {
+            {"Dropbox", typeof(Dropbox.Provider)},
+            {"GoogleDrive", typeof(GoogleDrive.Provider)},
+            {"OneDrive", typeof(OneDrive.Provider)},
+            {"LocalFile", typeof(LocalFile.Provider)}
+        };
+
         public static readonly string SettingsPath = "Settings.json";
         public static readonly Brush LeftColor = Brushes.RoyalBlue;
         public static readonly Brush RightColor = Brushes.PaleVioletRed;

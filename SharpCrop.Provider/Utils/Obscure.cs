@@ -32,6 +32,11 @@ namespace SharpCrop.Provider.Utils
         /// <returns></returns>
         public static string Encode(string key)
         {
+            if (key == null)
+            {
+                return null;
+            }
+
             var bytes = Code(Encoding.UTF8.GetBytes(key), 1);
 
             return Convert.ToBase64String(bytes);
@@ -44,6 +49,11 @@ namespace SharpCrop.Provider.Utils
         /// <returns></returns>
         public static string Decode(string key)
         {
+            if(key == null)
+            {
+                return null;
+            }
+
             var bytes = Code(Convert.FromBase64String(key), -1);
 
             return Encoding.UTF8.GetString(bytes);

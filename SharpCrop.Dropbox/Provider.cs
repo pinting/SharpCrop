@@ -40,15 +40,22 @@ namespace SharpCrop.Dropbox
         /// <summary>
         /// Get a token from Dropbox.
         /// </summary>
-        /// <param name="token"></param>
-        public async Task<string> Register(string token)
+        /// <param name="savedState"></param>
+        public async Task<string> Register(string savedState, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
             // Check if the saved token is still usable
-            if (await ClientFactory(token))
+            if (await ClientFactory(savedState))
             {
-                result.SetResult(token);
+                result.SetResult(savedState);
+                return await result.Task;
+            }
+
+            // If the saved token was not usable and showForm is false, return failure
+            if (!showForm)
+            {
+                result.SetResult(null);
                 return await result.Task;
             }
 

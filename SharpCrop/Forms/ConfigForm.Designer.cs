@@ -32,7 +32,6 @@
             this.formatList = new System.Windows.Forms.ComboBox();
             this.noCopyCheckBox = new System.Windows.Forms.CheckBox();
             this.noScalingCheckBox = new System.Windows.Forms.CheckBox();
-            this.unlinkButton = new System.Windows.Forms.Button();
             this.videoFpsList = new System.Windows.Forms.ComboBox();
             this.noGifRepeatCheckBox = new System.Windows.Forms.CheckBox();
             this.formatLabel = new System.Windows.Forms.Label();
@@ -42,11 +41,11 @@
             this.manualScallingBox = new System.Windows.Forms.TextBox();
             this.manualScallingLabel = new System.Windows.Forms.Label();
             this.enableMpegCheckbox = new System.Windows.Forms.CheckBox();
-            this.localFileLink = new System.Windows.Forms.LinkLabel();
-            this.oneDriveButton = new System.Windows.Forms.Button();
-            this.googleDriveButton = new System.Windows.Forms.Button();
-            this.dropboxButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.addProviderBox = new System.Windows.Forms.ListBox();
+            this.unlinkButton = new System.Windows.Forms.Button();
+            this.removeProviderBox = new System.Windows.Forms.ListBox();
+            this.removeProviderLabel = new System.Windows.Forms.Label();
+            this.addProviderLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // formatList
@@ -86,17 +85,6 @@
             this.noScalingCheckBox.Text = "Enable manual scaling";
             this.noScalingCheckBox.UseVisualStyleBackColor = true;
             this.noScalingCheckBox.CheckedChanged += new System.EventHandler(this.NoScalingChanged);
-            // 
-            // unlinkButton
-            // 
-            this.unlinkButton.Location = new System.Drawing.Point(7, 207);
-            this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
-            this.unlinkButton.Name = "unlinkButton";
-            this.unlinkButton.Size = new System.Drawing.Size(188, 25);
-            this.unlinkButton.TabIndex = 3;
-            this.unlinkButton.Text = "Unlink providers";
-            this.unlinkButton.UseVisualStyleBackColor = true;
-            this.unlinkButton.Click += new System.EventHandler(this.UnlinkClicked);
             // 
             // videoFpsList
             // 
@@ -198,72 +186,62 @@
             this.enableMpegCheckbox.UseVisualStyleBackColor = true;
             this.enableMpegCheckbox.CheckedChanged += new System.EventHandler(this.EnableMpegChanged);
             // 
-            // localFileLink
+            // addProviderBox
             // 
-            this.localFileLink.AutoSize = true;
-            this.localFileLink.Location = new System.Drawing.Point(223, 216);
-            this.localFileLink.Name = "localFileLink";
-            this.localFileLink.Size = new System.Drawing.Size(129, 13);
-            this.localFileLink.TabIndex = 16;
-            this.localFileLink.TabStop = true;
-            this.localFileLink.Text = "Save output as a local file";
-            this.localFileLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLocalFile);
+            this.addProviderBox.FormattingEnabled = true;
+            this.addProviderBox.Location = new System.Drawing.Point(228, 33);
+            this.addProviderBox.Name = "addProviderBox";
+            this.addProviderBox.Size = new System.Drawing.Size(120, 199);
+            this.addProviderBox.TabIndex = 18;
+            this.addProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnAddProvider);
             // 
-            // oneDriveButton
+            // unlinkButton
             // 
-            this.oneDriveButton.BackColor = System.Drawing.Color.SandyBrown;
-            this.oneDriveButton.Location = new System.Drawing.Point(568, 33);
-            this.oneDriveButton.Margin = new System.Windows.Forms.Padding(2);
-            this.oneDriveButton.Name = "oneDriveButton";
-            this.oneDriveButton.Size = new System.Drawing.Size(156, 179);
-            this.oneDriveButton.TabIndex = 15;
-            this.oneDriveButton.Text = "OneDrive";
-            this.oneDriveButton.UseVisualStyleBackColor = false;
-            this.oneDriveButton.Click += new System.EventHandler(this.OnOneDrive);
+            this.unlinkButton.Location = new System.Drawing.Point(7, 209);
+            this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
+            this.unlinkButton.Name = "unlinkButton";
+            this.unlinkButton.Size = new System.Drawing.Size(189, 25);
+            this.unlinkButton.TabIndex = 3;
+            this.unlinkButton.Text = "Reset";
+            this.unlinkButton.UseVisualStyleBackColor = true;
+            this.unlinkButton.Click += new System.EventHandler(this.UnlinkClicked);
             // 
-            // googleDriveButton
+            // removeProviderBox
             // 
-            this.googleDriveButton.BackColor = System.Drawing.Color.PaleGreen;
-            this.googleDriveButton.Location = new System.Drawing.Point(397, 33);
-            this.googleDriveButton.Margin = new System.Windows.Forms.Padding(2);
-            this.googleDriveButton.Name = "googleDriveButton";
-            this.googleDriveButton.Size = new System.Drawing.Size(167, 179);
-            this.googleDriveButton.TabIndex = 14;
-            this.googleDriveButton.Text = "Google Drive";
-            this.googleDriveButton.UseVisualStyleBackColor = false;
-            this.googleDriveButton.Click += new System.EventHandler(this.OnGoogleDrive);
+            this.removeProviderBox.FormattingEnabled = true;
+            this.removeProviderBox.Location = new System.Drawing.Point(379, 33);
+            this.removeProviderBox.Name = "removeProviderBox";
+            this.removeProviderBox.Size = new System.Drawing.Size(120, 199);
+            this.removeProviderBox.TabIndex = 19;
+            this.removeProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnRemoveProvider);
             // 
-            // dropboxButton
+            // removeProviderLabel
             // 
-            this.dropboxButton.BackColor = System.Drawing.Color.PaleTurquoise;
-            this.dropboxButton.Location = new System.Drawing.Point(225, 33);
-            this.dropboxButton.Margin = new System.Windows.Forms.Padding(2);
-            this.dropboxButton.Name = "dropboxButton";
-            this.dropboxButton.Size = new System.Drawing.Size(167, 179);
-            this.dropboxButton.TabIndex = 13;
-            this.dropboxButton.Text = "Dropbox";
-            this.dropboxButton.UseVisualStyleBackColor = false;
-            this.dropboxButton.Click += new System.EventHandler(this.OnDropbox);
+            this.removeProviderLabel.AutoSize = true;
+            this.removeProviderLabel.Location = new System.Drawing.Point(382, 12);
+            this.removeProviderLabel.Name = "removeProviderLabel";
+            this.removeProviderLabel.Size = new System.Drawing.Size(88, 13);
+            this.removeProviderLabel.TabIndex = 20;
+            this.removeProviderLabel.Text = "Remove provider";
             // 
-            // label1
+            // addProviderLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(225, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(99, 13);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Add a new provider";
+            this.addProviderLabel.AutoSize = true;
+            this.addProviderLabel.Location = new System.Drawing.Point(231, 12);
+            this.addProviderLabel.Name = "addProviderLabel";
+            this.addProviderLabel.Size = new System.Drawing.Size(67, 13);
+            this.addProviderLabel.TabIndex = 21;
+            this.addProviderLabel.Text = "Add provider";
             // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(754, 244);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.localFileLink);
-            this.Controls.Add(this.oneDriveButton);
-            this.Controls.Add(this.googleDriveButton);
-            this.Controls.Add(this.dropboxButton);
+            this.ClientSize = new System.Drawing.Size(514, 244);
+            this.Controls.Add(this.addProviderLabel);
+            this.Controls.Add(this.removeProviderLabel);
+            this.Controls.Add(this.removeProviderBox);
+            this.Controls.Add(this.addProviderBox);
             this.Controls.Add(this.enableMpegCheckbox);
             this.Controls.Add(this.manualScallingLabel);
             this.Controls.Add(this.manualScallingBox);
@@ -283,7 +261,6 @@
             this.Name = "ConfigForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";
-            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -294,7 +271,6 @@
         private System.Windows.Forms.ComboBox formatList;
         private System.Windows.Forms.CheckBox noCopyCheckBox;
         private System.Windows.Forms.CheckBox noScalingCheckBox;
-        private System.Windows.Forms.Button unlinkButton;
         private System.Windows.Forms.ComboBox videoFpsList;
         private System.Windows.Forms.CheckBox noGifRepeatCheckBox;
         private System.Windows.Forms.Label formatLabel;
@@ -304,10 +280,10 @@
         private System.Windows.Forms.TextBox manualScallingBox;
         private System.Windows.Forms.Label manualScallingLabel;
         private System.Windows.Forms.CheckBox enableMpegCheckbox;
-        private System.Windows.Forms.LinkLabel localFileLink;
-        private System.Windows.Forms.Button oneDriveButton;
-        private System.Windows.Forms.Button googleDriveButton;
-        private System.Windows.Forms.Button dropboxButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListBox addProviderBox;
+        private System.Windows.Forms.Button unlinkButton;
+        private System.Windows.Forms.ListBox removeProviderBox;
+        private System.Windows.Forms.Label removeProviderLabel;
+        private System.Windows.Forms.Label addProviderLabel;
     }
 }
