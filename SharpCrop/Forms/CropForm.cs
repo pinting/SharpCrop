@@ -40,6 +40,26 @@ namespace SharpCrop.Forms
             InitializeComponent();
             RefreshBackground();
             MakeClickable();
+
+            controller.ConfigForm.FormClosed += (sender, ev) =>
+            {
+                if (!ConfigHelper.Memory.NoTransparency)
+                {
+                    ShowAll();
+                    return;
+                }
+
+                Task.Run(() =>
+                {
+                    // Wait for the form to disappear
+                    Thread.Sleep(500);
+                    Invoke(new Action(() =>
+                    {
+                        RefreshBackground();
+                        ShowAll();
+                    }));
+                });
+            };
         }
 
         /// <summary>
@@ -90,29 +110,8 @@ namespace SharpCrop.Forms
         /// </summary>
         private void ShowConfig()
         {
-            var form = new ConfigForm();
-
             HideAll();
-            form.Show();
-            form.FormClosed += (sender, ev) =>
-            {
-                if (!ConfigHelper.Memory.NoTransparency)
-                {
-                    ShowAll();
-                    return;
-                }
-
-                Task.Run(() =>
-                {
-                    // Wait for the form to disappear
-                    Thread.Sleep(500);
-                    Invoke(new Action(() => 
-                    {
-                        RefreshBackground();
-                        ShowAll();
-                    }));
-                });
-            };
+            controller.ConfigForm.Show();
         }
         
         /// <summary>

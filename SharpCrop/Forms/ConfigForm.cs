@@ -1,6 +1,5 @@
 ﻿using SharpCrop.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -11,11 +10,15 @@ namespace SharpCrop.Forms
     /// </summary>
     public partial class ConfigForm : Form
     {
+        private readonly Controller controller;
+
         /// <summary>
         /// Construct a new ConfigForm and initialize it with ConfigHelper.
         /// </summary>
-        public ConfigForm()
+        public ConfigForm(Controller controller)
         {
+            this.controller = controller;
+
             InitializeComponent();
 
             // Init lists and boxes
@@ -150,12 +153,64 @@ namespace SharpCrop.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void UnlinkClick(object sender, EventArgs e)
+        private void UnlinkClicked(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.Provider = null;
-            ConfigHelper.Memory.Token = null;
-
+            ConfigHelper.Memory.Provider.Clear();
             Application.Exit();
+        }
+
+        /// <summary>
+        /// Focus on MainForm when shown.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            Focus();
+        }
+
+        /// <summary>
+        /// When Dropbox button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnDropbox(object sender, EventArgs e)
+        {
+            controller.LoadProvider("Dropbox");
+            Hide();
+        }
+
+        /// <summary>
+        /// When Google Drive button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnGoogleDrive(object sender, EventArgs e)
+        {
+            controller.LoadProvider("GoogleDrive");
+            Hide();
+        }
+
+        /// <summary>
+        /// When OneDrive button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnOneDrive(object sender, EventArgs e)
+        {
+            controller.LoadProvider("OneDrive");
+            Hide();
+        }
+
+        /// <summary>
+        /// When LocalFile link is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLocalFile(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            controller.LoadProvider("LocalFile");
+            Hide();
         }
     }
 }

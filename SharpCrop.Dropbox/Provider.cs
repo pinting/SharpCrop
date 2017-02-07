@@ -18,13 +18,13 @@ namespace SharpCrop.Dropbox
         /// <summary>
         /// Create a new DropboxClient and test it.
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="savedState"></param>
         /// <returns></returns>
-        private async Task<bool> ClientFactory(string token)
+        private async Task<bool> ClientFactory(string savedState)
         {
             try
             {
-                client = new DropboxClient(token);
+                client = new DropboxClient(savedState);
 
                 // Test if the token is valid with a simple action
                 await client.Users.GetSpaceUsageAsync();

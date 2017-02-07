@@ -16,15 +16,19 @@ namespace SharpCrop
     /// </summary>
     public class Controller : ApplicationContext
     {
-        private readonly List<Form> cropForms = new List<Form>();
-        private IProvider provider;
-        private Form mainForm;
+        public readonly List<IProvider> Providers = new List<IProvider>();
+        public readonly List<Form> CropForms = new List<Form>();
+        public Form ConfigForm;
         
         /// <summary>
         /// Construct a new Controller class.
         /// </summary>
         public Controller()
         {
+            // Open ConfigForm
+            ConfigForm = new ConfigForm(this);
+            ConfigForm.FormClosed += (s, e) => Application.Exit();
+
             // Open a CropForm for every screen
             for (var i = 0; i < Screen.AllScreens.Length; i++)
             {
@@ -32,20 +36,27 @@ namespace SharpCrop
                 var form = new CropForm(this, screen.Bounds, i);
 
                 form.FormClosed += (s, e) => Application.Exit();
-                cropForms.Add(form);
+                CropForms.Add(form);
             }
 
-            LoadProvider(ConfigHelper.Memory.Provider);
-        }
-
-        /// <summary>
-        /// Protect list from external modification.
-        /// </summary>
-        public IReadOnlyList<Form> CropForms
-        {
-            get
+            // Load providers
+            foreach (var name in ConfigHelper.Memory.SafeProvider.Keys)
             {
-                return cropForms;
+                var provider = GetProvider(name).Result;
+
+                if (provider != null)
+                {
+                    Providers.Add(provider);
+                }
+            }
+
+            if(Providers.Count > 0)
+            {
+                CropForms.ForEach(form => form.Show());
+            }
+            else
+            {
+                ConfigForm.Show();
             }
         }
 
@@ -55,21 +66,17 @@ namespace SharpCrop
         /// <param name="name"></param>
         public async void LoadProvider(string name)
         {
-            provider = await GetProvider(name);
+            var provider = await GetProvider(name);
 
-            if (provider != null)
+            if (provider == null)
             {
-                cropForms.ForEach(form => form.Show());
-                return;
+                ConfigForm.Show();
             }
-
-            if (mainForm == null)
+            else
             {
-                mainForm = new MainForm(this);
-                mainForm.FormClosed += (s, e) => Application.Exit();
+                Providers.Add(provider);
+                CropForms.ForEach(form => form.Show());
             }
-
-            mainForm.Show();
         }
 
         /// <summary>
@@ -100,19 +107,19 @@ namespace SharpCrop
             }
 
             // Try to register Provider
-            var token = await newProvider.Register(ConfigHelper.Memory.Token);
+            var savedState = ConfigHelper.Memory.SafeProvider.ContainsKey(name) ? ConfigHelper.Memory.SafeProvider[name] : null;
+            var state = await newProvider.Register(savedState);
 
-            if (token == null)
+            if (state == null)
             {
                 ToastFactory.Create("Failed to register provider!");
                 return null;
             }
 
             // If the token is not changed, there was no new registration
-            if (token != ConfigHelper.Memory.Token)
+            if (state != savedState)
             {
-                ConfigHelper.Memory.Provider = name;
-                ConfigHelper.Memory.Token = token;
+                ConfigHelper.Memory.SafeProvider[name] = state;
                 ToastFactory.Create("Successfully registered provider!");
             }
             
@@ -134,7 +141,11 @@ namespace SharpCrop
                     bitmap.Save(stream, ConfigHelper.Memory.FormatType);
                 }
 
-                var url = await provider.Upload(name, stream);
+                var url = "";
+
+                Providers.ForEach(async delegate(IProvider provider) {
+                    url = await provider.Upload(name, stream);
+                });
                 
                 Success(url);
             }
@@ -171,7 +182,11 @@ namespace SharpCrop
             toast = ToastFactory.Create($"Uploading... ({(double) stream.Length/(1024*1024):0.00} MB)", 0);
 
             var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}";
-            var url = await provider.Upload(name, stream);
+            var url = "";
+
+            Providers.ForEach(async delegate (IProvider provider) {
+                url = await provider.Upload(name, stream);
+            });
             
             ToastFactory.Remove(toast);
 

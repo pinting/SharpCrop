@@ -41,21 +41,21 @@ namespace SharpCrop.OneDrive
         /// <summary>
         /// Get an AccessToken from OneDrive.
         /// </summary>
-        /// <param name="token">Previous serialized TokenResponse from OneDrive.</param>
+        /// <param name="savedState">Previous serialized TokenResponse from OneDrive.</param>
         /// <returns></returns>
-        public async Task<string> Register(string token = null)
+        public async Task<string> Register(string savedState)
         {
             var result = new TaskCompletionSource<string>();
             var provider = new AuthProvider();
 
             // Check if there is a saved token and try to use it
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(savedState))
             {
-                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(token);
+                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(savedState);
 
                 if (await ClientFactory(provider))
                 {
-                    result.SetResult(token);
+                    result.SetResult(savedState);
                     return await result.Task;
                 }
             }

@@ -10,10 +10,7 @@ namespace SharpCrop.Models
     public class Config
     {
         [JsonProperty]
-        public string Provider { get; set; }
-
-        [JsonProperty]
-        public string Token { get; set; }
+        public Dictionary<string, string> Provider { get; set; }
 
         [JsonProperty]
         public string Format { get; set; }
@@ -96,10 +93,24 @@ namespace SharpCrop.Models
             {
                 if(ManualScaling == null)
                 {
-                    return new List<int>();
+                    ManualScaling = new List<int>();
                 }
 
                 return ManualScaling;
+            }
+        }
+
+        [JsonIgnore]
+        public Dictionary<string, string> SafeProvider
+        {
+            get
+            {
+                if (Provider == null)
+                {
+                    Provider = new Dictionary<string, string>();
+                }
+
+                return Provider;
             }
         }
 

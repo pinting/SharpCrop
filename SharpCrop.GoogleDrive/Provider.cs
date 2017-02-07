@@ -16,20 +16,20 @@ namespace SharpCrop.GoogleDrive
     public class Provider : IProvider
     {
         private DriveService service;
-        
+
         /// <summary>
         /// Get an access token from Google Drive.
         /// </summary>
-        /// <param name="token">Serialized TokenResponse from Google Api.</param>
+        /// <param name="savedState">Serialized TokenResponse from Google Api.</param>
         /// <returns></returns>
-        public async Task<string> Register(string token)
+        public async Task<string> Register(string savedState)
         {
             var result = new TaskCompletionSource<string>();
 
             try
             {
                 // Try to use the previously saved TokenResponse
-                var store = new MemoryStore(token);
+                var store = new MemoryStore(savedState);
                 var receiver = new CodeReceiver();
                 var secret = new ClientSecrets() { ClientId = Obscure.Decode(Constants.AppKey), ClientSecret = Obscure.Decode(Constants.AppSecret) };
                 var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Constants.Scopes, "token", CancellationToken.None, store, receiver);
