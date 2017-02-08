@@ -25,14 +25,6 @@ namespace SharpCrop
         /// </summary>
         public Controller()
         {
-            Init();
-        }
-
-        /// <summary>
-        /// Init the Controller.
-        /// </summary>
-        public async void Init()
-        {
             // Create ConfigForm
             configForm = new ConfigForm(this);
             configForm.FormClosed += (s, e) => Application.Exit();
@@ -57,7 +49,15 @@ namespace SharpCrop
                 cropForms.Add(form);
             }
 
-            // Load previously saved providers
+            // Init providers
+            InitProviders();
+        }
+
+        /// <summary>
+        /// Init providers with the previously saved states.
+        /// </summary>
+        private async void InitProviders()
+        {
             foreach (var e in ConfigHelper.Memory.SafeProviders)
             {
                 await LoadProvider(e.Key, e.Value);
@@ -193,7 +193,7 @@ namespace SharpCrop
             return provider;
         }
 
-        private async Task UploadAll(string name, MemoryStream stream)
+        private async Task<string> UploadAll(string name, MemoryStream stream)
         {
             var url = "";
 
@@ -201,13 +201,13 @@ namespace SharpCrop
             {
                 var result = await provider.Value.Upload(name, stream);
 
-                if (provider.Key == ConfigHelper.Memory.ProviderUrlToCopy)
+                if (provider.Key == ConfigHelper.Memory.ProviderUrlToCopy || loadedProviders.Count == 1)
                 {
                     url = result;
                 }
             }
 
-            Success(url);
+            return url;
         }
 
         /// <summary>
@@ -223,7 +223,10 @@ namespace SharpCrop
                     bitmap.Save(stream, ConfigHelper.Memory.FormatType);
                 }
 
-                await UploadAll(DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "." + ConfigHelper.Memory.FormatExt, stream);
+                var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{ConfigHelper.Memory.FormatExt}";
+                var url = await UploadAll(name, stream);
+
+                Success(url);
             }
         }
 
@@ -257,10 +260,13 @@ namespace SharpCrop
             
             toast = ToastFactory.Create($"Uploading... ({(double) stream.Length/(1024*1024):0.00} MB)", 0);
 
-            await UploadAll($"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}", stream);
+            var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}";
+            var url = await UploadAll(name, stream);
 
             ToastFactory.Remove(toast);
             stream.Dispose();
+
+            Success(url);
         }
 
         /// <summary>
@@ -269,7 +275,7 @@ namespace SharpCrop
         /// <param name="url"></param>
         private void Success(string url = null)
         {
-            if (!ConfigHelper.Memory.NoCopy && url != null)
+            if (!ConfigHelper.Memory.NoCopy && !string.IsNullOrEmpty(url))
             {
                 Clipboard.SetText(url);
 
