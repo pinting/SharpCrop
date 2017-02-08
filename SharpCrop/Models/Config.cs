@@ -22,6 +22,9 @@ namespace SharpCrop.Models
         public int VideoFPS { get; set; }
 
         [JsonProperty]
+        public string ProviderUrlToCopy { get; set; }
+
+        [JsonProperty]
         public bool NoCopy { get; set; }
 
 		[JsonProperty]

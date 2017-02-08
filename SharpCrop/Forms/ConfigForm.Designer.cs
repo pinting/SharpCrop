@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
-            this.formatList = new System.Windows.Forms.ComboBox();
+            this.formatBox = new System.Windows.Forms.ComboBox();
             this.noCopyCheckBox = new System.Windows.Forms.CheckBox();
             this.noScalingCheckBox = new System.Windows.Forms.CheckBox();
-            this.videoFpsList = new System.Windows.Forms.ComboBox();
+            this.videoFpsBox = new System.Windows.Forms.ComboBox();
             this.noGifRepeatCheckBox = new System.Windows.Forms.CheckBox();
             this.formatLabel = new System.Windows.Forms.Label();
             this.gifFpsLabel = new System.Windows.Forms.Label();
@@ -46,26 +46,28 @@
             this.removeProviderBox = new System.Windows.Forms.ListBox();
             this.removeProviderLabel = new System.Windows.Forms.Label();
             this.addProviderLabel = new System.Windows.Forms.Label();
+            this.urlToCopyLabel = new System.Windows.Forms.Label();
+            this.urlToCopyBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // formatList
+            // formatBox
             // 
-            this.formatList.FormattingEnabled = true;
-            this.formatList.Items.AddRange(new object[] {
+            this.formatBox.FormattingEnabled = true;
+            this.formatBox.Items.AddRange(new object[] {
             "jpg",
             "png",
             "bmp"});
-            this.formatList.Location = new System.Drawing.Point(8, 8);
-            this.formatList.Margin = new System.Windows.Forms.Padding(2);
-            this.formatList.Name = "formatList";
-            this.formatList.Size = new System.Drawing.Size(100, 21);
-            this.formatList.TabIndex = 0;
-            this.formatList.SelectedIndexChanged += new System.EventHandler(this.FormatChanged);
+            this.formatBox.Location = new System.Drawing.Point(8, 8);
+            this.formatBox.Margin = new System.Windows.Forms.Padding(2);
+            this.formatBox.Name = "formatBox";
+            this.formatBox.Size = new System.Drawing.Size(100, 21);
+            this.formatBox.TabIndex = 0;
+            this.formatBox.SelectedIndexChanged += new System.EventHandler(this.FormatChanged);
             // 
             // noCopyCheckBox
             // 
             this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 107);
+            this.noCopyCheckBox.Location = new System.Drawing.Point(8, 134);
             this.noCopyCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noCopyCheckBox.Name = "noCopyCheckBox";
             this.noCopyCheckBox.Size = new System.Drawing.Size(112, 17);
@@ -77,7 +79,7 @@
             // noScalingCheckBox
             // 
             this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 88);
+            this.noScalingCheckBox.Location = new System.Drawing.Point(8, 115);
             this.noScalingCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noScalingCheckBox.Name = "noScalingCheckBox";
             this.noScalingCheckBox.Size = new System.Drawing.Size(132, 17);
@@ -86,27 +88,27 @@
             this.noScalingCheckBox.UseVisualStyleBackColor = true;
             this.noScalingCheckBox.CheckedChanged += new System.EventHandler(this.NoScalingChanged);
             // 
-            // videoFpsList
+            // videoFpsBox
             // 
-            this.videoFpsList.FormattingEnabled = true;
-            this.videoFpsList.Items.AddRange(new object[] {
+            this.videoFpsBox.FormattingEnabled = true;
+            this.videoFpsBox.Items.AddRange(new object[] {
             "5",
             "10",
             "15",
             "20",
             "25",
             "30"});
-            this.videoFpsList.Location = new System.Drawing.Point(8, 33);
-            this.videoFpsList.Margin = new System.Windows.Forms.Padding(2);
-            this.videoFpsList.Name = "videoFpsList";
-            this.videoFpsList.Size = new System.Drawing.Size(100, 21);
-            this.videoFpsList.TabIndex = 4;
-            this.videoFpsList.SelectedIndexChanged += new System.EventHandler(this.GifFpsChanged);
+            this.videoFpsBox.Location = new System.Drawing.Point(8, 33);
+            this.videoFpsBox.Margin = new System.Windows.Forms.Padding(2);
+            this.videoFpsBox.Name = "videoFpsBox";
+            this.videoFpsBox.Size = new System.Drawing.Size(100, 21);
+            this.videoFpsBox.TabIndex = 4;
+            this.videoFpsBox.SelectedIndexChanged += new System.EventHandler(this.GifFpsChanged);
             // 
             // noGifRepeatCheckBox
             // 
             this.noGifRepeatCheckBox.AutoSize = true;
-            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(8, 126);
+            this.noGifRepeatCheckBox.Location = new System.Drawing.Point(8, 153);
             this.noGifRepeatCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noGifRepeatCheckBox.Name = "noGifRepeatCheckBox";
             this.noGifRepeatCheckBox.Size = new System.Drawing.Size(114, 17);
@@ -136,7 +138,7 @@
             // noFocusCheckBox
             // 
             this.noFocusCheckBox.AutoSize = true;
-            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 145);
+            this.noFocusCheckBox.Location = new System.Drawing.Point(8, 172);
             this.noFocusCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noFocusCheckBox.Name = "noFocusCheckBox";
             this.noFocusCheckBox.Size = new System.Drawing.Size(128, 17);
@@ -148,7 +150,7 @@
             // noTransparencyCheckBox
             // 
             this.noTransparencyCheckBox.AutoSize = true;
-            this.noTransparencyCheckBox.Location = new System.Drawing.Point(8, 165);
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(8, 192);
             this.noTransparencyCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
             this.noTransparencyCheckBox.Size = new System.Drawing.Size(125, 17);
@@ -159,7 +161,7 @@
             // 
             // manualScallingBox
             // 
-            this.manualScallingBox.Location = new System.Drawing.Point(8, 59);
+            this.manualScallingBox.Location = new System.Drawing.Point(8, 86);
             this.manualScallingBox.Name = "manualScallingBox";
             this.manualScallingBox.Size = new System.Drawing.Size(100, 20);
             this.manualScallingBox.TabIndex = 10;
@@ -168,7 +170,7 @@
             // manualScallingLabel
             // 
             this.manualScallingLabel.AutoSize = true;
-            this.manualScallingLabel.Location = new System.Drawing.Point(117, 62);
+            this.manualScallingLabel.Location = new System.Drawing.Point(117, 90);
             this.manualScallingLabel.Name = "manualScallingLabel";
             this.manualScallingLabel.Size = new System.Drawing.Size(78, 13);
             this.manualScallingLabel.TabIndex = 11;
@@ -177,7 +179,7 @@
             // enableMpegCheckbox
             // 
             this.enableMpegCheckbox.AutoSize = true;
-            this.enableMpegCheckbox.Location = new System.Drawing.Point(8, 185);
+            this.enableMpegCheckbox.Location = new System.Drawing.Point(8, 212);
             this.enableMpegCheckbox.Margin = new System.Windows.Forms.Padding(2);
             this.enableMpegCheckbox.Name = "enableMpegCheckbox";
             this.enableMpegCheckbox.Size = new System.Drawing.Size(188, 17);
@@ -191,13 +193,13 @@
             this.addProviderBox.FormattingEnabled = true;
             this.addProviderBox.Location = new System.Drawing.Point(228, 24);
             this.addProviderBox.Name = "addProviderBox";
-            this.addProviderBox.Size = new System.Drawing.Size(120, 212);
+            this.addProviderBox.Size = new System.Drawing.Size(120, 238);
             this.addProviderBox.TabIndex = 18;
             this.addProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnAddProvider);
             // 
             // unlinkButton
             // 
-            this.unlinkButton.Location = new System.Drawing.Point(7, 212);
+            this.unlinkButton.Location = new System.Drawing.Point(7, 238);
             this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
             this.unlinkButton.Name = "unlinkButton";
             this.unlinkButton.Size = new System.Drawing.Size(189, 25);
@@ -211,7 +213,7 @@
             this.removeProviderBox.FormattingEnabled = true;
             this.removeProviderBox.Location = new System.Drawing.Point(379, 24);
             this.removeProviderBox.Name = "removeProviderBox";
-            this.removeProviderBox.Size = new System.Drawing.Size(120, 212);
+            this.removeProviderBox.Size = new System.Drawing.Size(120, 238);
             this.removeProviderBox.TabIndex = 19;
             this.removeProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnRemoveProvider);
             // 
@@ -233,11 +235,32 @@
             this.addProviderLabel.TabIndex = 21;
             this.addProviderLabel.Text = "Add provider";
             // 
+            // urlToCopyLabel
+            // 
+            this.urlToCopyLabel.AutoSize = true;
+            this.urlToCopyLabel.Location = new System.Drawing.Point(117, 63);
+            this.urlToCopyLabel.Name = "urlToCopyLabel";
+            this.urlToCopyLabel.Size = new System.Drawing.Size(67, 13);
+            this.urlToCopyLabel.TabIndex = 23;
+            this.urlToCopyLabel.Text = "URL to copy";
+            // 
+            // urlToCopyBox
+            // 
+            this.urlToCopyBox.FormattingEnabled = true;
+            this.urlToCopyBox.Location = new System.Drawing.Point(8, 59);
+            this.urlToCopyBox.Margin = new System.Windows.Forms.Padding(2);
+            this.urlToCopyBox.Name = "urlToCopyBox";
+            this.urlToCopyBox.Size = new System.Drawing.Size(100, 21);
+            this.urlToCopyBox.TabIndex = 22;
+            this.urlToCopyBox.SelectedIndexChanged += new System.EventHandler(this.UrlToCopyChanged);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 244);
+            this.ClientSize = new System.Drawing.Size(514, 275);
+            this.Controls.Add(this.urlToCopyLabel);
+            this.Controls.Add(this.urlToCopyBox);
             this.Controls.Add(this.addProviderLabel);
             this.Controls.Add(this.removeProviderLabel);
             this.Controls.Add(this.removeProviderBox);
@@ -250,11 +273,11 @@
             this.Controls.Add(this.gifFpsLabel);
             this.Controls.Add(this.formatLabel);
             this.Controls.Add(this.noGifRepeatCheckBox);
-            this.Controls.Add(this.videoFpsList);
+            this.Controls.Add(this.videoFpsBox);
             this.Controls.Add(this.unlinkButton);
             this.Controls.Add(this.noScalingCheckBox);
             this.Controls.Add(this.noCopyCheckBox);
-            this.Controls.Add(this.formatList);
+            this.Controls.Add(this.formatBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -268,10 +291,10 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox formatList;
+        private System.Windows.Forms.ComboBox formatBox;
         private System.Windows.Forms.CheckBox noCopyCheckBox;
         private System.Windows.Forms.CheckBox noScalingCheckBox;
-        private System.Windows.Forms.ComboBox videoFpsList;
+        private System.Windows.Forms.ComboBox videoFpsBox;
         private System.Windows.Forms.CheckBox noGifRepeatCheckBox;
         private System.Windows.Forms.Label formatLabel;
         private System.Windows.Forms.Label gifFpsLabel;
@@ -285,5 +308,7 @@
         private System.Windows.Forms.ListBox removeProviderBox;
         private System.Windows.Forms.Label removeProviderLabel;
         private System.Windows.Forms.Label addProviderLabel;
+        private System.Windows.Forms.Label urlToCopyLabel;
+        private System.Windows.Forms.ComboBox urlToCopyBox;
     }
 }

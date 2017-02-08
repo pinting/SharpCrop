@@ -25,8 +25,9 @@ namespace SharpCrop.Forms
             UpdateProviderList();
 
             // Init lists and boxes
-            formatList.Text = ConfigHelper.Memory.FormatExt;
-            videoFpsList.Text = ConfigHelper.Memory.SafeVideoFPS.ToString();
+            formatBox.Text = ConfigHelper.Memory.FormatExt;
+            videoFpsBox.Text = ConfigHelper.Memory.SafeVideoFPS.ToString();
+            urlToCopyBox.Text = ConfigHelper.Memory.ProviderUrlToCopy;
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Memory.SafeManualScaling);
 
             // Init checkboxes
@@ -49,7 +50,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void FormatChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.Format = formatList.Text;
+            ConfigHelper.Memory.Format = formatBox.Text;
         }
 
         /// <summary>
@@ -61,12 +62,22 @@ namespace SharpCrop.Forms
         {
             try
             {
-                ConfigHelper.Memory.VideoFPS = int.Parse(videoFpsList.Text);
+                ConfigHelper.Memory.VideoFPS = int.Parse(videoFpsBox.Text);
             }
             catch
             {
-                videoFpsList.Text = string.Empty;
+                videoFpsBox.Text = string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Change URL to copy value.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UrlToCopyChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.ProviderUrlToCopy = urlToCopyBox.Text;
         }
 
         /// <summary>
@@ -167,17 +178,23 @@ namespace SharpCrop.Forms
         /// </summary>
         private void UpdateProviderList()
         {
+            urlToCopyBox.Items.Clear();
             addProviderBox.Items.Clear();
             removeProviderBox.Items.Clear();
 
-            controller.LoadedProviders.Keys
-                .ToList()
-                .ForEach(p => removeProviderBox.Items.Add(p));
+            foreach(var name in Constants.Providers.Keys)
+            {
+                if(!controller.LoadedProviders.Keys.Contains(name))
+                {
+                    addProviderBox.Items.Add(name);
+                }
+                else
+                {
+                    urlToCopyBox.Items.Add(name);
+                    removeProviderBox.Items.Add(name);
+                }
+            }
 
-            Constants.Providers.Keys
-                .Where(p => !controller.LoadedProviders.Keys.Contains(p))
-                .ToList()
-                .ForEach(p => addProviderBox.Items.Add(p));
         }
 
         /// <summary>
