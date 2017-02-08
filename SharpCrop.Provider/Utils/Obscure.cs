@@ -58,5 +58,39 @@ namespace SharpCrop.Provider.Utils
 
             return Encoding.UTF8.GetString(bytes);
         }
+
+        /// <summary>
+        /// Decode an encoded base64 string.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string Base64Encode(string key)
+        {
+            if (key == null)
+            {
+                return null;
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(key);
+
+            return Convert.ToBase64String(bytes);
+        }
+
+        /// <summary>
+        /// Encode a string to base64.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string Base64Decode(string key)
+        {
+            if (key == null)
+            {
+                return null;
+            }
+
+            var bytes = Convert.FromBase64String(key);
+
+            return Encoding.UTF8.GetString(bytes);
+        }
     }
 }

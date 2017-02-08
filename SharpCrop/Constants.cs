@@ -6,7 +6,10 @@ namespace SharpCrop
 {
     public static class Constants
     {
-        /// All available providers.
+        /// <summary>
+        /// List of the registered providers. To add a new one, you must add the needed reference to the project and
+        /// define its string name here.
+        /// </summary>
         public static readonly IReadOnlyDictionary<string, Type> Providers = new Dictionary<string, Type>()
         {
             {"Dropbox", typeof(Dropbox.Provider)},
@@ -15,6 +18,7 @@ namespace SharpCrop
             {"LocalFile", typeof(LocalFile.Provider)}
         };
 
+        // General constants
         public static readonly string SettingsPath = "Settings.json";
         public static readonly Brush LeftColor = Brushes.RoyalBlue;
         public static readonly Brush RightColor = Brushes.PaleVioletRed;

@@ -52,7 +52,7 @@ namespace SharpCrop.OneDrive
             // Check if there is a saved token and try to use it
             if (!string.IsNullOrEmpty(savedState))
             {
-                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(Obscure.Decode(savedState));
+                provider.Session = JsonConvert.DeserializeObject<TokenResponse>(Obscure.Base64Decode(savedState));
 
                 if (await ClientFactory(provider))
                 {
@@ -81,7 +81,7 @@ namespace SharpCrop.OneDrive
 
                 if (await ClientFactory(provider))
                 {
-                    result.SetResult(Obscure.Encode(JsonConvert.SerializeObject(provider.Session)));
+                    result.SetResult(Obscure.Base64Encode(JsonConvert.SerializeObject(provider.Session)));
                 }
                 else
                 {

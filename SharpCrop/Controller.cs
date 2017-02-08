@@ -25,11 +25,21 @@ namespace SharpCrop
         /// </summary>
         public Controller()
         {
-            // Open ConfigForm
+            // Create ConfigForm
             configForm = new ConfigForm(this);
             configForm.FormClosed += (s, e) => Application.Exit();
+            configForm.FormClosing += (s, e) =>
+            {
+                // If there are any loaded providers, the config will be hidden
+                // Else the config will be closed (along with the whole application)
+                if (e.CloseReason == CloseReason.UserClosing && loadedProviders.Count > 0)
+                {
+                    e.Cancel = true;
+                    configForm.Hide();
+                }
+            };
 
-            // Open a CropForm for every screen
+            // Create a CropForm for every screen
             for (var i = 0; i < Screen.AllScreens.Length; i++)
             {
                 var screen = Screen.AllScreens[i];
@@ -39,20 +49,21 @@ namespace SharpCrop
                 cropForms.Add(form);
             }
 
-            // Add an advanced closing event for ConfigForm
-            // - If there are any loaded providers, the config will be hidden
-            // - Else the config will be closed (along with the whole application)
-            configForm.FormClosing += (s, e) =>
-            {
-                if(e.CloseReason == CloseReason.UserClosing && loadedProviders.Count > 0)
-                {
-                    e.Cancel = true;
-                    configForm.Hide();
-                }
-            };
-
             // Load previously saved providers
-            LoadSavedProviders();
+            foreach (var e in ConfigHelper.Memory.SafeProviders)
+            {
+                LoadProvider(e.Key, e.Value).Wait();
+            }
+
+            // If at least one provider is loaded, show the crop windows
+            if (loadedProviders.Count > 0)
+            {
+                cropForms.ForEach(form => form.Show());
+            }
+            else
+            {
+                configForm.Show();
+            }
         }
 
         /// <summary>
@@ -89,85 +100,72 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Load the required Provider with the registration form.
+        /// Register the given provider with a registration form and load it.
         /// </summary>
         /// <param name="name"></param>
-        public async void LoadProvider(string name)
+        public async void RegisterProvider(string name)
         {
-            var provider = await GetProvider(name, null);
+            var provider = await GetProvider(name, null, true);
 
-            if (provider == null)
-            {
-                configForm.Show();
-            }
-            else
+            if (provider != null)
             {
                 loadedProviders[name] = provider;
             }
         }
 
         /// <summary>
-        /// Remove the given provider.
+        /// Try to load the given provider with the saved state silently - if it failes, there will
+        /// be no registration form.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="savedState"></param>
+        public async Task<bool> LoadProvider(string name, string savedState)
+        {
+            var provider = await GetProvider(name, savedState, false);
+
+            if (provider != null)
+            {
+                loadedProviders[name] = provider;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Unregister a provider.
         /// </summary>
         /// <param name="name"></param>
         public void ClearProvider(string name)
         {
+            // Remove from the loaded providers
             if (loadedProviders.ContainsKey(name))
             {
                 loadedProviders.Remove(name);
             }
 
-            if (ConfigHelper.Memory.SafeProvider.ContainsKey(name))
+            // Remove from the configuration file
+            if (ConfigHelper.Memory.SafeProviders.ContainsKey(name))
             {
-                ConfigHelper.Memory.SafeProvider.Remove(name);
+                ConfigHelper.Memory.SafeProviders.Remove(name);
             }
         }
 
         /// <summary>
-        /// Load saved providers from the config.
+        /// Get a provider.
         /// </summary>
-        private async void LoadSavedProviders()
-        {
-            var remove = new List<string>();
-
-            foreach (var e in ConfigHelper.Memory.SafeProvider)
-            {
-                var provider = await GetProvider(e.Key, e.Value, false);
-
-                if (provider != null)
-                {
-                    loadedProviders[e.Key] = provider;
-                }
-                else
-                {
-                    remove.Add(e.Key);
-                }
-            }
-
-            remove.ForEach(provider => ClearProvider(provider));
-
-            if (loadedProviders.Count > 0)
-            {
-                cropForms.ForEach(form => form.Show());
-            }
-            else
-            {
-                configForm.Show();
-            }
-        }
-
-        /// <summary>
-        /// Get a Provider by name and give it back with a callback function.
-        /// </summary>
-        /// <param name="name"></param>
-        private async Task<IProvider> GetProvider(string name, string savedState, bool showForm = true)
+        /// <param name="name">The name of the provider, defined in the Constants.</param>
+        /// <param name="savedState">A saved state which can be null.</param>
+        /// <param name="showForm">Show the registration form or not.</param>
+        /// <returns>Return a Provider state (usually json in base64), if the was an error, the result will be null.</returns>
+        private async Task<IProvider> GetProvider(string name, string savedState = null, bool showForm = true)
         {
             if(!Constants.Providers.ContainsKey(name))
             {
                 return null;
             }
 
-            // Translate name into a real instance and try to load the provider form saved state
+            // Translate name into a real instance and try to load the provider form the given saved state
             var provider = (IProvider)Activator.CreateInstance(Constants.Providers[name]);
             var state = await provider.Register(savedState, showForm);
 
@@ -180,7 +178,7 @@ namespace SharpCrop
             // If the token is not changed, there was no new registration
             if (state != savedState)
             {
-                ConfigHelper.Memory.SafeProvider[name] = state;
+                ConfigHelper.Memory.SafeProviders[name] = state;
                 ToastFactory.Create($"Successfully registered \"{name}\" provider!");
             }
             

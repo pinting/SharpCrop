@@ -30,7 +30,7 @@ namespace SharpCrop.GoogleDrive
             {
                 // Try to use the previously saved TokenResponse
                 var receiver = new CodeReceiver();
-                var store = new MemoryStore(Obscure.Decode(savedState));
+                var store = new MemoryStore(Obscure.Base64Decode(savedState));
                 var secret = new ClientSecrets() { ClientId = Obscure.Decode(Constants.AppKey), ClientSecret = Obscure.Decode(Constants.AppSecret) };
                 var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Constants.Scopes, "token", CancellationToken.None, store, receiver);
 
@@ -41,7 +41,7 @@ namespace SharpCrop.GoogleDrive
                 });
 
                 // Export the serialized TokenResponse which gonna be saved into the config
-                result.SetResult(Obscure.Encode(store.Export()));
+                result.SetResult(Obscure.Base64Encode(store.Export()));
             }
             catch
             {

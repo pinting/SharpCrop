@@ -1,6 +1,5 @@
 ﻿using SharpCrop.Utils;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 

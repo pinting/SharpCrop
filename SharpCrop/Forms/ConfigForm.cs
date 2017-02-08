@@ -41,24 +41,6 @@ namespace SharpCrop.Forms
             noFocusCheckBox.Enabled = false;
 #endif
         }
-
-        /// <summary>
-        /// Update the add/remove provider list the reflect the current state.
-        /// </summary>
-        private void UpdateProviderList()
-        {
-            addProviderBox.Items.Clear();
-            removeProviderBox.Items.Clear();
-
-            controller.LoadedProviders.Keys
-                .ToList()
-                .ForEach(p => removeProviderBox.Items.Add(p));
-
-            Constants.Providers.Keys
-                .Where(p => !controller.LoadedProviders.Keys.Contains(p))
-                .ToList()
-                .ForEach(p => addProviderBox.Items.Add(p));
-        }
         
         /// <summary>
         /// Change image format.
@@ -176,8 +158,59 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void UnlinkClicked(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.Provider.Clear();
+            ConfigHelper.Reset();
             Application.Exit();
+        }
+
+        /// <summary>
+        /// Update the add/remove provider list the reflect the current state.
+        /// </summary>
+        private void UpdateProviderList()
+        {
+            addProviderBox.Items.Clear();
+            removeProviderBox.Items.Clear();
+
+            controller.LoadedProviders.Keys
+                .ToList()
+                .ForEach(p => removeProviderBox.Items.Add(p));
+
+            Constants.Providers.Keys
+                .Where(p => !controller.LoadedProviders.Keys.Contains(p))
+                .ToList()
+                .ForEach(p => addProviderBox.Items.Add(p));
+        }
+
+        /// <summary>
+        /// Add new provider.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnAddProvider(object sender, EventArgs e)
+        {
+            if(addProviderBox.SelectedItem == null)
+            {
+                return;
+            }
+            
+            controller.RegisterProvider(addProviderBox.SelectedItem.ToString());
+            addProviderBox.ClearSelected();
+        }
+
+        /// <summary>
+        /// Remove existing provider.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnRemoveProvider(object sender, EventArgs e)
+        {
+            if (removeProviderBox.SelectedItem == null)
+            {
+                return;
+            }
+
+            controller.ClearProvider(removeProviderBox.SelectedItem.ToString());
+            removeProviderBox.ClearSelected();
+            UpdateProviderList();
         }
 
         /// <summary>
@@ -199,39 +232,6 @@ namespace SharpCrop.Forms
         {
             base.OnActivated(e);
 
-            UpdateProviderList();
-        }
-
-        /// <summary>
-        /// Add new provider.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnAddProvider(object sender, EventArgs e)
-        {
-            if(addProviderBox.SelectedItem == null)
-            {
-                return;
-            }
-            
-            controller.LoadProvider(addProviderBox.SelectedItem.ToString());
-            addProviderBox.ClearSelected();
-        }
-
-        /// <summary>
-        /// Remove existing provider.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnRemoveProvider(object sender, EventArgs e)
-        {
-            if (removeProviderBox.SelectedItem == null)
-            {
-                return;
-            }
-
-            controller.ClearProvider(removeProviderBox.SelectedItem.ToString());
-            removeProviderBox.ClearSelected();
             UpdateProviderList();
         }
     }

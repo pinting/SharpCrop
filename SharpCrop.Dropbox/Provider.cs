@@ -60,11 +60,7 @@ namespace SharpCrop.Dropbox
             }
 
             // If it is not, try to get another one
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(
-                    OAuthResponseType.Code,
-                    Obscure.Decode(Constants.AppKey),
-                    (string)null);
-
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Code, Obscure.Decode(Constants.AppKey), (string)null);
             var form = new CodeForm(url.ToString(), 43);
             var success = false;
 
@@ -73,10 +69,7 @@ namespace SharpCrop.Dropbox
                 success = true;
                 form.Close();
 
-                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
-                    code,
-                    Obscure.Decode(Constants.AppKey),
-                    Obscure.Decode(Constants.AppSecret));
+                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(code, Obscure.Decode(Constants.AppKey), Obscure.Decode(Constants.AppSecret));
 
                 if (response?.AccessToken != null && await ClientFactory(response.AccessToken))
                 {

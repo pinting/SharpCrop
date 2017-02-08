@@ -189,15 +189,15 @@
             // addProviderBox
             // 
             this.addProviderBox.FormattingEnabled = true;
-            this.addProviderBox.Location = new System.Drawing.Point(228, 33);
+            this.addProviderBox.Location = new System.Drawing.Point(228, 24);
             this.addProviderBox.Name = "addProviderBox";
-            this.addProviderBox.Size = new System.Drawing.Size(120, 199);
+            this.addProviderBox.Size = new System.Drawing.Size(120, 212);
             this.addProviderBox.TabIndex = 18;
             this.addProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnAddProvider);
             // 
             // unlinkButton
             // 
-            this.unlinkButton.Location = new System.Drawing.Point(7, 209);
+            this.unlinkButton.Location = new System.Drawing.Point(7, 212);
             this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
             this.unlinkButton.Name = "unlinkButton";
             this.unlinkButton.Size = new System.Drawing.Size(189, 25);
@@ -209,16 +209,16 @@
             // removeProviderBox
             // 
             this.removeProviderBox.FormattingEnabled = true;
-            this.removeProviderBox.Location = new System.Drawing.Point(379, 33);
+            this.removeProviderBox.Location = new System.Drawing.Point(379, 24);
             this.removeProviderBox.Name = "removeProviderBox";
-            this.removeProviderBox.Size = new System.Drawing.Size(120, 199);
+            this.removeProviderBox.Size = new System.Drawing.Size(120, 212);
             this.removeProviderBox.TabIndex = 19;
             this.removeProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnRemoveProvider);
             // 
             // removeProviderLabel
             // 
             this.removeProviderLabel.AutoSize = true;
-            this.removeProviderLabel.Location = new System.Drawing.Point(382, 12);
+            this.removeProviderLabel.Location = new System.Drawing.Point(376, 8);
             this.removeProviderLabel.Name = "removeProviderLabel";
             this.removeProviderLabel.Size = new System.Drawing.Size(88, 13);
             this.removeProviderLabel.TabIndex = 20;
@@ -227,7 +227,7 @@
             // addProviderLabel
             // 
             this.addProviderLabel.AutoSize = true;
-            this.addProviderLabel.Location = new System.Drawing.Point(231, 12);
+            this.addProviderLabel.Location = new System.Drawing.Point(225, 8);
             this.addProviderLabel.Name = "addProviderLabel";
             this.addProviderLabel.Size = new System.Drawing.Size(67, 13);
             this.addProviderLabel.TabIndex = 21;
