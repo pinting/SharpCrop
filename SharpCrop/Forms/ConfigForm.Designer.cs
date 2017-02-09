@@ -53,10 +53,6 @@
             // formatBox
             // 
             this.formatBox.FormattingEnabled = true;
-            this.formatBox.Items.AddRange(new object[] {
-            "jpg",
-            "png",
-            "bmp"});
             this.formatBox.Location = new System.Drawing.Point(8, 8);
             this.formatBox.Margin = new System.Windows.Forms.Padding(2);
             this.formatBox.Name = "formatBox";
@@ -91,13 +87,6 @@
             // videoFpsBox
             // 
             this.videoFpsBox.FormattingEnabled = true;
-            this.videoFpsBox.Items.AddRange(new object[] {
-            "5",
-            "10",
-            "15",
-            "20",
-            "25",
-            "30"});
             this.videoFpsBox.Location = new System.Drawing.Point(8, 33);
             this.videoFpsBox.Margin = new System.Windows.Forms.Padding(2);
             this.videoFpsBox.Name = "videoFpsBox";

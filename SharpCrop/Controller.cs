@@ -135,13 +135,13 @@ namespace SharpCrop
         /// <returns>Return a Provider state (usually json in base64), if the was an error, the result will be null.</returns>
         private async Task<IProvider> GetProvider(string name, string savedState = null, bool showForm = true)
         {
-            if(!Constants.Providers.ContainsKey(name))
+            if(!Constants.AvailableProviders.ContainsKey(name))
             {
                 return null;
             }
 
             // Translate name into a real instance and try to load the provider form the given saved state
-            var provider = (IProvider)Activator.CreateInstance(Constants.Providers[name]);
+            var provider = (IProvider)Activator.CreateInstance(Constants.AvailableProviders[name]);
             var state = await provider.Register(savedState, showForm);
 
             if (state == null)
@@ -169,7 +169,7 @@ namespace SharpCrop
             {
                 url = await provider.Value.Upload(name, stream);
 
-                if (provider.Key == ConfigHelper.Memory.ProviderUrlToCopy)
+                if (provider.Key == ConfigHelper.Memory.ProviderToCopy)
                 {
                     result = url;
                 }
@@ -189,10 +189,10 @@ namespace SharpCrop
             {
                 using (var bitmap = CaptureHelper.GetBitmap(region, offset))
                 {
-                    bitmap.Save(stream, ConfigHelper.Memory.FormatType);
+                    bitmap.Save(stream, ConfigHelper.Memory.ImageFormatType);
                 }
 
-                var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{ConfigHelper.Memory.FormatExt}";
+                var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{ConfigHelper.Memory.SafeImageFormat}";
                 var url = await UploadAll(name, stream);
 
                 Success(url);

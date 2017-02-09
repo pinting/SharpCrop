@@ -25,9 +25,11 @@ namespace SharpCrop.Forms
             UpdateProviderList();
 
             // Init lists and boxes
-            formatBox.Text = ConfigHelper.Memory.FormatExt;
+            formatBox.Text = ConfigHelper.Memory.SafeImageFormat;
+            formatBox.Items.AddRange(Constants.AvailableImageFormats.Keys.ToArray());
             videoFpsBox.Text = ConfigHelper.Memory.SafeVideoFPS.ToString();
-            urlToCopyBox.Text = ConfigHelper.Memory.ProviderUrlToCopy;
+            videoFpsBox.Items.AddRange(Constants.AvailableFPS.ToArray());
+            urlToCopyBox.Text = ConfigHelper.Memory.ProviderToCopy;
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Memory.SafeManualScaling);
 
             // Init checkboxes
@@ -50,7 +52,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void FormatChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.Format = formatBox.Text;
+            ConfigHelper.Memory.ImageFormat = formatBox.Text;
         }
 
         /// <summary>
@@ -77,7 +79,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void UrlToCopyChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.ProviderUrlToCopy = urlToCopyBox.Text;
+            ConfigHelper.Memory.ProviderToCopy = urlToCopyBox.Text;
         }
 
         /// <summary>
@@ -182,7 +184,7 @@ namespace SharpCrop.Forms
             addProviderBox.Items.Clear();
             removeProviderBox.Items.Clear();
 
-            foreach(var name in Constants.Providers.Keys)
+            foreach(var name in Constants.AvailableProviders.Keys)
             {
                 if(!controller.LoadedProviders.Keys.Contains(name))
                 {
@@ -194,7 +196,6 @@ namespace SharpCrop.Forms
                     removeProviderBox.Items.Add(name);
                 }
             }
-
         }
 
         /// <summary>

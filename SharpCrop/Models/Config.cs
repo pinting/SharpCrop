@@ -10,7 +10,7 @@ namespace SharpCrop.Models
     public class Config
     {
         [JsonProperty]
-        public string Format { get; set; }
+        public string ImageFormat { get; set; }
 
         [JsonProperty]
         public List<int> ManualScaling { get; set; }
@@ -19,7 +19,7 @@ namespace SharpCrop.Models
         public int VideoFPS { get; set; }
 
         [JsonProperty]
-        public string ProviderUrlToCopy { get; set; }
+        public string ProviderToCopy { get; set; }
 
         [JsonProperty]
         public bool NoCopy { get; set; }
@@ -45,37 +45,26 @@ namespace SharpCrop.Models
         #region Validators
 
         [JsonIgnore]
-        public ImageFormat FormatType
+        public ImageFormat ImageFormatType
         {
             get
             {
-                switch(Format)
-                {
-                    case "jpg":
-                        return ImageFormat.Jpeg;
-                    case "bmp":
-                        return ImageFormat.Bmp;
-                    case "png":
-                        return ImageFormat.Png;
-                    default:
-                        return ImageFormat.Png;
-                }
+                return Constants.AvailableImageFormats[SafeImageFormat];
             }
         }
 
         [JsonIgnore]
-        public string FormatExt
+        public string SafeImageFormat
         {
             get
             {
-                switch(Format)
+                if (!string.IsNullOrEmpty(ImageFormat) && Constants.AvailableImageFormats.ContainsKey(ImageFormat))
                 {
-                    case "jpg":
-                    case "bmp":
-                    case "png":
-                        return Format;
-                    default:
-                        return "png";
+                    return ImageFormat;
+                }
+                else
+                {
+                    return Constants.DefaultImageFormat;
                 }
             }
         }
@@ -85,7 +74,7 @@ namespace SharpCrop.Models
         {
             get
             {
-                return VideoFPS > 0 && VideoFPS <= 30 ? VideoFPS : 30;
+                return VideoFPS > 0 && VideoFPS <= Constants.MaxFPS ? VideoFPS : Constants.MaxFPS;
             }
         }
 
