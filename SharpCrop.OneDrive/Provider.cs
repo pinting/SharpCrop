@@ -72,7 +72,7 @@ namespace SharpCrop.OneDrive
             var form = new CodeForm(provider.Url, 37);
             var success = false;
 
-            form.OnCode(async code =>
+            form.OnResult(async code =>
             {
                 success = true;
 

@@ -28,7 +28,7 @@ namespace SharpCrop.GoogleDrive.Utils
             var form = new CodeForm(url, 45);
             var success = false;
 
-            form.OnCode(code =>
+            form.OnResult(code =>
             {
                 success = true;
 

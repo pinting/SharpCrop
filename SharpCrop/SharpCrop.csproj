@@ -128,6 +128,10 @@
       <Project>{52c62af5-cf9f-4f80-a5a6-13a322975e6c}</Project>
       <Name>SharpCrop.Dropbox</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpCrop.FTP\SharpCrop.FTP.csproj">
+      <Project>{d3c0d988-931b-4656-bb07-b270f0af8d5b}</Project>
+      <Name>SharpCrop.FTP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpCrop.LocalFile\SharpCrop.LocalFile.csproj">
       <Project>{a3a39048-9a42-4785-985c-ff9c06684285}</Project>
       <Name>SharpCrop.LocalFile</Name>

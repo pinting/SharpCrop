@@ -9,7 +9,7 @@ namespace SharpCrop.Provider.Forms
     /// </summary>
     public partial class CodeForm : Form
     {
-        private Action<string> onCode;
+        private Action<string> onResult;
         private readonly int length;
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace SharpCrop.Provider.Forms
         /// Register for callback.
         /// </summary>
         /// <param name="callback"></param>
-        public void OnCode(Action<string> callback)
+        public void OnResult(Action<string> callback)
         {
-            onCode = callback;
+            onResult = callback;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace SharpCrop.Provider.Forms
         {
             if(codeBox.Text.Length >= length)
             {
-                onCode(codeBox.Text);
+                onResult(codeBox.Text);
             }
         }
 

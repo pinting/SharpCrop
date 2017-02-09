@@ -13,6 +13,7 @@ namespace SharpCrop
             {"Dropbox", typeof(Dropbox.Provider)},
             {"GoogleDrive", typeof(GoogleDrive.Provider)},
             {"OneDrive", typeof(OneDrive.Provider)},
+            {"FTP", typeof(FTP.Provider)},
             {"LocalFile", typeof(LocalFile.Provider)}
         };
 

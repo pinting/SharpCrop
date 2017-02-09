@@ -39,8 +39,8 @@ namespace SharpCrop.LocalFile
             }
 
             // Get a newPath with FolderForm
-            var success = false;
             var form = new FolderForm();
+            var success = false;
 
             form.OnResult(newPath =>
             {

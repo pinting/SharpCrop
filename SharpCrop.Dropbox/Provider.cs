@@ -64,7 +64,7 @@ namespace SharpCrop.Dropbox
             var form = new CodeForm(url.ToString(), 43);
             var success = false;
 
-            form.OnCode(async code =>
+            form.OnResult(async code =>
             {
                 success = true;
                 form.Close();
