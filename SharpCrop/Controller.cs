@@ -162,14 +162,23 @@ namespace SharpCrop
 
         private async Task<string> UploadAll(string name, MemoryStream stream)
         {
+            var uploads = new Dictionary<string, Task<string>>();
+
             string result = null;
             string url = null;
 
+            // Run the upload async
             foreach (var provider in loadedProviders)
             {
-                url = await provider.Value.Upload(name, stream);
+                uploads[provider.Key] = provider.Value.Upload(name, stream);
+            }
 
-                if (provider.Key == ConfigHelper.Memory.ProviderToCopy)
+            // Wait for the uploads to finish and get the chosen URL
+            foreach (var upload in uploads)
+            {
+                result = await upload.Value;
+
+                if (upload.Key == ConfigHelper.Memory.ProviderToCopy)
                 {
                     result = url;
                 }
