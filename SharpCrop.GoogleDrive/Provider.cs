@@ -60,12 +60,12 @@ namespace SharpCrop.GoogleDrive
         /// <returns></returns>
         public async Task<string> Upload(string name, System.IO.MemoryStream stream)
         {
-            var folderBody = new File() { Name = Constants.FolderName, MimeType = "application/vnd.google-apps.folder" };
+            var folderBody = new File() { Name = Constants.FolderName, Description = Constants.FolderDescription, MimeType = "application/vnd.google-apps.folder" };
             var listRequest = service.Files.List();
 
             File folder;
 
-            listRequest.Q = $"name = '{folderBody.Name}' and mimeType = '{folderBody.MimeType}'";
+            listRequest.Q = $"name = '{folderBody.Name}' and fullText contains '{folderBody.Description}' and mimeType = '{folderBody.MimeType}' and trashed = false";
             listRequest.Spaces = "drive";
             listRequest.Fields = "files(id)";
 

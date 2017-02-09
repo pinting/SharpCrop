@@ -8,5 +8,6 @@ namespace SharpCrop.GoogleDrive
         public static readonly string AppSecret = "fVqOT34+kV2DYGRHSCprHWgVjT19TnA5";
         public static readonly string[] Scopes = { DriveService.Scope.DriveFile };
         public static readonly string FolderName = "SharpCrop";
+        public static readonly string FolderDescription = "1816911087";
     }
 }
