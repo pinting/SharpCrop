@@ -144,7 +144,7 @@ namespace SharpCrop
             var provider = (IProvider)Activator.CreateInstance(Constants.AvailableProviders[name]);
             var state = await provider.Register(savedState, showForm);
 
-            if (string.IsNullOrEmpty(state))
+            if (state == null)
             {
                 ToastFactory.Create($"Failed to register \"{name}\" provider!");
                 return null;
@@ -277,7 +277,7 @@ namespace SharpCrop
 #endif
             }
 
-            ToastFactory.Create("Uploaded successfully!", 3000, () =>
+            ToastFactory.Create(string.IsNullOrEmpty(url) ? "Upload failed!" : "Uploaded successfully!", 3000, () =>
             {
 #if !__MonoCS__
                 Application.Exit();
