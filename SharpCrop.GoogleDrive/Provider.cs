@@ -1,5 +1,4 @@
 ﻿using SharpCrop.Provider;
-using System.IO;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
@@ -7,6 +6,8 @@ using Google.Apis.Services;
 using System.Threading;
 using SharpCrop.Provider.Utils;
 using SharpCrop.GoogleDrive.Utils;
+using System.Collections.Generic;
+using Google.Apis.Drive.v3.Data;
 
 namespace SharpCrop.GoogleDrive
 {
@@ -57,19 +58,42 @@ namespace SharpCrop.GoogleDrive
         /// <param name="name"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public async Task<string> Upload(string name, MemoryStream stream)
+        public async Task<string> Upload(string name, System.IO.MemoryStream stream)
         {
-            var body = new Google.Apis.Drive.v3.Data.File() { Name = name };
-            var type = $"image/{MimeLookup.Find(Path.GetExtension(name))}";
-            var request = service.Files.Create(body, stream, type);
+            var folderBody = new File() { Name = Constants.FolderName, MimeType = "application/vnd.google-apps.folder" };
+            var listRequest = service.Files.List();
 
-            await request.UploadAsync();
+            File folder;
 
-            var permission = service.Permissions.Create(new Google.Apis.Drive.v3.Data.Permission() { Type = "anyone", Role = "reader" }, request.ResponseBody.Id);
+            listRequest.Q = $"name = '{folderBody.Name}' and mimeType = '{folderBody.MimeType}'";
+            listRequest.Spaces = "drive";
+            listRequest.Fields = "files(id)";
 
-            await permission.ExecuteAsync();
+            var result = listRequest.Execute();
 
-            return $"https://drive.google.com/open?id={request.ResponseBody.Id}";
+            if (result.Files.Count > 0)
+            {
+                folder = result.Files[0];
+            }
+            else
+            {
+                var createRequest = service.Files.Create(folderBody);
+
+                createRequest.Fields = "id";
+                folder = await createRequest.ExecuteAsync();
+            }
+
+            var uploadBody = new File() { Name = name,  Parents = new List<string> { folder.Id } };
+            var uploadType = $"image/{MimeLookup.Find(System.IO.Path.GetExtension(name))}";
+            var uploadRequest = service.Files.Create(uploadBody, stream, uploadType);
+
+            await uploadRequest.UploadAsync();
+
+            var uploadPermission = service.Permissions.Create(new Permission() { Type = "anyone", Role = "reader" }, uploadRequest.ResponseBody.Id);
+
+            await uploadPermission.ExecuteAsync();
+
+            return $"https://drive.google.com/open?id={uploadRequest.ResponseBody.Id}";
         }
     }
 }
