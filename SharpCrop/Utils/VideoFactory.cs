@@ -113,7 +113,7 @@ namespace SharpCrop.Utils
                 frames.RemoveAt(0);
             }
 
-            gif.SetDelay(1000 / ConfigHelper.Memory.SafeVideoFPS);
+            gif.SetDelay(1000 / ConfigHelper.Memory.SafeVideoFps);
             gif.Finish();
             Stop();
 
