@@ -38,7 +38,7 @@ namespace SharpCrop.Utils
         {
             try
             {
-                File.WriteAllText(Constants.SettingsPath, JsonConvert.SerializeObject(Memory));
+                File.WriteAllText(Constants.SettingsPath, JsonConvert.SerializeObject(Memory, Formatting.Indented));
             }
             catch(Exception e)
             {

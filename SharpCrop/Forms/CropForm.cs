@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System;
-using System.Threading.Tasks;
 
 namespace SharpCrop.Forms
 {
@@ -43,25 +42,7 @@ namespace SharpCrop.Forms
 
             controller.ConfigForm.VisibleChanged += (sender, ev) =>
             {
-                if(controller.ConfigForm.Visible)
-                {
-                    return;
-                }
-
-                if (ConfigHelper.Memory.NoTransparency)
-                {
-                    Task.Run(() =>
-                    {
-                        // Wait for the form to disappear
-                        Thread.Sleep(500);
-                        Invoke(new Action(() =>
-                        {
-                            RefreshBackground();
-                            ShowAll();
-                        }));
-                    });
-                }
-                else
+                if(!controller.ConfigForm.Visible)
                 {
                     ShowAll();
                 }
@@ -85,6 +66,7 @@ namespace SharpCrop.Forms
         {
             base.OnShown(e);
 
+            RefreshBackground();
             MakeClickable();
             ResetMouse();
 
@@ -102,6 +84,7 @@ namespace SharpCrop.Forms
         {
             base.OnLostFocus(e);
 
+            RefreshBackground();
             MakeClickable();
             ResetMouse();
 

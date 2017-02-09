@@ -10,9 +10,6 @@ namespace SharpCrop.Models
     public class Config
     {
         [JsonProperty]
-        public Dictionary<string, string> Providers { get; set; }
-
-        [JsonProperty]
         public string Format { get; set; }
 
         [JsonProperty]
@@ -41,6 +38,9 @@ namespace SharpCrop.Models
 
         [JsonProperty]
         public bool EnableMpeg { get; set; }
+
+        [JsonProperty]
+        public Dictionary<string, string> Providers { get; set; }
 
         #region Validators
 

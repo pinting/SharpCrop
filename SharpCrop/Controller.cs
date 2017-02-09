@@ -75,39 +75,6 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Protect list from external modification.
-        /// </summary>
-        public IReadOnlyDictionary<string, IProvider> LoadedProviders
-        {
-            get
-            {
-                return loadedProviders;
-            }
-        }
-
-        /// <summary>
-        /// Protect list from external modification.
-        /// </summary>
-        public IReadOnlyList<Form> CropForms
-        {
-            get
-            {
-                return cropForms;
-            }
-        }
-
-        /// <summary>
-        /// Protect variable from external modification.
-        /// </summary>
-        public Form ConfigForm
-        {
-            get
-            {
-                return configForm;
-            }
-        }
-
-        /// <summary>
         /// Register the given provider with a registration form and load it.
         /// </summary>
         /// <param name="name"></param>
@@ -195,19 +162,21 @@ namespace SharpCrop
 
         private async Task<string> UploadAll(string name, MemoryStream stream)
         {
-            var url = "";
+            string result = null;
+            string url = null;
 
             foreach (var provider in loadedProviders)
             {
-                var result = await provider.Value.Upload(name, stream);
+                url = await provider.Value.Upload(name, stream);
 
-                if (provider.Key == ConfigHelper.Memory.ProviderUrlToCopy || loadedProviders.Count == 1)
+                if (provider.Key == ConfigHelper.Memory.ProviderUrlToCopy)
                 {
-                    url = result;
+                    result = url;
                 }
             }
 
-            return url;
+            // If the searched provider was not found, use the URL of the last one
+            return result == null ? url : result;
         }
 
         /// <summary>
@@ -292,6 +261,39 @@ namespace SharpCrop
                 Application.Exit();
 #endif
             });
+        }
+
+        /// <summary>
+        /// Protect list from external modification.
+        /// </summary>
+        public IReadOnlyDictionary<string, IProvider> LoadedProviders
+        {
+            get
+            {
+                return loadedProviders;
+            }
+        }
+
+        /// <summary>
+        /// Protect list from external modification.
+        /// </summary>
+        public IReadOnlyList<Form> CropForms
+        {
+            get
+            {
+                return cropForms;
+            }
+        }
+
+        /// <summary>
+        /// Protect variable from external modification.
+        /// </summary>
+        public Form ConfigForm
+        {
+            get
+            {
+                return configForm;
+            }
         }
     }
 }
