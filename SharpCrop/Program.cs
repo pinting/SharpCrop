@@ -29,11 +29,17 @@ namespace SharpCrop
             ConfigHelper.Save();
         }
 
+
+#if !__MonoCS__
+
         /// <summary>
         /// DPI aware Windows feature.
         /// </summary>
         /// <returns></returns>
         [DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
+
+#endif
+
     }
 }

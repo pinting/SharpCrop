@@ -18,14 +18,14 @@ namespace SharpCrop
     {
         private readonly Dictionary<string, IProvider> loadedProviders = new Dictionary<string, IProvider>();
         private readonly List<Form> cropForms = new List<Form>();
-        private Form configForm;
+        private readonly Form configForm;
 
         /// <summary>
         /// Construct a new Controller class.
         /// </summary>
         public Controller()
         {
-            // Create ConfigForm
+            // Create a new ConfigForm
             configForm = new ConfigForm(this);
             configForm.FormClosed += (s, e) => Application.Exit();
             configForm.FormClosing += (s, e) =>
@@ -80,7 +80,7 @@ namespace SharpCrop
         /// <param name="name"></param>
         public async void RegisterProvider(string name)
         {
-            var provider = await GetProvider(name, null, true);
+            var provider = await GetProvider(name);
 
             if (provider != null)
             {
@@ -127,7 +127,7 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Get a provider.
+        /// Get an IProvider object from the given provider module.
         /// </summary>
         /// <param name="name">The name of the provider, defined in the Constants.</param>
         /// <param name="savedState">A saved state which can be null.</param>
@@ -144,7 +144,7 @@ namespace SharpCrop
             var provider = (IProvider)Activator.CreateInstance(Constants.AvailableProviders[name]);
             var state = await provider.Register(savedState, showForm);
 
-            if (state == null)
+            if (string.IsNullOrEmpty(state))
             {
                 ToastFactory.Create($"Failed to register \"{name}\" provider!");
                 return null;
@@ -160,6 +160,12 @@ namespace SharpCrop
             return provider;
         }
 
+        /// <summary>
+        /// Upload the given stream with all loaded providers.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         private async Task<string> UploadAll(string name, MemoryStream stream)
         {
             var uploads = new Dictionary<string, Task<string>>();
@@ -168,30 +174,37 @@ namespace SharpCrop
             string url = null;
 
             // Run the upload async
-            foreach (var provider in loadedProviders)
+            foreach (var p in loadedProviders)
             {
-                uploads[provider.Key] = provider.Value.Upload(name, stream);
+                uploads[p.Key] = p.Value.Upload(name, stream);
             }
 
             // Wait for the uploads to finish and get the chosen URL
-            foreach (var upload in uploads)
+            foreach (var p in uploads)
             {
-                result = await upload.Value;
+                url = await p.Value;
 
-                if (upload.Key == ConfigHelper.Memory.ProviderToCopy)
+                if(string.IsNullOrEmpty(url))
+                {
+                    ClearProvider(p.Key);
+                    ToastFactory.Create($"Upload failed using \"{p.Key}\" provider!");
+                }
+
+                if (p.Key == ConfigHelper.Memory.ProviderToCopy)
                 {
                     result = url;
                 }
             }
 
             // If the searched provider was not found, use the URL of the last one
-            return result == null ? url : result;
+            return string.IsNullOrEmpty(result) ? url : result;
         }
 
         /// <summary>
         /// Capture one Bitmap.
         /// </summary>
         /// <param name="region"></param>
+        /// <param name="offset"></param>
         public async void CaptureImage(Rectangle region, Point offset)
         {
             using (var stream = new MemoryStream())
@@ -201,7 +214,7 @@ namespace SharpCrop
                     bitmap.Save(stream, ConfigHelper.Memory.ImageFormatType);
                 }
 
-                var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{ConfigHelper.Memory.SafeImageFormat}";
+                var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{ConfigHelper.Memory.SafeImageFormat}";
                 var url = await UploadAll(name, stream);
 
                 Success(url);
@@ -212,6 +225,7 @@ namespace SharpCrop
         /// Capture a lot of Bitmaps and convert them to Gif.
         /// </summary>
         /// <param name="region"></param>
+        /// <param name="offset"></param>
         public async void CaptureGif(Rectangle region, Point offset)
         {
             MemoryStream stream;
@@ -275,34 +289,16 @@ namespace SharpCrop
         /// <summary>
         /// Protect list from external modification.
         /// </summary>
-        public IReadOnlyDictionary<string, IProvider> LoadedProviders
-        {
-            get
-            {
-                return loadedProviders;
-            }
-        }
+        public IReadOnlyDictionary<string, IProvider> LoadedProviders => loadedProviders;
 
         /// <summary>
         /// Protect list from external modification.
         /// </summary>
-        public IReadOnlyList<Form> CropForms
-        {
-            get
-            {
-                return cropForms;
-            }
-        }
+        public IReadOnlyList<Form> CropForms => cropForms;
 
         /// <summary>
         /// Protect variable from external modification.
         /// </summary>
-        public Form ConfigForm
-        {
-            get
-            {
-                return configForm;
-            }
-        }
+        public Form ConfigForm => configForm;
     }
 }

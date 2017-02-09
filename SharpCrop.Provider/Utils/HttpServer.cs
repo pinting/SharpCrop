@@ -38,7 +38,7 @@ namespace SharpCrop.Provider.Utils
             this.root = root;
 
             listener = new HttpListener();
-            listener.Prefixes.Add("http://*:" + port.ToString() + "/");
+            listener.Prefixes.Add($"http://*:{port}/");
             listener.Start();
 
             thread = new Thread(Listen);

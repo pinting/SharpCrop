@@ -22,6 +22,7 @@ namespace SharpCrop.GoogleDrive
         /// Get an access token from Google Drive.
         /// </summary>
         /// <param name="savedState">Serialized TokenResponse from Google Api.</param>
+        /// <param name="showForm"></param>
         /// <returns></returns>
         public async Task<string> Register(string savedState, bool showForm = true)
         {

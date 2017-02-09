@@ -18,18 +18,15 @@ namespace SharpCrop
         };
 
         // List of avaiable image formats
-        public static readonly string DefaultImageFormat = "png";
         public static readonly IReadOnlyDictionary<string, ImageFormat> AvailableImageFormats = new Dictionary<string, ImageFormat>()
         {
+            {"png", ImageFormat.Png},
             {"jpg", ImageFormat.Jpeg},
-            {"bmp", ImageFormat.Bmp},
-            {"png", ImageFormat.Png}
+            {"bmp", ImageFormat.Bmp}
         };
-
-
+        
         // List of available FPS values
-        public static readonly int MaxFPS = 30;
-        public static readonly IReadOnlyList<string> AvailableFPS = new List<string>()
+        public static readonly IReadOnlyList<string> AvailableFps = new List<string>()
         {
             "5",
             "10",
@@ -38,6 +35,8 @@ namespace SharpCrop
             "25",
             "30"
         };
+
+        public static readonly int MaxFps = 30;
 
         // General constants
         public static readonly string SettingsPath = "Settings.json";

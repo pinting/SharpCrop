@@ -6,7 +6,7 @@ using System.IO;
 namespace SharpCrop.Utils
 {
     /// <summary>
-    /// ConfigHelper reads the configuration json into memory and modify it if it is needed.
+    /// ConfigHelper reads the configuration JSON into the memory and modifies it if it is needed.
     /// </summary>
     public static class ConfigHelper
     {

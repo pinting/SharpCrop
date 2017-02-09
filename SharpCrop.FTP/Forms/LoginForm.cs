@@ -4,10 +4,16 @@ using System.Windows.Forms;
 
 namespace SharpCrop.FTP.Forms
 {
+    /// <summary>
+    /// LoginForm is responsible for FTP login.
+    /// </summary>
     public partial class LoginForm : Form
     {
         private Action<LoginCreds> onResult;
 
+        /// <summary>
+        /// Consturct a new LoginForm.
+        /// </summary>
         public LoginForm()
         {
             InitializeComponent();
@@ -22,6 +28,11 @@ namespace SharpCrop.FTP.Forms
             onResult = callback;
         }
 
+        /// <summary>
+        /// Executed when the login button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnLogin(object sender, EventArgs e)
         {
             onResult(new LoginCreds()

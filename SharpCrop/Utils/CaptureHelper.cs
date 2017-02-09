@@ -10,7 +10,7 @@ namespace SharpCrop.Utils
     /// </summary>
     public static class CaptureHelper
     {
-        public static float ManualScaling = 0.0f;
+        public static float ManualScaling;
 
         /// <summary>
         /// Resize a Bitmap.
@@ -49,7 +49,7 @@ namespace SharpCrop.Utils
         /// Get a Bitmap from screen in the size of the given rectangle.
         /// </summary>
         /// <param name="rectangle"></param>
-        /// <param name="scaling"></param>
+        /// <param name="offset"></param>
         /// <returns></returns>
         public static Bitmap GetBitmap(Rectangle rectangle, Point offset)
         {

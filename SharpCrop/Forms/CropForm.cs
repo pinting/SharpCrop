@@ -298,8 +298,7 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Make the background invisible (not the selecting rectangle)
-        /// and disable clicking.
+        /// Make the background invisible (not the selecting rectangle) and disable clicking.
         /// </summary>
         private void MakeInvisible()
         {

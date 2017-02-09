@@ -92,6 +92,7 @@
             this.copyPathBox.Name = "copyPathBox";
             this.copyPathBox.Size = new System.Drawing.Size(149, 20);
             this.copyPathBox.TabIndex = 12;
+            this.copyPathBox.Text = "http://";
             // 
             // remotePathBox
             // 
@@ -99,6 +100,7 @@
             this.remotePathBox.Name = "remotePathBox";
             this.remotePathBox.Size = new System.Drawing.Size(149, 20);
             this.remotePathBox.TabIndex = 11;
+            this.remotePathBox.Text = "ftp://";
             // 
             // passwordBox
             // 
@@ -114,6 +116,7 @@
             this.usernameBox.Name = "usernameBox";
             this.usernameBox.Size = new System.Drawing.Size(149, 20);
             this.usernameBox.TabIndex = 9;
+            this.usernameBox.Text = "anonymous";
             // 
             // LoginForm
             // 

@@ -1,7 +1,7 @@
-﻿using SharpCrop.Utils;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using SharpCrop.Utils;
 
 namespace SharpCrop.Forms
 {
@@ -27,8 +27,8 @@ namespace SharpCrop.Forms
             // Init lists and boxes
             formatBox.Text = ConfigHelper.Memory.SafeImageFormat;
             formatBox.Items.AddRange(Constants.AvailableImageFormats.Keys.ToArray());
-            videoFpsBox.Text = ConfigHelper.Memory.SafeVideoFPS.ToString();
-            videoFpsBox.Items.AddRange(Constants.AvailableFPS.ToArray());
+            videoFpsBox.Text = ConfigHelper.Memory.SafeVideoFps.ToString();
+            videoFpsBox.Items.AddRange(Constants.AvailableFps.ToArray());
             urlToCopyBox.Text = ConfigHelper.Memory.ProviderToCopy;
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Memory.SafeManualScaling);
 
@@ -64,7 +64,7 @@ namespace SharpCrop.Forms
         {
             try
             {
-                ConfigHelper.Memory.VideoFPS = int.Parse(videoFpsBox.Text);
+                ConfigHelper.Memory.VideoFps = int.Parse(videoFpsBox.Text);
             }
             catch
             {
@@ -93,14 +93,14 @@ namespace SharpCrop.Forms
             {
                 var list = manualScallingBox.Text
                     .Split(' ')
-                    .Select(s => int.Parse(s))
+                    .Select(int.Parse)
                     .ToList();
 
                 ConfigHelper.Memory.ManualScaling = list;
             }
             catch
             {
-                return;
+                // Ignored
             }
         }
 
@@ -145,7 +145,7 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Disable on enable transparency.
+        /// Disable or enable transparency.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -155,7 +155,7 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// 
+        /// Disable or enable mpeq recording.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -165,11 +165,11 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Unlink application from provider.
+        /// Reset application settings.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void UnlinkClicked(object sender, EventArgs e)
+        private void ResetClicked(object sender, EventArgs e)
         {
             ConfigHelper.Reset();
             Application.Exit();

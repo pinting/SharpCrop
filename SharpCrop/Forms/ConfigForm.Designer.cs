@@ -195,7 +195,7 @@
             this.unlinkButton.TabIndex = 3;
             this.unlinkButton.Text = "Reset";
             this.unlinkButton.UseVisualStyleBackColor = true;
-            this.unlinkButton.Click += new System.EventHandler(this.UnlinkClicked);
+            this.unlinkButton.Click += new System.EventHandler(this.ResetClicked);
             // 
             // removeProviderBox
             // 

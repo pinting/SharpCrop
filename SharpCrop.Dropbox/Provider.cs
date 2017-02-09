@@ -41,6 +41,7 @@ namespace SharpCrop.Dropbox
         /// Get a token from Dropbox.
         /// </summary>
         /// <param name="savedState"></param>
+        /// <param name="showForm"></param>
         public async Task<string> Register(string savedState, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
@@ -52,14 +53,14 @@ namespace SharpCrop.Dropbox
                 return await result.Task;
             }
 
-            // If the saved token was not usable and showForm is false, return failure
+            // If the saved token was not usable and showForm is false, return with failure
             if (!showForm)
             {
                 result.SetResult(null);
                 return await result.Task;
             }
 
-            // If it is not, try to get another one
+            // If it is not, try to get a new one
             var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Code, Obscure.Decode(Constants.AppKey), (string)null);
             var form = new CodeForm(url.ToString(), 43);
             var success = false;
@@ -81,7 +82,7 @@ namespace SharpCrop.Dropbox
                 }
             });
 
-            form.FormClosed += (sender, e) =>
+            form.FormClosed += (sender, args) =>
             {
                 if (!success)
                 {

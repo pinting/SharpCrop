@@ -14,18 +14,47 @@ namespace SharpCrop.FTP
     {
         private LoginCreds creds;
 
-        public Task<string> Register(string oldCreds, bool showForm = true)
+        /// <summary>
+        /// Check if creds are valid.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private bool IsValid(LoginCreds c)
+        {
+            if (string.IsNullOrEmpty(c.Username) || string.IsNullOrEmpty(c.Password) || string.IsNullOrEmpty(c.RemotePath) || string.IsNullOrEmpty(c.CopyPath))
+            {
+                return false;
+            }
+
+            Uri url;
+
+            if (!Uri.TryCreate(c.RemotePath, UriKind.Absolute, out url) || !Uri.TryCreate(c.CopyPath, UriKind.Absolute, out url))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Register an FTP connection - or try to restore one from the past.
+        /// </summary>
+        /// <param name="savedState"></param>
+        /// <param name="showForm"></param>
+        /// <returns></returns>
+        public Task<string> Register(string savedState, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
             // Try to use the old credentials
-            if (!string.IsNullOrEmpty(oldCreds))
+            if (!string.IsNullOrEmpty(savedState))
             {
-                creds = JsonConvert.DeserializeObject<LoginCreds>(Obscure.Base64Decode(oldCreds));
+                var oldCreds = JsonConvert.DeserializeObject<LoginCreds>(Obscure.Base64Decode(savedState));
 
-                if(!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password) && !string.IsNullOrEmpty(creds.RemotePath) && !string.IsNullOrEmpty(creds.CopyPath))
+                if(IsValid(oldCreds))
                 {
-                    result.SetResult(oldCreds);
+                    result.SetResult(savedState);
+                    creds = oldCreds;
 
                     return result.Task;
                 }
@@ -42,12 +71,12 @@ namespace SharpCrop.FTP
             var form = new LoginForm();
             var success = false;
 
-            form.OnResult(creds =>
+            form.OnResult(newCreds =>
             {
-                this.creds = creds;
+                creds = newCreds;
                 success = true;
 
-                result.SetResult(Obscure.Base64Encode(JsonConvert.SerializeObject(creds)));
+                result.SetResult(Obscure.Base64Encode(JsonConvert.SerializeObject(newCreds)));
                 form.Close();
             });
 
@@ -63,16 +92,29 @@ namespace SharpCrop.FTP
 
             return result.Task;
         }
-        
+
+        /// <summary>
+        /// Upload the given memory stream with the attached filename.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public Task<string> Upload(string name, MemoryStream stream)
         {
-            // This is needed, it will not work otherwise - I do not know why
-            using (var newStream = new MemoryStream(stream.ToArray()))
+            try
             {
-                FTPUploader.Upload(newStream, $"{creds.RemotePath}/{name}", creds.Username, creds.Password);
-            }
+                // This is needed, it will not work otherwise - I do not know why
+                using (var newStream = new MemoryStream(stream.ToArray()))
+                {
+                    FtpUploader.Upload(newStream, $"{creds.RemotePath}/{name}", creds.Username, creds.Password);
+                }
 
-            return Task.FromResult($"{creds.CopyPath}{name}");
+                return Task.FromResult($"{creds.CopyPath}{name}");
+            }
+            catch
+            {
+                return Task.FromResult((string)null);
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ namespace SharpCrop.LocalFile
         /// Register a path which will be saved as a "token" for this provider.
         /// </summary>
         /// <param name="oldPath"></param>
+        /// <param name="showForm"></param>
         /// <returns></returns>
         public Task<string> Register(string oldPath, bool showForm = true)
         {

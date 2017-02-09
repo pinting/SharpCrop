@@ -43,6 +43,7 @@ namespace SharpCrop.OneDrive
         /// Get an AccessToken from OneDrive.
         /// </summary>
         /// <param name="savedState">Previous serialized TokenResponse from OneDrive.</param>
+        /// <param name="showForm"></param>
         /// <returns></returns>
         public async Task<string> Register(string savedState, bool showForm = true)
         {

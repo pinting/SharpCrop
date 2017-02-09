@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,8 +60,8 @@
     </Compile>
     <Compile Include="Models\LoginCreds.cs" />
     <Compile Include="Provider.cs" />
-    <Compile Include="Models\FTPState.cs" />
-    <Compile Include="Utils\FTPUploader.cs" />
+    <Compile Include="Models\FtpState.cs" />
+    <Compile Include="Utils\FtpUploader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

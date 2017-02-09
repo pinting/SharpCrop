@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace SharpCrop.Models
 {
@@ -16,7 +17,7 @@ namespace SharpCrop.Models
         public List<int> ManualScaling { get; set; }
 
         [JsonProperty]
-        public int VideoFPS { get; set; }
+        public int VideoFps { get; set; }
 
         [JsonProperty]
         public string ProviderToCopy { get; set; }
@@ -45,13 +46,16 @@ namespace SharpCrop.Models
         #region Validators
 
         [JsonIgnore]
-        public ImageFormat ImageFormatType
-        {
-            get
-            {
-                return Constants.AvailableImageFormats[SafeImageFormat];
-            }
-        }
+        public ImageFormat ImageFormatType => Constants.AvailableImageFormats[SafeImageFormat];
+
+        [JsonIgnore]
+        public int SafeVideoFps => VideoFps > 0 && VideoFps <= Constants.MaxFps ? VideoFps : Constants.MaxFps;
+
+        [JsonIgnore]
+        public List<int> SafeManualScaling => ManualScaling ?? (ManualScaling = new List<int>());
+
+        [JsonIgnore]
+        public Dictionary<string, string> SafeProviders => Providers ?? (Providers = new Dictionary<string, string>());
 
         [JsonIgnore]
         public string SafeImageFormat
@@ -62,47 +66,8 @@ namespace SharpCrop.Models
                 {
                     return ImageFormat;
                 }
-                else
-                {
-                    return Constants.DefaultImageFormat;
-                }
-            }
-        }
 
-        [JsonIgnore]
-        public int SafeVideoFPS
-        {
-            get
-            {
-                return VideoFPS > 0 && VideoFPS <= Constants.MaxFPS ? VideoFPS : Constants.MaxFPS;
-            }
-        }
-
-        [JsonIgnore]
-        public List<int> SafeManualScaling
-        {
-            get
-            {
-                if(ManualScaling == null)
-                {
-                    ManualScaling = new List<int>();
-                }
-
-                return ManualScaling;
-            }
-        }
-
-        [JsonIgnore]
-        public Dictionary<string, string> SafeProviders
-        {
-            get
-            {
-                if (Providers == null)
-                {
-                    Providers = new Dictionary<string, string>();
-                }
-
-                return Providers;
+                return Constants.AvailableImageFormats.Keys.First();
             }
         }
 

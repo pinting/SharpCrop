@@ -31,9 +31,10 @@ namespace SharpCrop.Utils
         /// Start capturing frames with CaptureHelper.
         /// </summary>
         /// <param name="rectangle"></param>
+        /// <param name="offset"></param>
         private static void CaptureFrames(Rectangle rectangle, Point offset)
         {
-            var freq = (1000 / ConfigHelper.Memory.SafeVideoFPS);
+            var freq = (1000 / ConfigHelper.Memory.SafeVideoFps);
             var wait = 0;
 
             while (running)
@@ -163,7 +164,7 @@ namespace SharpCrop.Utils
 
         /// <summary>
         /// Record Mpeg using FFmpeg. Sadly pipes are not seekable, so we have to use the file system as a destination
-        /// for the output and read it back MemoryStream.
+        /// for the output and read it back MemoryStream. This is extremely bad for solid states drives.
         /// </summary>
         private static void EncodeMpeg()
         {
@@ -175,7 +176,7 @@ namespace SharpCrop.Utils
                 using (var ffmpeg = new Process())
                 {
                     ffmpeg.StartInfo.FileName = "ffmpeg";
-                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Memory.SafeVideoFPS} -an -y -f mp4 {temp}";
+                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Memory.SafeVideoFps} -an -y -f mp4 {temp}";
                     ffmpeg.StartInfo.RedirectStandardInput = true;
                     ffmpeg.StartInfo.UseShellExecute = false;
                     ffmpeg.StartInfo.CreateNoWindow = true;
@@ -201,7 +202,7 @@ namespace SharpCrop.Utils
                     ffmpeg.WaitForExit();
                 }
 
-                // TODO: Experiment with something
+                // TODO: Experiment with something (RAMDisk?)
                 using (var file = new FileStream(temp, FileMode.Open))
                 {
                     var buffer = new byte[512];
@@ -231,9 +232,11 @@ namespace SharpCrop.Utils
         }
 
         /// <summary>
-        /// Start a recording the given encoder.
+        /// Start a recording with the given encoder.
         /// </summary>
         /// <param name="region"></param>
+        /// <param name="offset"></param>
+        /// <param name="encoder"></param>
         /// <returns></returns>
         private static Task<MemoryStream> Record(Rectangle region, Point offset, Action encoder)
         {
