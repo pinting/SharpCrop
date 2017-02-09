@@ -135,7 +135,7 @@ namespace SharpCrop
         /// <returns>Return a Provider state (usually json in base64), if the was an error, the result will be null.</returns>
         private async Task<IProvider> GetProvider(string name, string savedState = null, bool showForm = true)
         {
-            if(!Constants.AvailableProviders.ContainsKey(name))
+            if (!Constants.AvailableProviders.ContainsKey(name))
             {
                 return null;
             }
@@ -156,7 +156,7 @@ namespace SharpCrop
                 ConfigHelper.Memory.SafeProviders[name] = state;
                 ToastFactory.Create($"Successfully registered \"{name}\" provider!");
             }
-            
+
             return provider;
         }
 
@@ -184,9 +184,8 @@ namespace SharpCrop
             {
                 url = await p.Value;
 
-                if(string.IsNullOrEmpty(url))
+                if (string.IsNullOrEmpty(url))
                 {
-                    ClearProvider(p.Key);
                     ToastFactory.Create($"Upload failed using \"{p.Key}\" provider!");
                 }
 
@@ -232,7 +231,7 @@ namespace SharpCrop
             var toast = -1;
 
             // Create a new toast which closing event gonna stop the recording
-            toast = ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () => 
+            toast = ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () =>
             {
                 toast = ToastFactory.Create("Encoding...", 0);
                 VideoFactory.Stop();
@@ -247,10 +246,10 @@ namespace SharpCrop
             {
                 stream = await VideoFactory.RecordGif(region, offset);
             }
-            
+
             ToastFactory.Remove(toast);
-            
-            toast = ToastFactory.Create($"Uploading... ({(double) stream.Length/(1024*1024):0.00} MB)", 0);
+
+            toast = ToastFactory.Create($"Uploading... ({(double)stream.Length / (1024 * 1024):0.00} MB)", 0);
 
             var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}";
             var url = await UploadAll(name, stream);

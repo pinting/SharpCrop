@@ -1,4 +1,6 @@
-﻿namespace SharpCrop.FTP.Models
+﻿using System;
+
+namespace SharpCrop.FTP.Models
 {
     /// <summary>
     /// LoginCreds represent state (savedState) in the upper layers of the application. This is where
@@ -8,7 +10,7 @@
     {
         public string Username;
         public string Password;
-        public string RemotePath;
-        public string CopyPath;
+        public Uri RemotePath;
+        public Uri CopyPath;
     }
 }

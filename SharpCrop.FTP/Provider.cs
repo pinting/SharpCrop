@@ -21,19 +21,7 @@ namespace SharpCrop.FTP
         /// <returns></returns>
         private bool IsValid(LoginCreds c)
         {
-            if (string.IsNullOrEmpty(c.Username) || string.IsNullOrEmpty(c.Password) || string.IsNullOrEmpty(c.RemotePath) || string.IsNullOrEmpty(c.CopyPath))
-            {
-                return false;
-            }
-
-            Uri url;
-
-            if (!Uri.TryCreate(c.RemotePath, UriKind.Absolute, out url) || !Uri.TryCreate(c.CopyPath, UriKind.Absolute, out url))
-            {
-                return false;
-            }
-
-            return true;
+            return !string.IsNullOrEmpty(c.Username) && !string.IsNullOrEmpty(c.Password) && !string.IsNullOrEmpty(c.RemotePath.ToString()) && !string.IsNullOrEmpty(c.CopyPath.ToString());
         }
 
         /// <summary>
@@ -103,13 +91,16 @@ namespace SharpCrop.FTP
         {
             try
             {
+                var remote = new Uri(creds.RemotePath, name);
+                var copy = new Uri(creds.CopyPath, name);
+
                 // This is needed, it will not work otherwise - I do not know why
                 using (var newStream = new MemoryStream(stream.ToArray()))
                 {
-                    FtpUploader.Upload(newStream, $"{creds.RemotePath}/{name}", creds.Username, creds.Password);
+                    FtpUploader.Upload(newStream, remote, creds.Username, creds.Password);
                 }
 
-                return Task.FromResult($"{creds.CopyPath}{name}");
+                return Task.FromResult(copy.ToString());
             }
             catch
             {

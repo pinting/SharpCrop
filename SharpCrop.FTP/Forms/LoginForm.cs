@@ -35,13 +35,20 @@ namespace SharpCrop.FTP.Forms
         /// <param name="e"></param>
         private void OnLogin(object sender, EventArgs e)
         {
-            onResult(new LoginCreds()
+            try
             {
-                Username = usernameBox.Text,
-                Password = passwordBox.Text,
-                RemotePath = remotePathBox.Text,
-                CopyPath = copyPathBox.Text
-            });
+                onResult?.Invoke(new LoginCreds()
+                {
+                    Username = usernameBox.Text,
+                    Password = passwordBox.Text,
+                    RemotePath = new Uri(remotePathBox.Text),
+                    CopyPath = new Uri(copyPathBox.Text)
+                });
+            }
+            catch
+            {
+                // Ignored
+            }
         }
     }
 }
