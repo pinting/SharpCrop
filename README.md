@@ -15,4 +15,4 @@ Anyone can help make this project better.
 
 ## License
 
-Copyright (c) 2016 Tornyi Dénes. Licensed under the MIT license.
+Copyright (c) 2017 Tornyi Dénes. Licensed under the MIT license.
