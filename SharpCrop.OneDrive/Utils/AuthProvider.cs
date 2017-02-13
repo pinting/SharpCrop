@@ -37,7 +37,7 @@ namespace SharpCrop.OneDrive.Utils
         /// <param name="code"></param>
         public void ProcessCode(string code)
         {
-            // The redirect_uri redirects the user to the project Github Page where the OneDrive.html
+            // The redirect_uri redirects the user to the Github Page of the project where the OneDrive.html
             // writes the API code to the document.body from the URL. This is needed, because OneDrive
             // does not support a token request without a callback URL - like Google Drive and Dropbox.
             var request = WebRequest.Create("https://login.live.com/oauth20_token.srf");

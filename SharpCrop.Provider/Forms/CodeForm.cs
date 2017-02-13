@@ -13,10 +13,10 @@ namespace SharpCrop.Provider.Forms
         private readonly int length;
 
         /// <summary>
-        /// Construct a new CodePaste form with an URL.
+        /// Construct a new CodePaste form with an URL and a required code length.
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="length"></param>
+        /// <param name="length">Required length of the activation code.</param>
         public CodeForm(string url = "", int length = 128)
         {
             InitializeComponent();
@@ -26,7 +26,7 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// Register for callback.
+        /// Register a callback function.
         /// </summary>
         /// <param name="callback"></param>
         public void OnResult(Action<string> callback)
@@ -35,7 +35,7 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// Call callback when the code is copied.
+        /// Call the registered callback when the required code length was reached.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -48,7 +48,7 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// Open browser when the link was clicked.
+        /// Open the browser when the link was clicked.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

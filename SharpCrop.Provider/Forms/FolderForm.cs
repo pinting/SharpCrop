@@ -11,7 +11,7 @@ namespace SharpCrop.Provider.Forms
         private Action<string> onResult;
 
         /// <summary>
-        /// Simple folder chooser form.
+        /// Init form.
         /// </summary>
         public FolderForm()
         {
@@ -19,7 +19,7 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// Register for callback.
+        /// Register a function as the callback.
         /// </summary>
         /// <param name="callback"></param>
         public void OnResult(Action<string> callback)
@@ -41,7 +41,7 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// Call callback with the result.
+        /// Call the callback with the result.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
