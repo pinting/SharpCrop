@@ -6,49 +6,48 @@ using SharpCrop.Provider.Forms;
 namespace SharpCrop.LocalFile
 {
     /// <summary>
-    /// This is another IProvider implemantation which writes the output to
-    /// the local disk with File.IO.
+    /// An IProvider implemantation which writes the output to the local disk with File.IO.
     /// </summary>
     public class Provider : IProvider
     {
-        private string path;
+        private string state;
 
         /// <summary>
-        /// Register a path which will be saved as a "token" for this provider.
+        /// Register a path which will be saved as the state of this provider.
         /// </summary>
-        /// <param name="oldPath"></param>
+        /// <param name="savedState"></param>
         /// <param name="showForm"></param>
         /// <returns></returns>
-        public Task<string> Register(string oldPath, bool showForm = true)
+        public Task<string> Register(string savedState, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
-            // Check if given oldPath is still exists - if it is, use it
-            if (oldPath != null && Directory.Exists(oldPath))
+            // Check if the saved path (state) is still exists - if it is, use it
+            if (savedState != null && Directory.Exists(savedState))
             {
-                path = oldPath;
+                state = savedState;
 
-                result.SetResult(oldPath);
+                result.SetResult(savedState);
                 return result.Task;
             }
 
-            // If the saved token was not usable and showForm is false, return failure
+            // If the saved state was not usable and showForm is false, return with failure
             if (!showForm)
             {
                 result.SetResult(null);
                 return result.Task;
             }
 
-            // Get a newPath with FolderForm
+            // Get a new path with FolderForm
             var form = new FolderForm();
             var success = false;
 
-            form.OnResult(newPath =>
+            form.OnResult(path =>
             {
                 success = true;
-                path = newPath;
+                state = path;
 
-                result.SetResult(newPath);
+                result.SetResult(path);
                 form.Close();
             });
 
@@ -73,7 +72,7 @@ namespace SharpCrop.LocalFile
         /// <returns></returns>
         public Task<string> Upload(string name, MemoryStream stream)
         {
-            var url = Path.Combine(path, name);
+            var url = Path.Combine(state, name);
 
             File.WriteAllBytes(url, stream.ToArray());
 

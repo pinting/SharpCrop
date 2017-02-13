@@ -5,9 +5,6 @@ using System.Threading;
 
 namespace SharpCrop.FTP.Models
 {
-    /// <summary>
-    /// Helper model for FtpUploader.
-    /// </summary>
     public class FtpState
     {
         public FtpState()

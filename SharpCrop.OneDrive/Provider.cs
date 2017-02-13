@@ -40,7 +40,7 @@ namespace SharpCrop.OneDrive
         }
 
         /// <summary>
-        /// Get an AccessToken from OneDrive.
+        /// Get an access token from OneDrive - or try to use an existing one.
         /// </summary>
         /// <param name="savedState">Previous serialized TokenResponse from OneDrive.</param>
         /// <param name="showForm"></param>
@@ -62,7 +62,7 @@ namespace SharpCrop.OneDrive
                 }
             }
 
-            // If the saved token was not usable and showForm is false, return failure
+            // If the saved token was not usable and showForm is false, return with failure
             if(!showForm)
             {
                 result.SetResult(null);
@@ -109,7 +109,7 @@ namespace SharpCrop.OneDrive
         /// </summary>
         /// <param name="name"></param>
         /// <param name="stream"></param>
-        /// <returns></returns>
+        /// <returns>Shared link.</returns>
         public async Task<string> Upload(string name, MemoryStream stream)
         {
             await client.Drive.Special.AppRoot.Request().GetAsync();

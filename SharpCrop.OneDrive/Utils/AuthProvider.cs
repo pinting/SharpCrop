@@ -27,7 +27,7 @@ namespace SharpCrop.OneDrive.Utils
         /// </summary>
         public string Url => string.Format(
             "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope={1}&response_type=code&redirect_uri={2}",
-            Obscure.Decode(Constants.AppKey),
+            Obscure.CaesarDecode(Constants.AppKey),
             string.Join("+", Constants.Scopes),
             Constants.RedirectUrl);
 
@@ -43,8 +43,8 @@ namespace SharpCrop.OneDrive.Utils
             var request = WebRequest.Create("https://login.live.com/oauth20_token.srf");
             var array = Encoding.UTF8.GetBytes(string.Format(
                 "client_id={0}&client_secret={1}&redirect_uri={2}&code={3}&grant_type=authorization_code",
-                Obscure.Decode(Constants.AppKey),
-                Obscure.Decode(Constants.AppSecret),
+                Obscure.CaesarDecode(Constants.AppKey),
+                Obscure.CaesarDecode(Constants.AppSecret),
                 Constants.RedirectUrl,
                 code));
 

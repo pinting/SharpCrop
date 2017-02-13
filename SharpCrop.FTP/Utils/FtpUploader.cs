@@ -45,11 +45,7 @@ namespace SharpCrop.FTP.Utils
                 throw state.OperationException;
             }
         }
-
-        /// <summary>
-        /// Actual uploading.
-        /// </summary>
-        /// <param name="ar"></param>
+        
         private static void EndGetStreamCallback(IAsyncResult ar)
         {
             var state = (FtpState)ar.AsyncState;

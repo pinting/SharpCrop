@@ -12,50 +12,41 @@ namespace SharpCrop.FTP
 {
     public class Provider : IProvider
     {
-        private LoginCreds creds;
-
+        private LoginCredentials creds;
+        
         /// <summary>
-        /// Check if creds are valid.
+        /// Register an FTP connection from saved or new credentials.
         /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        private bool IsValid(LoginCreds c)
-        {
-            return !string.IsNullOrEmpty(c.Username) && !string.IsNullOrEmpty(c.Password) && !string.IsNullOrEmpty(c.RemotePath.ToString()) && !string.IsNullOrEmpty(c.CopyPath.ToString());
-        }
-
-        /// <summary>
-        /// Register an FTP connection - or try to restore one from the past.
-        /// </summary>
-        /// <param name="savedState"></param>
-        /// <param name="showForm"></param>
+        /// <param name="savedState">The login informations of the FTP.</param>
+        /// <param name="showForm">Show the registration form, if the saved state did not work.</param>
         /// <returns></returns>
         public Task<string> Register(string savedState, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
             // Try to use the old credentials
-            if (!string.IsNullOrEmpty(savedState))
+            try
             {
-                var oldCreds = JsonConvert.DeserializeObject<LoginCreds>(Obscure.Base64Decode(savedState));
+                var oldCreds = JsonConvert.DeserializeObject<LoginCredentials>(Obscure.Base64Decode(savedState));
 
-                if(IsValid(oldCreds))
-                {
-                    result.SetResult(savedState);
-                    creds = oldCreds;
+                result.SetResult(savedState);
+                creds = oldCreds;
 
-                    return result.Task;
-                }
+                return result.Task;
+            }
+            catch
+            {
+                // Ignored
             }
 
-            // If the saved creds were not usable and showForm is false, return failure
+            // If the saved creds were not usable and showForm is false, return with failure
             if (!showForm)
             {
                 result.SetResult(null);
                 return result.Task;
             }
 
-            // If it fails, try to get new ones
+            // If the old ones failed, try to get new ones
             var form = new LoginForm();
             var success = false;
 
@@ -82,7 +73,8 @@ namespace SharpCrop.FTP
         }
 
         /// <summary>
-        /// Upload the given memory stream with the attached filename.
+        /// Upload the given memory stream with the attached filename to the FTP server and return
+        /// a link with the registered CopyPath prefix.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="stream"></param>

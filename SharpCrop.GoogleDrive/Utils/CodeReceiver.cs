@@ -12,19 +12,25 @@ namespace SharpCrop.GoogleDrive.Utils
     /// </summary>
     public class CodeReceiver : ICodeReceiver
     {
-        public string RedirectUri => GoogleAuthConsts.InstalledAppRedirectUri;
-
-        /// <summary>
-        /// Waiting for a Google API code.
-        /// </summary>
-        /// <param name="authUrl"></param>
-        /// <param name="taskCancellationToken"></param>
-        /// <returns></returns>
+        private bool showForm;
+        private bool executed;
+        
+        public CodeReceiver(bool showForm = true)
+        {
+            this.showForm = showForm;
+        }
+        
         public Task<AuthorizationCodeResponseUrl> ReceiveCodeAsync(AuthorizationCodeRequestUrl authUrl, CancellationToken taskCancellationToken)
         {
             var result = new TaskCompletionSource<AuthorizationCodeResponseUrl>();
-            var url = authUrl.Build().ToString();
+            
+            if (showForm == false)
+            {
+                result.SetResult(null);
+                return result.Task;
+            }
 
+            var url = authUrl.Build().ToString();
             var form = new CodeForm(url, 45);
             var success = false;
 
@@ -47,7 +53,17 @@ namespace SharpCrop.GoogleDrive.Utils
             System.Diagnostics.Process.Start(url);
             form.Show();
 
+            executed = true;
+
             return result.Task;
         }
+
+        /// <summary>
+        /// Return true if the CodeReceiver was used to get a new access token.
+        /// </summary>
+        public bool Executed => executed;
+
+        public string RedirectUri => GoogleAuthConsts.InstalledAppRedirectUri;
+
     }
 }

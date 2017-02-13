@@ -17,12 +17,13 @@ namespace SharpCrop.GoogleDrive
     public class Provider : IProvider
     {
         private DriveService service;
+        private MemoryStore state;
 
         /// <summary>
-        /// Get an access token from Google Drive.
+        /// Get a working Provider for Google Drive.
         /// </summary>
-        /// <param name="savedState">Serialized TokenResponse from Google Api.</param>
-        /// <param name="showForm"></param>
+        /// <param name="savedState">Serialized TokenResponse from the Google Api (and folderId).</param>
+        /// <param name="showForm">Show registration form, if the saved state did not work.</param>
         /// <returns></returns>
         public async Task<string> Register(string savedState, bool showForm = true)
         {
@@ -30,20 +31,32 @@ namespace SharpCrop.GoogleDrive
 
             try
             {
-                // Try to use the previously saved TokenResponse
-                var receiver = new CodeReceiver();
-                var store = new MemoryStore(Obscure.Base64Decode(savedState));
-                var secret = new ClientSecrets() { ClientId = Obscure.Decode(Constants.AppKey), ClientSecret = Obscure.Decode(Constants.AppSecret) };
-                var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Constants.Scopes, "token", CancellationToken.None, store, receiver);
+                state = new MemoryStore(Obscure.Base64Decode(savedState));
+
+                // Try to use the previously saved TokenResponse and if it fails, show the registration form (if the showForm parameter allows it)
+                var secret = new ClientSecrets() { ClientId = Obscure.CaesarDecode(Constants.AppKey), ClientSecret = Obscure.CaesarDecode(Constants.AppSecret) };
+                var receiver = new CodeReceiver(showForm);
+
+                var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Constants.Scopes, "token", CancellationToken.None, state, receiver);
 
                 service = new DriveService(new BaseClientService.Initializer()
                 {
-                    HttpClientInitializer = credential,
+                    HttpClientInitializer = credentials,
                     ApplicationName = "SharpCrop",
                 });
+                
+                // Try to use the saved application folder or get a new one
+                // If the access token was expired or corrupted, it is safer to get the folder id again
+                if(receiver.Executed || await state.GetAsync<string>("folderId") == null)
+                {
+                    var folder = await GetFolder();
+
+                    await state.DeleteAsync<string>("folderId");
+                    await state.StoreAsync("folderId", folder?.Id);
+                }
 
                 // Export the serialized TokenResponse which gonna be saved into the config
-                result.SetResult(Obscure.Base64Encode(store.Export()));
+                result.SetResult(Obscure.Base64Encode(state.Export()));
             }
             catch
             {
@@ -54,37 +67,15 @@ namespace SharpCrop.GoogleDrive
         }
 
         /// <summary>
-        /// Upload a stream with the given name to Google Drive.
+        /// Upload a stream with the given name to Google Drive, share it and return its link.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
         public async Task<string> Upload(string name, System.IO.MemoryStream stream)
         {
-            var folderBody = new File() { Name = Constants.FolderName, Description = Constants.FolderDescription, MimeType = "application/vnd.google-apps.folder" };
-            var listRequest = service.Files.List();
-
-            File folder;
-
-            listRequest.Q = $"name = '{folderBody.Name}' and fullText contains '{folderBody.Description}' and mimeType = '{folderBody.MimeType}' and trashed = false";
-            listRequest.Spaces = "drive";
-            listRequest.Fields = "files(id)";
-
-            var result = listRequest.Execute();
-
-            if (result.Files.Count > 0)
-            {
-                folder = result.Files[0];
-            }
-            else
-            {
-                var createRequest = service.Files.Create(folderBody);
-
-                createRequest.Fields = "id";
-                folder = await createRequest.ExecuteAsync();
-            }
-
-            var uploadBody = new File() { Name = name,  Parents = new List<string> { folder.Id } };
+            var folderId = await state.GetAsync<string>("folderId");
+            var uploadBody = new File() { Name = name,  Parents = new List<string> { folderId } };
             var uploadType = $"image/{MimeLookup.Find(System.IO.Path.GetExtension(name))}";
             var uploadRequest = service.Files.Create(uploadBody, stream, uploadType);
 
@@ -95,6 +86,40 @@ namespace SharpCrop.GoogleDrive
             await uploadPermission.ExecuteAsync();
 
             return $"https://drive.google.com/open?id={uploadRequest.ResponseBody.Id}";
+        }
+
+        /// <summary>
+        /// Get the application folder from Google Drive.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<File> GetFolder()
+        {
+            // Use a random generated number as a description to always find the folder
+            var folderBody = new File()
+            {
+                Name = Constants.FolderName,
+                Description = Constants.FolderDescription,
+                MimeType = "application/vnd.google-apps.folder"
+            };
+
+            var listRequest = service.Files.List();
+
+            listRequest.Q = $"name = '{folderBody.Name}' and fullText contains '{folderBody.Description}' and mimeType = '{folderBody.MimeType}' and trashed = false";
+            listRequest.Spaces = "drive";
+            listRequest.Fields = "files(id)";
+
+            var result = listRequest.Execute();
+
+            if (result.Files.Count > 0)
+            {
+                return result.Files[0];
+            }
+
+            var createRequest = service.Files.Create(folderBody);
+
+            createRequest.Fields = "id";
+
+            return await createRequest.ExecuteAsync();
         }
     }
 }

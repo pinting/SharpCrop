@@ -4,8 +4,6 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-// ReSharper disable FunctionNeverReturns
-
 namespace SharpCrop.Provider.Utils
 {
     /// <summary>

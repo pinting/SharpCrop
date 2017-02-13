@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SharpCrop.Provider.Utils
 {
     /// <summary>
-    /// MIME type lookup class. Copied from Stackoverflow.
+    /// MIME type lookup class. Copied from Stack Overflow.
     /// </summary>
     public static class MimeLookup
     {

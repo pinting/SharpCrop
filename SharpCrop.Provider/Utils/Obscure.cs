@@ -4,7 +4,7 @@ using System.Text;
 namespace SharpCrop.Provider.Utils
 {
     /// <summary>
-    /// Simple algorithm to hide API keys and secrets from bots.
+    /// Simple algorithms to hide API keys and secrets from bots.
     /// Yep, I am paranoid!
     /// </summary>
     public static class Obscure
@@ -15,7 +15,7 @@ namespace SharpCrop.Provider.Utils
         /// <param name="bytes"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        private static byte[] Code(byte[] bytes, int prefix)
+        private static byte[] CaesarCode(byte[] bytes, int prefix)
         {
             for (var i = 0; i < bytes.Length; i++)
             {
@@ -30,14 +30,14 @@ namespace SharpCrop.Provider.Utils
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static string Encode(string key)
+        public static string CaesarEncode(string key)
         {
             if (key == null)
             {
                 return null;
             }
 
-            var bytes = Code(Encoding.UTF8.GetBytes(key), 1);
+            var bytes = CaesarCode(Encoding.UTF8.GetBytes(key), 1);
 
             return Convert.ToBase64String(bytes);
         }
@@ -47,14 +47,14 @@ namespace SharpCrop.Provider.Utils
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static string Decode(string key)
+        public static string CaesarDecode(string key)
         {
             if(key == null)
             {
                 return null;
             }
 
-            var bytes = Code(Convert.FromBase64String(key), -1);
+            var bytes = CaesarCode(Convert.FromBase64String(key), -1);
 
             return Encoding.UTF8.GetString(bytes);
         }

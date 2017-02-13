@@ -5,11 +5,11 @@ using System.Windows.Forms;
 namespace SharpCrop.FTP.Forms
 {
     /// <summary>
-    /// LoginForm is responsible for FTP login.
+    /// LoginForm is responsible for getting new FTP credentials.
     /// </summary>
     public partial class LoginForm : Form
     {
-        private Action<LoginCreds> onResult;
+        private Action<LoginCredentials> onResult;
 
         /// <summary>
         /// Consturct a new LoginForm.
@@ -23,7 +23,7 @@ namespace SharpCrop.FTP.Forms
         /// Register for callback.
         /// </summary>
         /// <param name="callback"></param>
-        public void OnResult(Action<LoginCreds> callback)
+        public void OnResult(Action<LoginCredentials> callback)
         {
             onResult = callback;
         }
@@ -37,7 +37,7 @@ namespace SharpCrop.FTP.Forms
         {
             try
             {
-                onResult?.Invoke(new LoginCreds()
+                onResult?.Invoke(new LoginCredentials()
                 {
                     Username = usernameBox.Text,
                     Password = passwordBox.Text,
@@ -47,7 +47,7 @@ namespace SharpCrop.FTP.Forms
             }
             catch
             {
-                // Ignored
+                // Ignored, because it will be a UriFormatException or a ArgumentNullException
             }
         }
     }

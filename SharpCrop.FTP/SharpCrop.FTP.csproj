@@ -58,7 +58,7 @@
     <Compile Include="Forms\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\LoginCreds.cs" />
+    <Compile Include="Models\LoginCredentials.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Models\FtpState.cs" />
     <Compile Include="Utils\FtpUploader.cs" />
