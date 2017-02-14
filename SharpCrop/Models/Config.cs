@@ -41,6 +41,9 @@ namespace SharpCrop.Models
         public bool EnableMpeg { get; set; }
 
         [JsonProperty]
+        public bool LoadOnStartup { get; set; }
+
+        [JsonProperty]
         public Dictionary<string, string> Providers { get; set; }
 
         #region Validators

@@ -39,14 +39,6 @@ namespace SharpCrop.Forms
             InitializeComponent();
             RefreshBackground();
             MakeClickable();
-
-            controller.ConfigForm.VisibleChanged += (sender, ev) =>
-            {
-                if(!controller.ConfigForm.Visible)
-                {
-                    ShowAll();
-                }
-            };
         }
 
         /// <summary>
@@ -99,7 +91,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void ShowConfig()
         {
-            HideAll();
+            controller.HideCrop();
             controller.ConfigForm.Show();
         }
         
@@ -147,7 +139,7 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            HideAll();
+            controller.HideCrop();
             Application.DoEvents();
             CaptureHelper.SetManualScaling(index);
 
@@ -238,28 +230,6 @@ namespace SharpCrop.Forms
                 case MouseButtons.Right:
                     draw(Constants.RightColor, region);
                     break;
-            }
-        }
-
-        /// <summary>
-        /// Hide every CropForm - if more than one monitor is used.
-        /// </summary>
-        private void HideAll()
-        {
-            foreach (var form in controller.CropForms)
-            {
-                form.Hide();
-            }
-        }
-
-        /// <summary>
-        /// Show every CropForm.
-        /// </summary>
-        private void ShowAll()
-        {
-            foreach (var form in controller.CropForms)
-            {
-                form.Show();
             }
         }
 

@@ -48,6 +48,7 @@
             this.addProviderLabel = new System.Windows.Forms.Label();
             this.urlToCopyLabel = new System.Windows.Forms.Label();
             this.urlToCopyBox = new System.Windows.Forms.ComboBox();
+            this.loadOnStartup = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // formatBox
@@ -180,18 +181,18 @@
             // addProviderBox
             // 
             this.addProviderBox.FormattingEnabled = true;
-            this.addProviderBox.Location = new System.Drawing.Point(228, 24);
+            this.addProviderBox.Location = new System.Drawing.Point(228, 29);
             this.addProviderBox.Name = "addProviderBox";
-            this.addProviderBox.Size = new System.Drawing.Size(120, 238);
+            this.addProviderBox.Size = new System.Drawing.Size(120, 186);
             this.addProviderBox.TabIndex = 18;
             this.addProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnAddProvider);
             // 
             // unlinkButton
             // 
-            this.unlinkButton.Location = new System.Drawing.Point(7, 238);
+            this.unlinkButton.Location = new System.Drawing.Point(228, 225);
             this.unlinkButton.Margin = new System.Windows.Forms.Padding(2);
             this.unlinkButton.Name = "unlinkButton";
-            this.unlinkButton.Size = new System.Drawing.Size(189, 25);
+            this.unlinkButton.Size = new System.Drawing.Size(271, 25);
             this.unlinkButton.TabIndex = 3;
             this.unlinkButton.Text = "Reset";
             this.unlinkButton.UseVisualStyleBackColor = true;
@@ -200,9 +201,9 @@
             // removeProviderBox
             // 
             this.removeProviderBox.FormattingEnabled = true;
-            this.removeProviderBox.Location = new System.Drawing.Point(379, 24);
+            this.removeProviderBox.Location = new System.Drawing.Point(379, 29);
             this.removeProviderBox.Name = "removeProviderBox";
-            this.removeProviderBox.Size = new System.Drawing.Size(120, 238);
+            this.removeProviderBox.Size = new System.Drawing.Size(120, 186);
             this.removeProviderBox.TabIndex = 19;
             this.removeProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnRemoveProvider);
             // 
@@ -243,11 +244,24 @@
             this.urlToCopyBox.TabIndex = 22;
             this.urlToCopyBox.SelectedIndexChanged += new System.EventHandler(this.UrlToCopyChanged);
             // 
+            // loadOnStartup
+            // 
+            this.loadOnStartup.AutoSize = true;
+            this.loadOnStartup.Location = new System.Drawing.Point(8, 233);
+            this.loadOnStartup.Margin = new System.Windows.Forms.Padding(2);
+            this.loadOnStartup.Name = "loadOnStartup";
+            this.loadOnStartup.Size = new System.Drawing.Size(146, 17);
+            this.loadOnStartup.TabIndex = 24;
+            this.loadOnStartup.Text = "Load providers on startup";
+            this.loadOnStartup.UseVisualStyleBackColor = true;
+            this.loadOnStartup.CheckedChanged += new System.EventHandler(this.OnLoadOnStartup);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 275);
+            this.ClientSize = new System.Drawing.Size(514, 259);
+            this.Controls.Add(this.loadOnStartup);
             this.Controls.Add(this.urlToCopyLabel);
             this.Controls.Add(this.urlToCopyBox);
             this.Controls.Add(this.addProviderLabel);
@@ -299,5 +313,6 @@
         private System.Windows.Forms.Label addProviderLabel;
         private System.Windows.Forms.Label urlToCopyLabel;
         private System.Windows.Forms.ComboBox urlToCopyBox;
+        private System.Windows.Forms.CheckBox loadOnStartup;
     }
 }

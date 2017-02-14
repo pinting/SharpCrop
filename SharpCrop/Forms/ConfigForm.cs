@@ -39,6 +39,7 @@ namespace SharpCrop.Forms
             noFocusCheckBox.Checked = ConfigHelper.Memory.NoFocus;
             noTransparencyCheckBox.Checked = ConfigHelper.Memory.NoTransparency;
             enableMpegCheckbox.Checked = ConfigHelper.Memory.EnableMpeg;
+            loadOnStartup.Checked = ConfigHelper.Memory.LoadOnStartup;
 
 #if __MonoCS__
             noFocusCheckBox.Enabled = false;
@@ -162,6 +163,16 @@ namespace SharpCrop.Forms
         private void EnableMpegChanged(object sender, EventArgs e)
         {
             ConfigHelper.Memory.EnableMpeg = enableMpegCheckbox.Checked;
+        }
+
+        /// <summary>
+        /// Disable or enable the load of the providers on startup.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLoadOnStartup(object sender, EventArgs e)
+        {
+            ConfigHelper.Memory.LoadOnStartup = loadOnStartup.Checked;
         }
 
         /// <summary>
