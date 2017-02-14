@@ -23,6 +23,8 @@ namespace SharpCrop.Forms
 
             // Update add/remove provider list
             UpdateProviderList();
+            addProviderBox.MouseEnter += (s, e) => UpdateProviderList();
+            removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
 
             // Init lists and boxes
             formatBox.Text = ConfigHelper.Memory.SafeImageFormat;
@@ -251,17 +253,6 @@ namespace SharpCrop.Forms
             base.OnShown(e);
 
             Focus();
-        }
-
-        /// <summary>
-        /// Update provider list on activation.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
-
-            UpdateProviderList();
         }
     }
 }

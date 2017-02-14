@@ -27,13 +27,13 @@ namespace SharpCrop
         {
             // Create a new ConfigForm
             configForm = new ConfigForm(this);
-            configForm.Load += async (s, e) => await InitProviders();
             configForm.FormClosed += (s, e) => Application.Exit();
+            configForm.Load += async (s, e) => await InitProviders();
 
+            // If there are any loaded providers, the config will be hidden
+            // Else the config will be closed (along with the whole application)
             configForm.FormClosing += (s, e) =>
             {
-                // If there are any loaded providers, the config will be hidden
-                // Else the config will be closed (along with the whole application)
                 if (e.CloseReason == CloseReason.UserClosing && loadedProviders.Count > 0)
                 {
                     e.Cancel = true;
@@ -41,6 +41,7 @@ namespace SharpCrop
                 }
             };
 
+            // Show crop forms if the config is hidden
             configForm.VisibleChanged += (s, e) =>
             {
                 if (!configForm.Visible)
@@ -56,15 +57,24 @@ namespace SharpCrop
                 var form = new CropForm(this, screen.Bounds, i);
 
                 form.FormClosed += (s, e) => Application.Exit();
-                form.Show(); // Like ShowCrop();
 
                 cropForms.Add(form);
             }
 
+            // If LoadOnStartup is enabled, init providers on the load of the first CropForm
             if(ConfigHelper.Memory.LoadOnStartup)
             {
-                // Whaaaat?
-                (new Action(async () => await InitProviders()))();
+                cropForms[0].Load += async (s, e) => await InitProviders();
+            }
+
+            // Show settings if no providers gonna be loaded
+            if(ConfigHelper.Memory.SafeProviders.Count > 0)
+            {
+                ShowCrop();
+            }
+            else
+            {
+                configForm.Show();
             }
         }
 
