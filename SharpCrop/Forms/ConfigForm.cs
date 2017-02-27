@@ -3,6 +3,8 @@ using System.Linq;
 using System.Windows.Forms;
 using SharpCrop.Utils;
 
+// ReSharper disable CoVariantArrayConversion
+
 namespace SharpCrop.Forms
 {
     /// <summary>
@@ -21,31 +23,32 @@ namespace SharpCrop.Forms
 
             InitializeComponent();
 
-            // Update add/remove provider list
-            UpdateProviderList();
-            addProviderBox.MouseEnter += (s, e) => UpdateProviderList();
-            removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
-
             // Init lists and boxes
-            formatBox.Text = ConfigHelper.Memory.SafeImageFormat;
-            formatBox.Items.AddRange(Constants.AvailableImageFormats.Keys.ToArray());
-            videoFpsBox.Text = ConfigHelper.Memory.SafeVideoFps.ToString();
-            videoFpsBox.Items.AddRange(Constants.AvailableFps.ToArray());
-            urlToCopyBox.Text = ConfigHelper.Memory.ProviderToCopy;
-            manualScallingBox.Text = string.Join(" ", ConfigHelper.Memory.SafeManualScaling);
+            formatBox.Text = ConfigHelper.Current.SafeImageExt;
+            formatBox.Items.AddRange(Constants.ImageFormats.Keys.ToArray());
+            videoFpsBox.Text = ConfigHelper.Current.SafeVideoFps.ToString();
+            videoFpsBox.Items.AddRange(Constants.FpsList.ToArray());
+            urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
+            manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
+            addProviderBox.Items.AddRange(Constants.Providers.Keys.ToArray());
 
-            // Init checkboxes
-            noCopyCheckBox.Checked = ConfigHelper.Memory.NoCopy;
-            noScalingCheckBox.Checked = ConfigHelper.Memory.NoAutoScaling;
-            noGifRepeatCheckBox.Checked = ConfigHelper.Memory.NoGifRepeat;
-            noFocusCheckBox.Checked = ConfigHelper.Memory.NoFocus;
-            noTransparencyCheckBox.Checked = ConfigHelper.Memory.NoTransparency;
-            enableMpegCheckbox.Checked = ConfigHelper.Memory.EnableMpeg;
-            loadOnStartup.Checked = ConfigHelper.Memory.LoadOnStartup;
+            // Init checkboxes from settings
+            noCopyCheckBox.Checked = ConfigHelper.Current.NoCopy;
+            noScalingCheckBox.Checked = ConfigHelper.Current.NoAutoScaling;
+            noGifRepeatCheckBox.Checked = ConfigHelper.Current.NoGifRepeat;
+            noFocusCheckBox.Checked = ConfigHelper.Current.NoFocus;
+            noTransparencyCheckBox.Checked = ConfigHelper.Current.NoTransparency;
+            enableMpegCheckbox.Checked = ConfigHelper.Current.EnableMpeg;
+            loadOnStartup.Checked = ConfigHelper.Current.StartupLoad;
 
 #if __MonoCS__
             noFocusCheckBox.Enabled = false;
 #endif
+
+            // Update provider list and register an update event
+            UpdateProviderList();
+            urlToCopyBox.MouseEnter += (s, e) => UpdateProviderList();
+            removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
         }
         
         /// <summary>
@@ -55,7 +58,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void FormatChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.ImageFormat = formatBox.Text;
+            ConfigHelper.Current.ImageExt = formatBox.Text;
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace SharpCrop.Forms
         {
             try
             {
-                ConfigHelper.Memory.VideoFps = int.Parse(videoFpsBox.Text);
+                ConfigHelper.Current.VideoFps = int.Parse(videoFpsBox.Text);
             }
             catch
             {
@@ -82,7 +85,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void UrlToCopyChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.ProviderToCopy = urlToCopyBox.Text;
+            ConfigHelper.Current.CopyProvider = urlToCopyBox.Text;
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace SharpCrop.Forms
                     .Select(int.Parse)
                     .ToList();
 
-                ConfigHelper.Memory.ManualScaling = list;
+                ConfigHelper.Current.ManualScaling = list;
             }
             catch
             {
@@ -114,7 +117,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void NoScalingChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoAutoScaling = noScalingCheckBox.Checked;
+            ConfigHelper.Current.NoAutoScaling = noScalingCheckBox.Checked;
         }
 
         /// <summary>
@@ -124,7 +127,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void NoCopyChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoCopy = noCopyCheckBox.Checked;
+            ConfigHelper.Current.NoCopy = noCopyCheckBox.Checked;
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void NoGifRepeatChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoGifRepeat = noGifRepeatCheckBox.Checked;
+            ConfigHelper.Current.NoGifRepeat = noGifRepeatCheckBox.Checked;
         }
 
         /// <summary>
@@ -144,7 +147,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void NoFocusChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoFocus = noFocusCheckBox.Checked;
+            ConfigHelper.Current.NoFocus = noFocusCheckBox.Checked;
         }
 
         /// <summary>
@@ -154,7 +157,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void NoTransparencyChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.NoTransparency = noTransparencyCheckBox.Checked;
+            ConfigHelper.Current.NoTransparency = noTransparencyCheckBox.Checked;
         }
 
         /// <summary>
@@ -164,7 +167,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void EnableMpegChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.EnableMpeg = enableMpegCheckbox.Checked;
+            ConfigHelper.Current.EnableMpeg = enableMpegCheckbox.Checked;
         }
 
         /// <summary>
@@ -174,7 +177,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnLoadOnStartup(object sender, EventArgs e)
         {
-            ConfigHelper.Memory.LoadOnStartup = loadOnStartup.Checked;
+            ConfigHelper.Current.StartupLoad = loadOnStartup.Checked;
         }
 
         /// <summary>
@@ -189,26 +192,14 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Update the add/remove provider list the reflect the current state.
+        /// Update the loaded providers lists.
         /// </summary>
         private void UpdateProviderList()
         {
             urlToCopyBox.Items.Clear();
-            addProviderBox.Items.Clear();
             removeProviderBox.Items.Clear();
-
-            foreach(var name in Constants.AvailableProviders.Keys)
-            {
-                if(!controller.LoadedProviders.Keys.Contains(name))
-                {
-                    addProviderBox.Items.Add(name);
-                }
-                else
-                {
-                    urlToCopyBox.Items.Add(name);
-                    removeProviderBox.Items.Add(name);
-                }
-            }
+            urlToCopyBox.Items.AddRange(controller.LoadedProviders.Keys.ToArray());
+            removeProviderBox.Items.AddRange(controller.LoadedProviders.Keys.ToArray());
         }
 
         /// <summary>
@@ -216,14 +207,18 @@ namespace SharpCrop.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnAddProvider(object sender, EventArgs e)
+        private async void OnAddProvider(object sender, EventArgs e)
         {
             if(addProviderBox.SelectedItem == null)
             {
                 return;
             }
-            
-            controller.RegisterProvider(addProviderBox.SelectedItem.ToString());
+
+            var number = (new Random().Next(1000, 9999)).ToString();
+            var name = addProviderBox.SelectedItem.ToString();
+
+            await controller.LoadProvider($"{name}{number}", name);
+
             addProviderBox.ClearSelected();
         }
 
@@ -239,9 +234,10 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            controller.ClearProvider(removeProviderBox.SelectedItem.ToString());
+            var name = removeProviderBox.SelectedItem.ToString();
+
+            controller.ClearProvider(name);
             removeProviderBox.ClearSelected();
-            UpdateProviderList();
         }
 
         /// <summary>
@@ -251,7 +247,6 @@ namespace SharpCrop.Forms
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-
             Focus();
         }
     }

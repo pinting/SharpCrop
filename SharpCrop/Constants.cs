@@ -8,7 +8,7 @@ namespace SharpCrop
     public static class Constants
     {
         // List of the registered providers
-        public static readonly IReadOnlyDictionary<string, Type> AvailableProviders = new Dictionary<string, Type>()
+        public static readonly IReadOnlyDictionary<string, Type> Providers = new Dictionary<string, Type>()
         {
             {"Dropbox", typeof(Dropbox.Provider)},
             {"GoogleDrive", typeof(GoogleDrive.Provider)},
@@ -17,26 +17,24 @@ namespace SharpCrop
             {"LocalFile", typeof(LocalFile.Provider)}
         };
 
-        // List of avaiable image formats
-        public static readonly IReadOnlyDictionary<string, ImageFormat> AvailableImageFormats = new Dictionary<string, ImageFormat>()
+        // List of avaiable image formats (first if default)
+        public static readonly IReadOnlyDictionary<string, ImageFormat> ImageFormats = new Dictionary<string, ImageFormat>()
         {
             {"png", ImageFormat.Png},
             {"jpg", ImageFormat.Jpeg},
             {"bmp", ImageFormat.Bmp}
         };
         
-        // List of available FPS values
-        public static readonly IReadOnlyList<string> AvailableFps = new List<string>()
+        // List of available FPS values (the first must be the greatest)
+        public static readonly IReadOnlyList<string> FpsList = new List<string>()
         {
-            "5",
-            "10",
-            "15",
-            "20",
+            "30",
             "25",
-            "30"
+            "20",
+            "15",
+            "10",
+            "5"
         };
-
-        public static readonly int MaxFps = 30;
 
         // General constants
         public static readonly string SettingsPath = "Settings.json";

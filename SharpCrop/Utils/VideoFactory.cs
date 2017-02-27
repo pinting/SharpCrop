@@ -34,7 +34,7 @@ namespace SharpCrop.Utils
         /// <param name="offset"></param>
         private static void CaptureFrames(Rectangle rectangle, Point offset)
         {
-            var freq = (1000 / ConfigHelper.Memory.SafeVideoFps);
+            var freq = (1000 / ConfigHelper.Current.SafeVideoFps);
             var wait = 0;
 
             while (running)
@@ -100,7 +100,7 @@ namespace SharpCrop.Utils
 
             gif.Start(stream);
             gif.SetQuality(Constants.GifQuality);
-            gif.SetRepeat(ConfigHelper.Memory.NoGifRepeat ? 1 : 0);
+            gif.SetRepeat(ConfigHelper.Current.NoGifRepeat ? 1 : 0);
 
             while (running || frames.Count > 0)
             {
@@ -113,7 +113,7 @@ namespace SharpCrop.Utils
                 frames.RemoveAt(0);
             }
 
-            gif.SetDelay(1000 / ConfigHelper.Memory.SafeVideoFps);
+            gif.SetDelay(1000 / ConfigHelper.Current.SafeVideoFps);
             gif.Finish();
             Stop();
 
@@ -134,7 +134,7 @@ namespace SharpCrop.Utils
             // Wait for the first frame
             while (!FrameExists(0)) { }
 
-            using (var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Memory.NoGifRepeat ? 1 : 0))
+            using (var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Current.NoGifRepeat ? 1 : 0))
             {
                 while (running || frames.Count > 0)
                 {
@@ -176,7 +176,7 @@ namespace SharpCrop.Utils
                 using (var ffmpeg = new Process())
                 {
                     ffmpeg.StartInfo.FileName = "ffmpeg";
-                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Memory.SafeVideoFps} -an -y -f mp4 {temp}";
+                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Current.SafeVideoFps} -an -y -f mp4 {temp}";
                     ffmpeg.StartInfo.RedirectStandardInput = true;
                     ffmpeg.StartInfo.UseShellExecute = false;
                     ffmpeg.StartInfo.CreateNoWindow = true;

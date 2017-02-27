@@ -11,7 +11,7 @@ namespace SharpCrop.Models
     public class Config
     {
         [JsonProperty]
-        public string ImageFormat { get; set; }
+        public string ImageExt { get; set; }
 
         [JsonProperty]
         public List<int> ManualScaling { get; set; }
@@ -20,7 +20,7 @@ namespace SharpCrop.Models
         public int VideoFps { get; set; }
 
         [JsonProperty]
-        public string ProviderToCopy { get; set; }
+        public string CopyProvider { get; set; }
 
         [JsonProperty]
         public bool NoCopy { get; set; }
@@ -41,38 +41,42 @@ namespace SharpCrop.Models
         public bool EnableMpeg { get; set; }
 
         [JsonProperty]
-        public bool LoadOnStartup { get; set; }
+        public bool StartupLoad { get; set; }
 
         [JsonProperty]
-        public Dictionary<string, string> Providers { get; set; }
+        public Dictionary<string, SavedProvider> Providers { get; set; }
 
         #region Validators
 
+        /// <summary>
+        /// Get the ImageFormat form the current image extension.
+        /// </summary>
         [JsonIgnore]
-        public ImageFormat ImageFormatType => Constants.AvailableImageFormats[SafeImageFormat];
+        public ImageFormat ImageFormat => Constants.ImageFormats[SafeImageExt];
 
+        /// <summary>
+        /// Get the current FPS value in the permitted range.
+        /// </summary>
         [JsonIgnore]
-        public int SafeVideoFps => VideoFps > 0 && VideoFps <= Constants.MaxFps ? VideoFps : Constants.MaxFps;
+        public int SafeVideoFps => VideoFps > 0 && VideoFps <= int.Parse(Constants.FpsList.First()) ? VideoFps : int.Parse(Constants.FpsList.First());
 
+        /// <summary>
+        /// Get the manual scalling list - or create a new one and return it.
+        /// </summary>
         [JsonIgnore]
         public List<int> SafeManualScaling => ManualScaling ?? (ManualScaling = new List<int>());
 
+        /// <summary>
+        /// Get or create a new dictionary for providers.
+        /// </summary>
         [JsonIgnore]
-        public Dictionary<string, string> SafeProviders => Providers ?? (Providers = new Dictionary<string, string>());
+        public Dictionary<string, SavedProvider> SafeProviders => Providers ?? (Providers = new Dictionary<string, SavedProvider>());
 
+        /// <summary>
+        /// Get the current ImageExt and check if it is valid.
+        /// </summary>
         [JsonIgnore]
-        public string SafeImageFormat
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(ImageFormat) && Constants.AvailableImageFormats.ContainsKey(ImageFormat))
-                {
-                    return ImageFormat;
-                }
-
-                return Constants.AvailableImageFormats.Keys.First();
-            }
-        }
+        public string SafeImageExt => (!string.IsNullOrEmpty(ImageExt) && Constants.ImageFormats.ContainsKey(ImageExt)) ? ImageExt : Constants.ImageFormats.Keys.First();
 
         #endregion
     }

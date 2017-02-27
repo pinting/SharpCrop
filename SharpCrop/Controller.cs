@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCrop.Models;
 
 namespace SharpCrop
 {
@@ -28,7 +30,7 @@ namespace SharpCrop
             // Create a new ConfigForm
             configForm = new ConfigForm(this);
             configForm.FormClosed += (s, e) => Application.Exit();
-            configForm.Load += async (s, e) => await InitProviders();
+            configForm.Load += (s, e) => InitProviders();
 
             // If there are any loaded providers, the config will be hidden
             // Else the config will be closed (along with the whole application)
@@ -61,14 +63,14 @@ namespace SharpCrop
                 cropForms.Add(form);
             }
 
-            // If LoadOnStartup is enabled, init providers on the load of the first CropForm
-            if(ConfigHelper.Memory.LoadOnStartup)
+            // If StartupLoad is enabled, init providers on the load of the first CropForm
+            if(ConfigHelper.Current.StartupLoad)
             {
-                cropForms[0].Load += async (s, e) => await InitProviders();
+                cropForms[0].Load += (s, e) => InitProviders();
             }
 
             // Show settings if no providers gonna be loaded
-            if(ConfigHelper.Memory.SafeProviders.Count > 0)
+            if(ConfigHelper.Current.SafeProviders.Count > 0)
             {
                 ShowCrop();
             }
@@ -90,11 +92,11 @@ namespace SharpCrop
                 // Capture the frame
                 using (var bitmap = CaptureHelper.GetBitmap(region, offset))
                 {
-                    bitmap.Save(stream, ConfigHelper.Memory.ImageFormatType);
+                    bitmap.Save(stream, ConfigHelper.Current.ImageFormat);
                 }
 
                 // Generate filename and start the upload(s)
-                var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{ConfigHelper.Memory.SafeImageFormat}";
+                var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{ConfigHelper.Current.SafeImageExt}";
                 var url = await UploadAll(name, stream);
 
                 CompleteCapture(url);
@@ -119,7 +121,7 @@ namespace SharpCrop
             });
 
             // Use Mpeg if enabled
-            if (ConfigHelper.Memory.EnableMpeg)
+            if (ConfigHelper.Current.EnableMpeg)
             {
                 stream = await VideoFactory.RecordMpeg(region, offset);
             }
@@ -133,7 +135,7 @@ namespace SharpCrop
             // Generate filename and start the upload(s)
             toast = ToastFactory.Create($"Uploading... ({(double)stream.Length / (1024 * 1024):0.00} MB)", 0);
 
-            var name = $"{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.{(ConfigHelper.Memory.EnableMpeg ? "mp4" : "gif")}";
+            var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{(ConfigHelper.Current.EnableMpeg ? "mp4" : "gif")}";
             var url = await UploadAll(name, stream);
 
             ToastFactory.Remove(toast);
@@ -150,8 +152,14 @@ namespace SharpCrop
         /// <returns></returns>
         private async Task<string> UploadAll(string name, MemoryStream stream)
         {
-            // Try to load saved providers
-            if (!await InitProviders())
+            // Try to load the saved providers (if load on startup is disabled)
+            if (!ConfigHelper.Current.StartupLoad)
+            {
+                InitProviders();
+            }
+
+            // Save file locally if no providers were loaded
+            if (loadedProviders.Count == 0)
             {
                 File.WriteAllBytes(name, stream.ToArray());
                 return null;
@@ -184,7 +192,7 @@ namespace SharpCrop
                 {
                     last = url;
 
-                    if (p.Key == ConfigHelper.Memory.ProviderToCopy)
+                    if (p.Key == ConfigHelper.Current.CopyProvider)
                     {
                         result = url;
                     }
@@ -199,58 +207,18 @@ namespace SharpCrop
         /// Init providers with the previously saved states.
         /// </summary>
         /// <returns>Returns true if at least one provider was successfully loaded.</returns>
-        public async Task<bool> InitProviders()
+        private void InitProviders()
         {
             var tasks = new List<Task<bool>>();
-            var result = false;
 
-            foreach (var p in ConfigHelper.Memory.SafeProviders)
-            {
-                tasks.Add(LoadProvider(p.Key, p.Value));
-            }
+            // ToList() is needed because the original Dictionary is changing while we iterating
+            ConfigHelper.Current.SafeProviders
+                .ToList()
+                .ForEach(p => tasks.Add(
+                    LoadProvider(p.Key, p.Value.ProviderName, p.Value.SavedState, false)));
 
-            foreach (var p in tasks)
-            {
-                result = await p ? true : result;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Register the given provider with a registration form and load it.
-        /// </summary>
-        /// <param name="name"></param>
-        public async void RegisterProvider(string name)
-        {
-            var provider = await GetProvider(name);
-
-            if (provider != null)
-            {
-                loadedProviders[name] = provider;
-            }
-        }
-
-        /// <summary>
-        /// Try to load the given provider with the saved state silently - if it failes, there will
-        /// be no registration form. The failed providers gonna be put into the dictionary with 
-        /// a null IProvider.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="savedState"></param>
-        public async Task<bool> LoadProvider(string name, string savedState)
-        {
-            // If the provider was loaded successfully, return with true
-            if (loadedProviders.ContainsKey(name))
-            {
-                return loadedProviders[name] != null;
-            }
-
-            var provider = await GetProvider(name, savedState, false);
-
-            loadedProviders[name] = provider;
-
-            return provider != null;
+            // Wait for tasks to finish
+            tasks.ForEach(async p => await p);
         }
 
         /// <summary>
@@ -266,44 +234,60 @@ namespace SharpCrop
             }
 
             // Remove from the configuration file
-            if (ConfigHelper.Memory.SafeProviders.ContainsKey(name))
+            if (ConfigHelper.Current.SafeProviders.ContainsKey(name))
             {
-                ConfigHelper.Memory.SafeProviders.Remove(name);
+                ConfigHelper.Current.SafeProviders.Remove(name);
             }
         }
 
         /// <summary>
-        /// Get an IProvider object from the given provider module.
+        /// Try to load a provider.
         /// </summary>
-        /// <param name="name">The name of the provider, defined in the Constants.</param>
-        /// <param name="savedState">A saved state which can be null.</param>
-        /// <param name="showForm">Show the registration form or not.</param>
-        /// <returns>Return a Provider state (usually json in base64), if the was an error, the result will be null.</returns>
-        private async Task<IProvider> GetProvider(string name, string savedState = null, bool showForm = true)
+        /// <param name="name">The name of the provider - CAN BE ANYTHING!</param>
+        /// <param name="providerName">The name of the IProvider class, defined in the Constants.</param>
+        /// <param name="savedState">A saved state that the Provider will try to interpret - if it fails, the registration form will be used.</param>
+        /// <param name="showForm">Enable or disable registration form.</param>
+        /// <returns></returns>
+        public async Task<bool> LoadProvider(string name, string providerName, string savedState = null, bool showForm = true)
         {
-            if (!Constants.AvailableProviders.ContainsKey(name))
+            // If no IProvider classes are registered with this providerName OR
+            // there is already a LOADED PROVIDER with this (exact) name, return with false
+            if (!Constants.Providers.ContainsKey(providerName) || loadedProviders.ContainsKey(name))
             {
-                return null;
+                return false;
             }
 
-            // Translate name into a real instance and try to load the provider form the given saved state
-            var provider = (IProvider)Activator.CreateInstance(Constants.AvailableProviders[name]);
+            // Translate providerName into a real instance and try to load the provider form the savedState
+            var provider = (IProvider)Activator.CreateInstance(Constants.Providers[providerName]);
             var state = await provider.Register(savedState, showForm);
 
+            if (showForm && state == null)
+            {
+                ToastFactory.Create($"Failed to register \"{providerName}\" provider!");
+            }
+            else if (showForm && state != savedState)
+            {
+                // If the token is not changed, there was no new registration
+                ToastFactory.Create($"Successfully registered \"{providerName}\" provider!");
+            }
+
+            // If the the loading failed, return with false
             if (state == null)
             {
-                ToastFactory.Create($"Failed to register \"{name}\" provider!");
-                return null;
+                return false;
             }
 
-            // If the token is not changed, there was no new registration
-            if (state != savedState)
+            // Save the provider to the config
+            ConfigHelper.Current.Providers[name] = new SavedProvider()
             {
-                ConfigHelper.Memory.SafeProviders[name] = state;
-                ToastFactory.Create($"Successfully registered \"{name}\" provider!");
-            }
+                ProviderName = providerName,
+                SavedState = state
+            };
 
-            return provider;
+            // Save the provider as loaded
+            loadedProviders[name] = provider;
+
+            return true;
         }
 
         /// <summary>
@@ -312,7 +296,7 @@ namespace SharpCrop
         /// <param name="url"></param>
         private void CompleteCapture(string url = null)
         {
-            if (!ConfigHelper.Memory.NoCopy && !string.IsNullOrEmpty(url))
+            if (!ConfigHelper.Current.NoCopy && !string.IsNullOrEmpty(url))
             {
                 Clipboard.SetText(url);
 
@@ -334,18 +318,12 @@ namespace SharpCrop
         /// <summary>
         /// Hide every CropForm - if more than one monitor is used.
         /// </summary>
-        public void HideCrop()
-        {
-            cropForms.ForEach(e => e.Hide());
-        }
+        public void HideCrop() => cropForms.ForEach(e => e.Hide());
 
         /// <summary>
         /// Show every CropForm.
         /// </summary>
-        public void ShowCrop()
-        {
-            cropForms.ForEach(e => e.Show());
-        }
+        public void ShowCrop() => cropForms.ForEach(e => e.Show());
 
         /// <summary>
         /// Protect list from external modification.

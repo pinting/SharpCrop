@@ -13,7 +13,7 @@ namespace SharpCrop.Utils
         /// <summary>
         /// In-memory settings.
         /// </summary>
-        public static Config Memory;
+        public static Config Current;
 
         /// <summary>
         /// Load settings into memory.
@@ -22,11 +22,11 @@ namespace SharpCrop.Utils
         {
             try
             {
-                Memory = JsonConvert.DeserializeObject<Config>(File.ReadAllText(Constants.SettingsPath));
+                Current = JsonConvert.DeserializeObject<Config>(File.ReadAllText(Constants.SettingsPath));
             }
             catch
             {
-                Memory = new Config();
+                Current = new Config();
             }
 
         }
@@ -38,7 +38,7 @@ namespace SharpCrop.Utils
         {
             try
             {
-                File.WriteAllText(Constants.SettingsPath, JsonConvert.SerializeObject(Memory, Formatting.Indented));
+                File.WriteAllText(Constants.SettingsPath, JsonConvert.SerializeObject(Current, Formatting.Indented));
             }
             catch(Exception e)
             {
@@ -51,7 +51,7 @@ namespace SharpCrop.Utils
         /// </summary>
         public static void Reset()
         {
-            Memory = new Config();
+            Current = new Config();
         }
     }
 }

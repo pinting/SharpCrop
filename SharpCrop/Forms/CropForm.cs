@@ -202,7 +202,7 @@ namespace SharpCrop.Forms
 
             var draw = new Action<Brush, Rectangle>((color, r) => 
             {
-                if (!ConfigHelper.Memory.NoTransparency)
+                if (!ConfigHelper.Current.NoTransparency)
                 {
                     e.Graphics.FillRectangle(color, r);
                     return;
@@ -238,7 +238,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void RefreshBackground()
         {
-            if (!ConfigHelper.Memory.NoTransparency)
+            if (!ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
@@ -257,7 +257,7 @@ namespace SharpCrop.Forms
         private void MakeClickable()
         {
 #if !__MonoCS__
-            if(ConfigHelper.Memory.NoTransparency)
+            if(ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
@@ -273,7 +273,7 @@ namespace SharpCrop.Forms
         private void MakeInvisible()
         {
 #if !__MonoCS__
-            if (ConfigHelper.Memory.NoTransparency)
+            if (ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
@@ -292,7 +292,7 @@ namespace SharpCrop.Forms
         {
             get
             {
-                if(!ConfigHelper.Memory.NoFocus)
+                if(!ConfigHelper.Current.NoFocus)
                 {
                     return base.CreateParams;
                 }
@@ -311,7 +311,7 @@ namespace SharpCrop.Forms
         /// <summary>
         /// Do not steal focus from other windows.
         /// </summary>
-        protected override bool ShowWithoutActivation => ConfigHelper.Memory.NoFocus || base.ShowWithoutActivation;
+        protected override bool ShowWithoutActivation => ConfigHelper.Current.NoFocus || base.ShowWithoutActivation;
 
 #endif
 

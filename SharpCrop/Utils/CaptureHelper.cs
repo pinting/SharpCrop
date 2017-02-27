@@ -55,7 +55,7 @@ namespace SharpCrop.Utils
         {
             float scaling;
 
-            if(ConfigHelper.Memory.NoAutoScaling && ManualScaling > 0.0f)
+            if(ConfigHelper.Current.NoAutoScaling && ManualScaling > 0.0f)
             {
                 scaling = ManualScaling;
             }
@@ -84,7 +84,7 @@ namespace SharpCrop.Utils
         /// <param name="index"></param>
         public static void SetManualScaling(int index)
         {
-            var list = ConfigHelper.Memory.SafeManualScaling;
+            var list = ConfigHelper.Current.SafeManualScaling;
 
             if (index < list.Count)
             {
