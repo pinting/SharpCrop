@@ -142,7 +142,9 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Esc] Close the crop window
+        ///   Looks up a localized string similar to Welcome to SharpCrop!
+        ///
+        ///[Esc] Close the crop window
         ///[F1] Open config window
         ///[Left] Image capture
         ///[Right] Video capture.

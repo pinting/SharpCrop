@@ -120,6 +120,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.hu-HU.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

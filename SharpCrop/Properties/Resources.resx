@@ -142,7 +142,9 @@
     <value>Uploading...</value>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
-    <value>[Esc] Close the crop window
+    <value>Welcome to SharpCrop!
+
+[Esc] Close the crop window
 [F1] Open config window
 [Left] Image capture
 [Right] Video capture</value>
