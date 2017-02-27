@@ -1,6 +1,14 @@
 ﻿# SharpCrop
 
-This application can capture a part of your screen and upload it to your Dropbox / Google Drive / OneDrive account.
+This application can capture a part of your screen and upload it to the cloud - or save it locally.
+
+## Services
+
+* Dropbox
+* Google Drive
+* OneDrive
+* FTP
+* Local FS
 
 ## Usage
 
