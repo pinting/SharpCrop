@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpCrop.Models;
+using SharpCrop.Properties;
 
 namespace SharpCrop
 {
@@ -78,6 +79,13 @@ namespace SharpCrop
             {
                 configForm.Show();
             }
+
+            // Show welcome message if this is the first launch of the app
+            if (!ConfigHelper.Current.HideWelcome)
+            {
+                MessageBox.Show(Resources.WelcomeMessage, Resources.AppName);
+                ConfigHelper.Current.HideWelcome = true;
+            }
         }
 
         /// <summary>
@@ -114,9 +122,9 @@ namespace SharpCrop
             var toast = -1;
 
             // Create a new toast which closing event gonna stop the recording
-            toast = ToastFactory.Create("Click here to stop!", Color.OrangeRed, 0, () =>
+            toast = ToastFactory.Create(Resources.StopRecording, Color.OrangeRed, 0, () =>
             {
-                toast = ToastFactory.Create("Encoding...", 0);
+                toast = ToastFactory.Create(Resources.Encoding, 0);
                 VideoFactory.Stop();
             });
 
@@ -133,7 +141,7 @@ namespace SharpCrop
             ToastFactory.Remove(toast);
 
             // Generate filename and start the upload(s)
-            toast = ToastFactory.Create($"Uploading... ({(double)stream.Length / (1024 * 1024):0.00} MB)", 0);
+            toast = ToastFactory.Create($"{Resources.Uploading} ({(double)stream.Length / (1024 * 1024):0.00} MB)", 0);
 
             var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{(ConfigHelper.Current.EnableMpeg ? "mp4" : "gif")}";
             var url = await UploadAll(name, stream);
@@ -186,7 +194,7 @@ namespace SharpCrop
 
                 if (string.IsNullOrEmpty(url))
                 {
-                    ToastFactory.Create($"Upload failed using \"{p.Key}\" provider!");
+                    ToastFactory.Create($"[{p.Key}] {Resources.ProviderUploadFailed}");
                 }
                 else
                 {
@@ -263,12 +271,12 @@ namespace SharpCrop
 
             if (showForm && state == null)
             {
-                ToastFactory.Create($"Failed to register \"{providerName}\" provider!");
+                ToastFactory.Create($"[{providerName}] {Resources.ProviderRegistrationFailed}");
             }
             else if (showForm && state != savedState)
             {
                 // If the token is not changed, there was no new registration
-                ToastFactory.Create($"Successfully registered \"{providerName}\" provider!");
+                ToastFactory.Create($"[{providerName}] {Resources.ProviderRegistrationSucceed}");
             }
 
             // If the the loading failed, return with false
@@ -307,7 +315,7 @@ namespace SharpCrop
 #endif
             }
 
-            ToastFactory.Create(string.IsNullOrEmpty(url) ? "Upload failed! File was saved locally." : "Upload completed!", 3000, () =>
+            ToastFactory.Create(string.IsNullOrEmpty(url) ? Resources.UploadFailed : Resources.UploadCompleted, 3000, () =>
             {
 #if !__MonoCS__
                 Application.Exit();

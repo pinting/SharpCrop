@@ -11,6 +11,9 @@ namespace SharpCrop.Models
     public class Config
     {
         [JsonProperty]
+        public bool HideWelcome { get; set; }
+
+        [JsonProperty]
         public string ImageExt { get; set; }
 
         [JsonProperty]
