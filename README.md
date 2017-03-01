@@ -2,7 +2,7 @@
 
 This application can capture a part of your screen and upload it to the cloud - or save it locally.
 
-## Services
+## Providers
 
 * Dropbox
 * Google Drive

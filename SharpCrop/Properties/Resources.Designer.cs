@@ -61,15 +61,6 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SharpCrop.
-        /// </summary>
-        internal static string AppName {
-            get {
-                return ResourceManager.GetString("AppName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add provider.
         /// </summary>
         internal static string ConfigAddProvider {

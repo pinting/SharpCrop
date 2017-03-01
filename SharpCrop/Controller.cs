@@ -83,7 +83,7 @@ namespace SharpCrop
             // Show welcome message if this is the first launch of the app
             if (!ConfigHelper.Current.NoWelcome)
             {
-                MessageBox.Show(Resources.WelcomeMessage, Resources.AppName);
+                MessageBox.Show(Resources.WelcomeMessage, "SharpCrop");
                 ConfigHelper.Current.NoWelcome = true;
             }
         }

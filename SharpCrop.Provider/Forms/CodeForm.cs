@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using SharpCrop.Provider.Properties;
 
 namespace SharpCrop.Provider.Forms
 {
@@ -21,6 +22,13 @@ namespace SharpCrop.Provider.Forms
         {
             InitializeComponent();
 
+            // Init texts
+            stepOneLabel.Text = Resources.CodeStepOne;
+            linkLabel.Text = Resources.CodeLink;
+            stepTwoLabel.Text = Resources.CodeStepTwo;
+            helpLabel.Text = Resources.CodeHelp;
+
+            // Init variables
             this.length = length;
             linkBox.Text = url;
         }

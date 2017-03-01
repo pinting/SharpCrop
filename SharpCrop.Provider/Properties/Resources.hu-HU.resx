@@ -117,78 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConfigAddProvider" xml:space="preserve">
-    <value>Szolgáltatás hozzáadása</value>
+  <data name="CodeHelp" xml:space="preserve">
+    <value>Másold be a kapott kódot az engedélyezéshez!</value>
   </data>
-  <data name="ConfigCopyProvider" xml:space="preserve">
-    <value>Szolgáltatás URL másolása</value>
+  <data name="CodeLink" xml:space="preserve">
+    <value>Kérlek nyisd meg az alábbi linket!</value>
   </data>
-  <data name="ConfigEnableMpeg" xml:space="preserve">
-    <value>Mozgókép MPEG-ben (ffmpeg szükséges)</value>
+  <data name="CodeStepOne" xml:space="preserve">
+    <value>1. Lépés</value>
   </data>
-  <data name="ConfigFormat" xml:space="preserve">
-    <value>Pillanatkép formátuma</value>
+  <data name="CodeStepTwo" xml:space="preserve">
+    <value>2. Lépés</value>
   </data>
-  <data name="ConfigManualScalling" xml:space="preserve">
-    <value>Manuális skálázás</value>
+  <data name="FolderBrowse" xml:space="preserve">
+    <value>Tallózás</value>
   </data>
-  <data name="ConfigNoCopy" xml:space="preserve">
-    <value>URL másolás kikapcsolása</value>
-  </data>
-  <data name="ConfigNoFocus" xml:space="preserve">
-    <value>Indulás fókusz nélkül</value>
-  </data>
-  <data name="ConfigNoGifRepeat" xml:space="preserve">
-    <value>GIF ismétlés kikapcsolása</value>
-  </data>
-  <data name="ConfigNoScaling" xml:space="preserve">
-    <value>Manuális skálázás bekapcsolása</value>
-  </data>
-  <data name="ConfigNoTransparency" xml:space="preserve">
-    <value>Átlátszóság kikapcsolása</value>
-  </data>
-  <data name="ConfigRemoveProvider" xml:space="preserve">
-    <value>Szolgáltatás törlése</value>
-  </data>
-  <data name="ConfigReset" xml:space="preserve">
-    <value>Visszaállítás</value>
-  </data>
-  <data name="ConfigStartupLoad" xml:space="preserve">
-    <value>Betöltés induláskor</value>
-  </data>
-  <data name="ConfigVideoFps" xml:space="preserve">
-    <value>Mozgókép sebessége (FPS)</value>
-  </data>
-  <data name="Encoding" xml:space="preserve">
-    <value>Tömörítés folyamatban...</value>
-  </data>
-  <data name="ProviderRegistrationFailed" xml:space="preserve">
-    <value>A(z) "{0}" szolgáltatás regisztrálása nem sikerült!</value>
-  </data>
-  <data name="ProviderRegistrationSucceed" xml:space="preserve">
-    <value>A(z) "{0}" szolgáltatás regisztrálva!</value>
-  </data>
-  <data name="ProviderUploadFailed" xml:space="preserve">
-    <value>A feltöltés sikertelen volt a(z) "{0}" szolgáltatásra!</value>
-  </data>
-  <data name="StopRecording" xml:space="preserve">
-    <value>Kattints ide a leállításhoz!</value>
-  </data>
-  <data name="UploadCompleted" xml:space="preserve">
-    <value>Feltöltés kész!</value>
-  </data>
-  <data name="UploadFailed" xml:space="preserve">
-    <value>Feltöltés sikertelen! A fájl lokálisan mentésre került!</value>
-  </data>
-  <data name="Uploading" xml:space="preserve">
-    <value>Feltöltés folyamatban... ({0})</value>
-  </data>
-  <data name="WelcomeMessage" xml:space="preserve">
-    <value>Üdv a SharpCropban!
-
-[Esc] Kivágási ablak bezárása
-[F1] Beállítások megnyitása
-[Left] Pillanatkép készítése
-[Right] Mozgókép felvétele</value>
+  <data name="FolderSubmit" xml:space="preserve">
+    <value>Küldés</value>
   </data>
 </root>

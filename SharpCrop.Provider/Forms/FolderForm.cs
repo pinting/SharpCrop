@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using SharpCrop.Provider.Properties;
 
 namespace SharpCrop.Provider.Forms
 {
@@ -16,6 +17,10 @@ namespace SharpCrop.Provider.Forms
         public FolderForm()
         {
             InitializeComponent();
+
+            // Init texts
+            submitButton.Text = Resources.FolderSubmit;
+            browseButton.Text = Resources.FolderBrowse;
         }
 
         /// <summary>

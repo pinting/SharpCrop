@@ -37,41 +37,45 @@
             // 
             // browseButton
             // 
-            this.browseButton.Location = new System.Drawing.Point(278, 12);
+            this.browseButton.Location = new System.Drawing.Point(417, 18);
+            this.browseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(75, 22);
+            this.browseButton.Size = new System.Drawing.Size(112, 33);
             this.browseButton.TabIndex = 0;
-            this.browseButton.Text = "Browse";
+            this.browseButton.Text = "browserButton";
             this.browseButton.UseVisualStyleBackColor = true;
             this.browseButton.Click += new System.EventHandler(this.OnBrowse);
             // 
             // folderBox
             // 
-            this.folderBox.Location = new System.Drawing.Point(12, 13);
+            this.folderBox.Location = new System.Drawing.Point(18, 20);
+            this.folderBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.folderBox.Name = "folderBox";
-            this.folderBox.Size = new System.Drawing.Size(260, 20);
+            this.folderBox.Size = new System.Drawing.Size(388, 20);
             this.folderBox.TabIndex = 1;
             // 
             // submitButton
             // 
-            this.submitButton.Location = new System.Drawing.Point(359, 12);
+            this.submitButton.Location = new System.Drawing.Point(538, 18);
+            this.submitButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(75, 22);
+            this.submitButton.Size = new System.Drawing.Size(112, 33);
             this.submitButton.TabIndex = 2;
-            this.submitButton.Text = "Submit";
+            this.submitButton.Text = "submitButton";
             this.submitButton.UseVisualStyleBackColor = true;
             this.submitButton.Click += new System.EventHandler(this.OnSubmit);
             // 
             // FolderForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(439, 46);
+            this.ClientSize = new System.Drawing.Size(658, 69);
             this.Controls.Add(this.submitButton);
             this.Controls.Add(this.folderBox);
             this.Controls.Add(this.browseButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FolderForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SharpCrop";

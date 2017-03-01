@@ -39,7 +39,6 @@ namespace SharpCrop.Forms
             videoFpsLabel.Text = Resources.ConfigVideoFps;
             formatLabel.Text = Resources.ConfigFormat;
             resetButton.Text = Resources.ConfigReset;
-            Text = Resources.AppName;
 
             // Init lists and boxes
             formatBox.Text = ConfigHelper.Current.SafeImageExt;

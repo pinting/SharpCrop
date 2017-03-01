@@ -43,10 +43,10 @@
             this.linkLabel.Location = new System.Drawing.Point(4, 40);
             this.linkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel.Name = "linkLabel";
-            this.linkLabel.Size = new System.Drawing.Size(150, 13);
+            this.linkLabel.Size = new System.Drawing.Size(49, 13);
             this.linkLabel.TabIndex = 3;
             this.linkLabel.TabStop = true;
-            this.linkLabel.Text = "Please open the following link!";
+            this.linkLabel.Text = "linkLabel";
             this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkClicked);
             // 
             // linkBox
@@ -64,9 +64,9 @@
             this.stepOneLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.stepOneLabel.Location = new System.Drawing.Point(2, 5);
             this.stepOneLabel.Name = "stepOneLabel";
-            this.stepOneLabel.Size = new System.Drawing.Size(74, 25);
+            this.stepOneLabel.Size = new System.Drawing.Size(215, 37);
             this.stepOneLabel.TabIndex = 6;
-            this.stepOneLabel.Text = "Step 1";
+            this.stepOneLabel.Text = "stepOneLabel";
             this.stepOneLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // codeBox
@@ -83,9 +83,9 @@
             this.stepTwoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.stepTwoLabel.Location = new System.Drawing.Point(2, 90);
             this.stepTwoLabel.Name = "stepTwoLabel";
-            this.stepTwoLabel.Size = new System.Drawing.Size(74, 25);
+            this.stepTwoLabel.Size = new System.Drawing.Size(216, 37);
             this.stepTwoLabel.TabIndex = 7;
-            this.stepTwoLabel.Text = "Step 2";
+            this.stepTwoLabel.Text = "stepTwoLabel";
             this.stepTwoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // helpLabel
@@ -93,9 +93,9 @@
             this.helpLabel.AutoSize = true;
             this.helpLabel.Location = new System.Drawing.Point(4, 125);
             this.helpLabel.Name = "helpLabel";
-            this.helpLabel.Size = new System.Drawing.Size(278, 13);
+            this.helpLabel.Size = new System.Drawing.Size(53, 13);
             this.helpLabel.TabIndex = 4;
-            this.helpLabel.Text = "Copy the given code bellow to give access to SharpCrop!";
+            this.helpLabel.Text = "helpLabel";
             // 
             // CodeForm
             // 

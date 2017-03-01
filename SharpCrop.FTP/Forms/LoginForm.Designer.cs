@@ -55,36 +55,36 @@
             this.copyPathLabel.AutoSize = true;
             this.copyPathLabel.Location = new System.Drawing.Point(166, 93);
             this.copyPathLabel.Name = "copyPathLabel";
-            this.copyPathLabel.Size = new System.Drawing.Size(55, 13);
+            this.copyPathLabel.Size = new System.Drawing.Size(78, 13);
             this.copyPathLabel.TabIndex = 16;
-            this.copyPathLabel.Text = "Copy path";
+            this.copyPathLabel.Text = "copyPathLabel";
             // 
             // remotePathLabel
             // 
             this.remotePathLabel.AutoSize = true;
             this.remotePathLabel.Location = new System.Drawing.Point(166, 67);
             this.remotePathLabel.Name = "remotePathLabel";
-            this.remotePathLabel.Size = new System.Drawing.Size(68, 13);
+            this.remotePathLabel.Size = new System.Drawing.Size(87, 13);
             this.remotePathLabel.TabIndex = 15;
-            this.remotePathLabel.Text = "Remote path";
+            this.remotePathLabel.Text = "remotePathLabel";
             // 
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
             this.passwordLabel.Location = new System.Drawing.Point(166, 41);
             this.passwordLabel.Name = "passwordLabel";
-            this.passwordLabel.Size = new System.Drawing.Size(53, 13);
+            this.passwordLabel.Size = new System.Drawing.Size(78, 13);
             this.passwordLabel.TabIndex = 14;
-            this.passwordLabel.Text = "Password";
+            this.passwordLabel.Text = "passwordLabel";
             // 
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
             this.usernameLabel.Location = new System.Drawing.Point(166, 15);
             this.usernameLabel.Name = "usernameLabel";
-            this.usernameLabel.Size = new System.Drawing.Size(55, 13);
+            this.usernameLabel.Size = new System.Drawing.Size(79, 13);
             this.usernameLabel.TabIndex = 13;
-            this.usernameLabel.Text = "Username";
+            this.usernameLabel.Text = "usernameLabel";
             // 
             // copyPathBox
             // 

@@ -1,6 +1,7 @@
 ﻿using SharpCrop.FTP.Models;
 using System;
 using System.Windows.Forms;
+using SharpCrop.FTP.Properties;
 
 namespace SharpCrop.FTP.Forms
 {
@@ -17,6 +18,12 @@ namespace SharpCrop.FTP.Forms
         public LoginForm()
         {
             InitializeComponent();
+
+            // Init texts
+            usernameLabel.Text = Resources.Username;
+            passwordLabel.Text = Resources.Password;
+            copyPathLabel.Text = Resources.CopyPath;
+            remotePathLabel.Text = Resources.RemotePath;
         }
 
         /// <summary>

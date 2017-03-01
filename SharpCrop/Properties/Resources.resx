@@ -149,9 +149,6 @@
 [Left] Image capture
 [Right] Video capture</value>
   </data>
-  <data name="AppName" xml:space="preserve">
-    <value>SharpCrop</value>
-  </data>
   <data name="ConfigAddProvider" xml:space="preserve">
     <value>Add provider</value>
   </data>
