@@ -121,13 +121,13 @@
     <value>Encoding...</value>
   </data>
   <data name="ProviderRegistrationFailed" xml:space="preserve">
-    <value>Failed to register!</value>
+    <value>Failed to register the "{0}" provider!</value>
   </data>
   <data name="ProviderRegistrationSucceed" xml:space="preserve">
-    <value>Successfully registered!</value>
+    <value>Successfully registered the "{0}" provider!</value>
   </data>
   <data name="ProviderUploadFailed" xml:space="preserve">
-    <value>Upload failed!</value>
+    <value>Upload failed using the "{0}" provider!</value>
   </data>
   <data name="StopRecording" xml:space="preserve">
     <value>Click here to stop!</value>
@@ -139,7 +139,7 @@
     <value>Upload failed! File was saved locally.</value>
   </data>
   <data name="Uploading" xml:space="preserve">
-    <value>Uploading...</value>
+    <value>Uploading... ({0})</value>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
     <value>Welcome to SharpCrop!
@@ -151,5 +151,47 @@
   </data>
   <data name="AppName" xml:space="preserve">
     <value>SharpCrop</value>
+  </data>
+  <data name="ConfigAddProvider" xml:space="preserve">
+    <value>Add provider</value>
+  </data>
+  <data name="ConfigEnableMpeg" xml:space="preserve">
+    <value>Record in MPEG (ffmpeg required)</value>
+  </data>
+  <data name="ConfigFormat" xml:space="preserve">
+    <value>Image format</value>
+  </data>
+  <data name="ConfigVideoFps" xml:space="preserve">
+    <value>Video FPS</value>
+  </data>
+  <data name="ConfigStartupLoad" xml:space="preserve">
+    <value>Load providers on startup</value>
+  </data>
+  <data name="ConfigManualScalling" xml:space="preserve">
+    <value>Manual scaling</value>
+  </data>
+  <data name="ConfigNoCopy" xml:space="preserve">
+    <value>Disable URL copy</value>
+  </data>
+  <data name="ConfigNoFocus" xml:space="preserve">
+    <value>Launch without focus</value>
+  </data>
+  <data name="ConfigNoGifRepeat" xml:space="preserve">
+    <value>Disable GIF repeat</value>
+  </data>
+  <data name="ConfigNoScaling" xml:space="preserve">
+    <value>Enable manual scaling</value>
+  </data>
+  <data name="ConfigNoTransparency" xml:space="preserve">
+    <value>Disable transparency</value>
+  </data>
+  <data name="ConfigRemoveProvider" xml:space="preserve">
+    <value>Remove provider</value>
+  </data>
+  <data name="ConfigReset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ConfigCopyProvider" xml:space="preserve">
+    <value>Provider to copy</value>
   </data>
 </root>

@@ -86,7 +86,6 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Models\Config.cs" />
     <Compile Include="Models\GifFrame.cs" />
-    <Compile Include="Models\LoadedProvider.cs" />
     <Compile Include="Models\SavedProvider.cs" />
     <Compile Include="Utils\CaptureHelper.cs" />
     <Compile Include="Program.cs" />

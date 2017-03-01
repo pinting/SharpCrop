@@ -11,9 +11,6 @@ namespace SharpCrop.Models
     public class Config
     {
         [JsonProperty]
-        public bool HideWelcome { get; set; }
-
-        [JsonProperty]
         public string ImageExt { get; set; }
 
         [JsonProperty]
@@ -45,6 +42,9 @@ namespace SharpCrop.Models
 
         [JsonProperty]
         public bool StartupLoad { get; set; }
+
+        [JsonProperty]
+        public bool NoWelcome { get; set; }
 
         [JsonProperty]
         public Dictionary<string, SavedProvider> Providers { get; set; }

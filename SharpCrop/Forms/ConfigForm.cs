@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using SharpCrop.Utils;
+using SharpCrop.Properties;
 
 // ReSharper disable CoVariantArrayConversion
 
@@ -10,7 +11,7 @@ namespace SharpCrop.Forms
     /// <summary>
     /// ConfigForm is a UI for config modification.
     /// </summary>
-    public partial class ConfigForm : Form
+    public sealed partial class ConfigForm : Form
     {
         private readonly Controller controller;
 
@@ -22,6 +23,23 @@ namespace SharpCrop.Forms
             this.controller = controller;
 
             InitializeComponent();
+
+            // Init texts from Resources
+            noGifRepeatCheckBox.Text = Resources.ConfigNoGifRepeat;
+            startupLoadCheckBox.Text = Resources.ConfigStartupLoad;
+            noTransparencyCheckBox.Text = Resources.ConfigNoTransparency;
+            enableMpegCheckbox.Text = Resources.ConfigEnableMpeg;
+            noFocusCheckBox.Text = Resources.ConfigNoFocus;
+            noScalingCheckBox.Text = Resources.ConfigNoScaling;
+            copyProviderBox.Text = Resources.ConfigCopyProvider;
+            noCopyCheckBox.Text = Resources.ConfigNoCopy;
+            addProviderLabel.Text = Resources.ConfigAddProvider;
+            removeProviderLabel.Text = Resources.ConfigRemoveProvider;
+            manualScallingLabel.Text = Resources.ConfigManualScalling;
+            videoFpsLabel.Text = Resources.ConfigVideoFps;
+            formatLabel.Text = Resources.ConfigFormat;
+            resetButton.Text = Resources.ConfigReset;
+            Text = Resources.AppName;
 
             // Init lists and boxes
             formatBox.Text = ConfigHelper.Current.SafeImageExt;
@@ -39,7 +57,7 @@ namespace SharpCrop.Forms
             noFocusCheckBox.Checked = ConfigHelper.Current.NoFocus;
             noTransparencyCheckBox.Checked = ConfigHelper.Current.NoTransparency;
             enableMpegCheckbox.Checked = ConfigHelper.Current.EnableMpeg;
-            loadOnStartup.Checked = ConfigHelper.Current.StartupLoad;
+            startupLoadCheckBox.Checked = ConfigHelper.Current.StartupLoad;
 
 #if __MonoCS__
             noFocusCheckBox.Enabled = false;
@@ -49,6 +67,7 @@ namespace SharpCrop.Forms
             UpdateProviderList();
             urlToCopyBox.MouseEnter += (s, e) => UpdateProviderList();
             removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
+
         }
         
         /// <summary>
@@ -177,7 +196,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnLoadOnStartup(object sender, EventArgs e)
         {
-            ConfigHelper.Current.StartupLoad = loadOnStartup.Checked;
+            ConfigHelper.Current.StartupLoad = startupLoadCheckBox.Checked;
         }
 
         /// <summary>

@@ -70,6 +70,132 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add provider.
+        /// </summary>
+        internal static string ConfigAddProvider {
+            get {
+                return ResourceManager.GetString("ConfigAddProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provider to copy.
+        /// </summary>
+        internal static string ConfigCopyProvider {
+            get {
+                return ResourceManager.GetString("ConfigCopyProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record in MPEG (ffmpeg required).
+        /// </summary>
+        internal static string ConfigEnableMpeg {
+            get {
+                return ResourceManager.GetString("ConfigEnableMpeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image format.
+        /// </summary>
+        internal static string ConfigFormat {
+            get {
+                return ResourceManager.GetString("ConfigFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual scaling.
+        /// </summary>
+        internal static string ConfigManualScalling {
+            get {
+                return ResourceManager.GetString("ConfigManualScalling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable URL copy.
+        /// </summary>
+        internal static string ConfigNoCopy {
+            get {
+                return ResourceManager.GetString("ConfigNoCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch without focus.
+        /// </summary>
+        internal static string ConfigNoFocus {
+            get {
+                return ResourceManager.GetString("ConfigNoFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable GIF repeat.
+        /// </summary>
+        internal static string ConfigNoGifRepeat {
+            get {
+                return ResourceManager.GetString("ConfigNoGifRepeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable manual scaling.
+        /// </summary>
+        internal static string ConfigNoScaling {
+            get {
+                return ResourceManager.GetString("ConfigNoScaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable transparency.
+        /// </summary>
+        internal static string ConfigNoTransparency {
+            get {
+                return ResourceManager.GetString("ConfigNoTransparency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove provider.
+        /// </summary>
+        internal static string ConfigRemoveProvider {
+            get {
+                return ResourceManager.GetString("ConfigRemoveProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string ConfigReset {
+            get {
+                return ResourceManager.GetString("ConfigReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load providers on startup.
+        /// </summary>
+        internal static string ConfigStartupLoad {
+            get {
+                return ResourceManager.GetString("ConfigStartupLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video FPS.
+        /// </summary>
+        internal static string ConfigVideoFps {
+            get {
+                return ResourceManager.GetString("ConfigVideoFps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encoding....
         /// </summary>
         internal static string Encoding {
@@ -79,7 +205,7 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to register!.
+        ///   Looks up a localized string similar to Failed to register the &quot;{0}&quot; provider!.
         /// </summary>
         internal static string ProviderRegistrationFailed {
             get {
@@ -88,7 +214,7 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully registered!.
+        ///   Looks up a localized string similar to Successfully registered the &quot;{0}&quot; provider!.
         /// </summary>
         internal static string ProviderRegistrationSucceed {
             get {
@@ -97,7 +223,7 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload failed!.
+        ///   Looks up a localized string similar to Upload failed using the &quot;{0}&quot; provider!.
         /// </summary>
         internal static string ProviderUploadFailed {
             get {
@@ -133,7 +259,7 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uploading....
+        ///   Looks up a localized string similar to Uploading... ({0}).
         /// </summary>
         internal static string Uploading {
             get {

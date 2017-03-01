@@ -81,10 +81,10 @@ namespace SharpCrop
             }
 
             // Show welcome message if this is the first launch of the app
-            if (!ConfigHelper.Current.HideWelcome)
+            if (!ConfigHelper.Current.NoWelcome)
             {
                 MessageBox.Show(Resources.WelcomeMessage, Resources.AppName);
-                ConfigHelper.Current.HideWelcome = true;
+                ConfigHelper.Current.NoWelcome = true;
             }
         }
 
@@ -141,7 +141,7 @@ namespace SharpCrop
             ToastFactory.Remove(toast);
 
             // Generate filename and start the upload(s)
-            toast = ToastFactory.Create($"{Resources.Uploading} ({(double)stream.Length / (1024 * 1024):0.00} MB)", 0);
+            toast = ToastFactory.Create(string.Format(Resources.Uploading, $"{(double)stream.Length / (1024 * 1024):0.00} MB"), 0);
 
             var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{(ConfigHelper.Current.EnableMpeg ? "mp4" : "gif")}";
             var url = await UploadAll(name, stream);
@@ -194,7 +194,7 @@ namespace SharpCrop
 
                 if (string.IsNullOrEmpty(url))
                 {
-                    ToastFactory.Create($"[{p.Key}] {Resources.ProviderUploadFailed}");
+                    ToastFactory.Create(string.Format(Resources.ProviderUploadFailed, p.Key));
                 }
                 else
                 {
@@ -271,12 +271,12 @@ namespace SharpCrop
 
             if (showForm && state == null)
             {
-                ToastFactory.Create($"[{providerName}] {Resources.ProviderRegistrationFailed}");
+                ToastFactory.Create(string.Format(Resources.ProviderRegistrationFailed, providerName));
             }
             else if (showForm && state != savedState)
             {
                 // If the token is not changed, there was no new registration
-                ToastFactory.Create($"[{providerName}] {Resources.ProviderRegistrationSucceed}");
+                ToastFactory.Create(string.Format(Resources.ProviderRegistrationSucceed, providerName));
             }
 
             // If the the loading failed, return with false

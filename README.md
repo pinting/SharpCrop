@@ -10,6 +10,11 @@ This application can capture a part of your screen and upload it to the cloud - 
 * FTP
 * Local FS
 
+## Languages
+
+* English
+* Hungarian
+
 ## Usage
 
 * `Esc` Close the crop window
