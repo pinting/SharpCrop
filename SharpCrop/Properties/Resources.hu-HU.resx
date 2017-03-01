@@ -184,7 +184,7 @@
     <value>Feltöltés sikertelen! A fájl lokálisan mentésre került!</value>
   </data>
   <data name="Uploading" xml:space="preserve">
-    <value>Feltöltés folyamatban...</value>
+    <value>Feltöltés folyamatban... ({0})</value>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
     <value>Üdv a SharpCropban!
