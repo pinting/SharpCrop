@@ -132,6 +132,9 @@
   <data name="ConfigManualScalling" xml:space="preserve">
     <value>Manuális skálázás</value>
   </data>
+  <data name="ConfigManualScallingHelp" xml:space="preserve">
+    <value>DPI százalékban</value>
+  </data>
   <data name="ConfigNoCopy" xml:space="preserve">
     <value>URL másolás kikapcsolása</value>
   </data>
@@ -144,11 +147,8 @@
   <data name="ConfigRemoveProvider" xml:space="preserve">
     <value>Szolgáltatás törlése</value>
   </data>
-  <data name="ConfigReset" xml:space="preserve">
-    <value>Visszaállítás</value>
-  </data>
   <data name="ConfigStartupLoad" xml:space="preserve">
-    <value>Betöltés induláskor</value>
+    <value>Szolgáltatások betöltése induláskor</value>
   </data>
   <data name="ConfigVideoFps" xml:space="preserve">
     <value>Mozgókép sebessége (FPS)</value>

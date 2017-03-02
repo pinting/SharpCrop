@@ -106,6 +106,15 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scalling in percent.
+        /// </summary>
+        internal static string ConfigManualScallingHelp {
+            get {
+                return ResourceManager.GetString("ConfigManualScallingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable URL copy.
         /// </summary>
         internal static string ConfigNoCopy {
@@ -138,15 +147,6 @@ namespace SharpCrop.Properties {
         internal static string ConfigRemoveProvider {
             get {
                 return ResourceManager.GetString("ConfigRemoveProvider", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reset.
-        /// </summary>
-        internal static string ConfigReset {
-            get {
-                return ResourceManager.GetString("ConfigReset", resourceCulture);
             }
         }
         

@@ -179,9 +179,6 @@
   <data name="ConfigRemoveProvider" xml:space="preserve">
     <value>Remove provider</value>
   </data>
-  <data name="ConfigReset" xml:space="preserve">
-    <value>Reset</value>
-  </data>
   <data name="ConfigCopyProvider" xml:space="preserve">
     <value>Provider to copy</value>
   </data>
@@ -199,5 +196,8 @@
   </data>
   <data name="OneDrive" xml:space="preserve">
     <value>OneDrive</value>
+  </data>
+  <data name="ConfigManualScallingHelp" xml:space="preserve">
+    <value>Scalling in percent</value>
   </data>
 </root>

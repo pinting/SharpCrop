@@ -36,15 +36,6 @@ namespace SharpCrop.Forms
             manualScallingLabel.Text = Resources.ConfigManualScalling;
             videoFpsLabel.Text = Resources.ConfigVideoFps;
             formatLabel.Text = Resources.ConfigFormat;
-            resetButton.Text = Resources.ConfigReset;
-
-            // Init lists and boxes
-            formatBox.Items.AddRange(Constants.ImageFormats.Keys.ToArray());
-            videoFpsBox.Items.AddRange(Constants.FpsList.ToArray());
-            manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
-            videoFpsBox.Text = ConfigHelper.Current.SafeVideoFps.ToString();
-            urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
-            formatBox.Text = ConfigHelper.Current.SafeImageExt;
 
             // Init checkboxes
             noCopyCheckBox.Checked = ConfigHelper.Current.NoCopy;
@@ -53,9 +44,17 @@ namespace SharpCrop.Forms
             enableMpegCheckbox.Checked = ConfigHelper.Current.EnableMpeg;
             startupLoadCheckBox.Checked = ConfigHelper.Current.StartupRegister;
 
-#if __MonoCS__
-            noFocusCheckBox.Enabled = false;
-#endif
+            // Init lists and boxes
+            formatBox.Items.AddRange(Constants.ImageFormats.Keys.ToArray());
+            videoFpsBox.Items.AddRange(Constants.FpsList.ToArray());
+            videoFpsBox.Text = ConfigHelper.Current.SafeVideoFps.ToString();
+            urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
+            formatBox.Text = ConfigHelper.Current.SafeImageExt;
+
+            manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
+            manualScallingBox.Text = string.IsNullOrEmpty(manualScallingBox.Text)
+                ? Resources.ConfigManualScallingHelp
+                : manualScallingBox.Text;
 
             // Update provider list and register an update event
             UpdateProviderList();
@@ -172,17 +171,6 @@ namespace SharpCrop.Forms
         private void OnLoadOnStartup(object sender, EventArgs e)
         {
             ConfigHelper.Current.StartupRegister = startupLoadCheckBox.Checked;
-        }
-
-        /// <summary>
-        /// Reset application settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ResetClicked(object sender, EventArgs e)
-        {
-            ConfigHelper.Reset();
-            Application.Exit();
         }
 
         /// <summary>

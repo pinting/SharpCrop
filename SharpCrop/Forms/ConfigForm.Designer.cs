@@ -40,7 +40,6 @@
             this.manualScallingLabel = new System.Windows.Forms.Label();
             this.enableMpegCheckbox = new System.Windows.Forms.CheckBox();
             this.addProviderBox = new System.Windows.Forms.ListBox();
-            this.resetButton = new System.Windows.Forms.Button();
             this.removeProviderBox = new System.Windows.Forms.ListBox();
             this.removeProviderLabel = new System.Windows.Forms.Label();
             this.addProviderLabel = new System.Windows.Forms.Label();
@@ -61,7 +60,7 @@
             // noCopyCheckBox
             // 
             this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(12, 206);
+            this.noCopyCheckBox.Location = new System.Drawing.Point(12, 210);
             this.noCopyCheckBox.Name = "noCopyCheckBox";
             this.noCopyCheckBox.Size = new System.Drawing.Size(161, 24);
             this.noCopyCheckBox.TabIndex = 1;
@@ -72,7 +71,7 @@
             // noScalingCheckBox
             // 
             this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(12, 177);
+            this.noScalingCheckBox.Location = new System.Drawing.Point(12, 181);
             this.noScalingCheckBox.Name = "noScalingCheckBox";
             this.noScalingCheckBox.Size = new System.Drawing.Size(177, 24);
             this.noScalingCheckBox.TabIndex = 2;
@@ -112,7 +111,7 @@
             // noTransparencyCheckBox
             // 
             this.noTransparencyCheckBox.AutoSize = true;
-            this.noTransparencyCheckBox.Location = new System.Drawing.Point(12, 236);
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(12, 240);
             this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
             this.noTransparencyCheckBox.Size = new System.Drawing.Size(221, 24);
             this.noTransparencyCheckBox.TabIndex = 9;
@@ -142,7 +141,7 @@
             // enableMpegCheckbox
             // 
             this.enableMpegCheckbox.AutoSize = true;
-            this.enableMpegCheckbox.Location = new System.Drawing.Point(12, 266);
+            this.enableMpegCheckbox.Location = new System.Drawing.Point(12, 270);
             this.enableMpegCheckbox.Name = "enableMpegCheckbox";
             this.enableMpegCheckbox.Size = new System.Drawing.Size(193, 24);
             this.enableMpegCheckbox.TabIndex = 12;
@@ -157,19 +156,9 @@
             this.addProviderBox.Location = new System.Drawing.Point(404, 45);
             this.addProviderBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.addProviderBox.Name = "addProviderBox";
-            this.addProviderBox.Size = new System.Drawing.Size(178, 224);
+            this.addProviderBox.Size = new System.Drawing.Size(178, 284);
             this.addProviderBox.TabIndex = 18;
             this.addProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnAddProvider);
-            // 
-            // resetButton
-            // 
-            this.resetButton.Location = new System.Drawing.Point(402, 288);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(406, 38);
-            this.resetButton.TabIndex = 3;
-            this.resetButton.Text = "resetButton";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.ResetClicked);
             // 
             // removeProviderBox
             // 
@@ -178,7 +167,7 @@
             this.removeProviderBox.Location = new System.Drawing.Point(630, 45);
             this.removeProviderBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.removeProviderBox.Name = "removeProviderBox";
-            this.removeProviderBox.Size = new System.Drawing.Size(178, 224);
+            this.removeProviderBox.Size = new System.Drawing.Size(178, 284);
             this.removeProviderBox.TabIndex = 19;
             this.removeProviderBox.SelectedIndexChanged += new System.EventHandler(this.OnRemoveProvider);
             // 
@@ -224,7 +213,7 @@
             // startupLoadCheckBox
             // 
             this.startupLoadCheckBox.AutoSize = true;
-            this.startupLoadCheckBox.Location = new System.Drawing.Point(12, 296);
+            this.startupLoadCheckBox.Location = new System.Drawing.Point(12, 300);
             this.startupLoadCheckBox.Name = "startupLoadCheckBox";
             this.startupLoadCheckBox.Size = new System.Drawing.Size(193, 24);
             this.startupLoadCheckBox.TabIndex = 24;
@@ -236,7 +225,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 336);
+            this.ClientSize = new System.Drawing.Size(832, 346);
             this.Controls.Add(this.startupLoadCheckBox);
             this.Controls.Add(this.copyProviderBox);
             this.Controls.Add(this.urlToCopyBox);
@@ -251,7 +240,6 @@
             this.Controls.Add(this.videoFpsLabel);
             this.Controls.Add(this.formatLabel);
             this.Controls.Add(this.videoFpsBox);
-            this.Controls.Add(this.resetButton);
             this.Controls.Add(this.noScalingCheckBox);
             this.Controls.Add(this.noCopyCheckBox);
             this.Controls.Add(this.formatBox);
@@ -278,7 +266,6 @@
         private System.Windows.Forms.Label manualScallingLabel;
         private System.Windows.Forms.CheckBox enableMpegCheckbox;
         private System.Windows.Forms.ListBox addProviderBox;
-        private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.ListBox removeProviderBox;
         private System.Windows.Forms.Label removeProviderLabel;
         private System.Windows.Forms.Label addProviderLabel;
