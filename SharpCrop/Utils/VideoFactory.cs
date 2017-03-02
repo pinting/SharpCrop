@@ -100,7 +100,7 @@ namespace SharpCrop.Utils
 
             gif.Start(stream);
             gif.SetQuality(Constants.GifQuality);
-            gif.SetRepeat(ConfigHelper.Current.NoGifRepeat ? 1 : 0);
+            gif.SetRepeat(0);
 
             while (running || frames.Count > 0)
             {
@@ -110,6 +110,7 @@ namespace SharpCrop.Utils
                 }
 
                 gif.AddFrame(frames[0].Image);
+                frames[0].Image.Dispose();
                 frames.RemoveAt(0);
             }
 
@@ -142,6 +143,7 @@ namespace SharpCrop.Utils
                     if (FrameExists(1) && Compare(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
                     {
                         frames[0].Delay += frames[1].Delay;
+                        frames[1].Image.Dispose();
                         frames.RemoveAt(1);
                     }
 
@@ -151,6 +153,7 @@ namespace SharpCrop.Utils
                     else if (FrameExists(1) || FrameExists(0) && !running)
                     {
                         gif.AddFrame(frames[0].Image, 0, 0, TimeSpan.FromMilliseconds(frames[0].Delay));
+                        frames[0].Image.Dispose();
                         frames.RemoveAt(0);
                     }
                 }
@@ -194,6 +197,7 @@ namespace SharpCrop.Utils
                         {
                             frames[0].Image.Save(stream, ImageFormat.Bmp);
                             stream.WriteTo(ffmpeg.StandardInput.BaseStream);
+                            frames[0].Image.Dispose();
                             frames.RemoveAt(0);
                         }
                     }
