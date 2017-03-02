@@ -134,7 +134,7 @@ namespace SharpCrop.Utils
             // Wait for the first frame
             while (!FrameExists(0)) { }
 
-            using (var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, ConfigHelper.Current.NoGifRepeat ? 1 : 0))
+            using (var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, 0))
             {
                 while (running || frames.Count > 0)
                 {

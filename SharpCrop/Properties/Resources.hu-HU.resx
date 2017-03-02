@@ -135,12 +135,6 @@
   <data name="ConfigNoCopy" xml:space="preserve">
     <value>URL másolás kikapcsolása</value>
   </data>
-  <data name="ConfigNoFocus" xml:space="preserve">
-    <value>Indulás fókusz nélkül</value>
-  </data>
-  <data name="ConfigNoGifRepeat" xml:space="preserve">
-    <value>GIF ismétlés kikapcsolása</value>
-  </data>
   <data name="ConfigNoScaling" xml:space="preserve">
     <value>Manuális skálázás bekapcsolása</value>
   </data>
@@ -159,8 +153,23 @@
   <data name="ConfigVideoFps" xml:space="preserve">
     <value>Mozgókép sebessége (FPS)</value>
   </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
   <data name="Encoding" xml:space="preserve">
     <value>Tömörítés folyamatban...</value>
+  </data>
+  <data name="FTP" xml:space="preserve">
+    <value>FTP</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="LocalFile" xml:space="preserve">
+    <value>Helyi fájlrendszer</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
   </data>
   <data name="ProviderRegistrationFailed" xml:space="preserve">
     <value>A(z) "{0}" szolgáltatás regisztrálása nem sikerült!</value>

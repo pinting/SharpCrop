@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SharpCrop.FTP.Properties {
+namespace SharpCrop.LocalFile.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace SharpCrop.FTP.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SharpCrop.FTP.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SharpCrop.LocalFile.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,11 @@ namespace SharpCrop.FTP.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy path.
-        /// </summary>
-        internal static string CopyPath {
-            get {
-                return ResourceManager.GetString("CopyPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password.
-        /// </summary>
-        internal static string Password {
-            get {
-                return ResourceManager.GetString("Password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FTP.
+        ///   Looks up a localized string similar to Local filesystem.
         /// </summary>
         internal static string ProviderName {
             get {
                 return ResourceManager.GetString("ProviderName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remote path.
-        /// </summary>
-        internal static string RemotePath {
-            get {
-                return ResourceManager.GetString("RemotePath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username.
-        /// </summary>
-        internal static string Username {
-            get {
-                return ResourceManager.GetString("Username", resourceCulture);
             }
         }
     }

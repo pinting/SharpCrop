@@ -6,6 +6,7 @@ using SharpCrop.FTP.Models;
 using SharpCrop.FTP.Utils;
 using SharpCrop.FTP.Forms;
 using Newtonsoft.Json;
+using SharpCrop.FTP.Properties;
 using SharpCrop.Provider.Utils;
 
 namespace SharpCrop.FTP
@@ -99,5 +100,9 @@ namespace SharpCrop.FTP
                 return Task.FromResult((string)null);
             }
         }
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using SharpCrop.LocalFile.Properties;
 using SharpCrop.Provider;
 using SharpCrop.Provider.Forms;
 
@@ -78,5 +79,9 @@ namespace SharpCrop.LocalFile
 
             return Task.FromResult($"{Constants.UrlPrefix}{url}");
         }
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
     }
 }

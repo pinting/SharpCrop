@@ -170,12 +170,6 @@
   <data name="ConfigNoCopy" xml:space="preserve">
     <value>Disable URL copy</value>
   </data>
-  <data name="ConfigNoFocus" xml:space="preserve">
-    <value>Launch without focus</value>
-  </data>
-  <data name="ConfigNoGifRepeat" xml:space="preserve">
-    <value>Disable GIF repeat</value>
-  </data>
   <data name="ConfigNoScaling" xml:space="preserve">
     <value>Enable manual scaling</value>
   </data>
@@ -190,5 +184,20 @@
   </data>
   <data name="ConfigCopyProvider" xml:space="preserve">
     <value>Provider to copy</value>
+  </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+  <data name="FTP" xml:space="preserve">
+    <value>FTP</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="LocalFile" xml:space="preserve">
+    <value>Local FS</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
   </data>
 </root>

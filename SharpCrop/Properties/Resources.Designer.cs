@@ -115,24 +115,6 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Launch without focus.
-        /// </summary>
-        internal static string ConfigNoFocus {
-            get {
-                return ResourceManager.GetString("ConfigNoFocus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Disable GIF repeat.
-        /// </summary>
-        internal static string ConfigNoGifRepeat {
-            get {
-                return ResourceManager.GetString("ConfigNoGifRepeat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enable manual scaling.
         /// </summary>
         internal static string ConfigNoScaling {
@@ -187,11 +169,56 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dropbox.
+        /// </summary>
+        internal static string Dropbox {
+            get {
+                return ResourceManager.GetString("Dropbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encoding....
         /// </summary>
         internal static string Encoding {
             get {
                 return ResourceManager.GetString("Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FTP.
+        /// </summary>
+        internal static string FTP {
+            get {
+                return ResourceManager.GetString("FTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Drive.
+        /// </summary>
+        internal static string GoogleDrive {
+            get {
+                return ResourceManager.GetString("GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local FS.
+        /// </summary>
+        internal static string LocalFile {
+            get {
+                return ResourceManager.GetString("LocalFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OneDrive.
+        /// </summary>
+        internal static string OneDrive {
+            get {
+                return ResourceManager.GetString("OneDrive", resourceCulture);
             }
         }
         

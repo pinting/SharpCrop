@@ -4,6 +4,7 @@ using Dropbox.Api.Files;
 using System.IO;
 using SharpCrop.Provider.Utils;
 using System.Threading.Tasks;
+using SharpCrop.Dropbox.Properties;
 using SharpCrop.Provider.Forms;
 
 namespace SharpCrop.Dropbox
@@ -116,5 +117,9 @@ namespace SharpCrop.Dropbox
 
             return meta.Url;
         }
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
     }
 }

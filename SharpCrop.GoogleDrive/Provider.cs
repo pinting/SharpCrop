@@ -8,6 +8,7 @@ using SharpCrop.Provider.Utils;
 using SharpCrop.GoogleDrive.Utils;
 using System.Collections.Generic;
 using Google.Apis.Drive.v3.Data;
+using SharpCrop.GoogleDrive.Properties;
 
 namespace SharpCrop.GoogleDrive
 {
@@ -121,5 +122,9 @@ namespace SharpCrop.GoogleDrive
 
             return await createRequest.ExecuteAsync();
         }
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
     }
 }

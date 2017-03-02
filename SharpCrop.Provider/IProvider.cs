@@ -5,6 +5,10 @@ namespace SharpCrop.Provider
 {
     public interface IProvider
     {
+        string Id { get; }
+
+        string Name { get; }
+
         Task<string> Register(string savedState, bool showForm = true);
 
         Task<string> Upload(string name, MemoryStream stream);

@@ -7,6 +7,7 @@ using Microsoft.Graph;
 using SharpCrop.Provider.Forms;
 using SharpCrop.OneDrive.Utils;
 using SharpCrop.OneDrive.Models;
+using SharpCrop.OneDrive.Properties;
 using SharpCrop.Provider.Utils;
 
 namespace SharpCrop.OneDrive
@@ -124,5 +125,9 @@ namespace SharpCrop.OneDrive
 
             return result.Link.WebUrl;
         }
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
     }
 }

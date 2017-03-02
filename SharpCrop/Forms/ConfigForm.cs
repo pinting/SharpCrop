@@ -25,11 +25,9 @@ namespace SharpCrop.Forms
             InitializeComponent();
 
             // Init texts from Resources
-            noGifRepeatCheckBox.Text = Resources.ConfigNoGifRepeat;
             startupLoadCheckBox.Text = Resources.ConfigStartupLoad;
             noTransparencyCheckBox.Text = Resources.ConfigNoTransparency;
             enableMpegCheckbox.Text = Resources.ConfigEnableMpeg;
-            noFocusCheckBox.Text = Resources.ConfigNoFocus;
             noScalingCheckBox.Text = Resources.ConfigNoScaling;
             copyProviderBox.Text = Resources.ConfigCopyProvider;
             noCopyCheckBox.Text = Resources.ConfigNoCopy;
@@ -41,22 +39,19 @@ namespace SharpCrop.Forms
             resetButton.Text = Resources.ConfigReset;
 
             // Init lists and boxes
-            formatBox.Text = ConfigHelper.Current.SafeImageExt;
             formatBox.Items.AddRange(Constants.ImageFormats.Keys.ToArray());
-            videoFpsBox.Text = ConfigHelper.Current.SafeVideoFps.ToString();
             videoFpsBox.Items.AddRange(Constants.FpsList.ToArray());
-            urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
-            addProviderBox.Items.AddRange(Constants.Providers.Keys.ToArray());
+            videoFpsBox.Text = ConfigHelper.Current.SafeVideoFps.ToString();
+            urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
+            formatBox.Text = ConfigHelper.Current.SafeImageExt;
 
-            // Init checkboxes from settings
+            // Init checkboxes
             noCopyCheckBox.Checked = ConfigHelper.Current.NoCopy;
             noScalingCheckBox.Checked = ConfigHelper.Current.NoAutoScaling;
-            noGifRepeatCheckBox.Checked = ConfigHelper.Current.NoGifRepeat;
-            noFocusCheckBox.Checked = ConfigHelper.Current.NoFocus;
             noTransparencyCheckBox.Checked = ConfigHelper.Current.NoTransparency;
             enableMpegCheckbox.Checked = ConfigHelper.Current.EnableMpeg;
-            startupLoadCheckBox.Checked = ConfigHelper.Current.StartupLoad;
+            startupLoadCheckBox.Checked = ConfigHelper.Current.StartupRegister;
 
 #if __MonoCS__
             noFocusCheckBox.Enabled = false;
@@ -65,6 +60,7 @@ namespace SharpCrop.Forms
             // Update provider list and register an update event
             UpdateProviderList();
             urlToCopyBox.MouseEnter += (s, e) => UpdateProviderList();
+            addProviderBox.MouseEnter += (s, e) => UpdateProviderList();
             removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
 
         }
@@ -149,26 +145,6 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Disable or enable GIF repeat.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NoGifRepeatChanged(object sender, EventArgs e)
-        {
-            ConfigHelper.Current.NoGifRepeat = noGifRepeatCheckBox.Checked;
-        }
-
-        /// <summary>
-        /// Disable or enable focus on launch.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NoFocusChanged(object sender, EventArgs e)
-        {
-            ConfigHelper.Current.NoFocus = noFocusCheckBox.Checked;
-        }
-
-        /// <summary>
         /// Disable or enable transparency.
         /// </summary>
         /// <param name="sender"></param>
@@ -195,7 +171,7 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void OnLoadOnStartup(object sender, EventArgs e)
         {
-            ConfigHelper.Current.StartupLoad = startupLoadCheckBox.Checked;
+            ConfigHelper.Current.StartupRegister = startupLoadCheckBox.Checked;
         }
 
         /// <summary>
@@ -210,14 +186,19 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Update the loaded providers lists.
+        /// Update the providers lists.
         /// </summary>
         private void UpdateProviderList()
         {
+            // Clear existing items
             urlToCopyBox.Items.Clear();
             removeProviderBox.Items.Clear();
-            urlToCopyBox.Items.AddRange(controller.LoadedProviders.Keys.ToArray());
-            removeProviderBox.Items.AddRange(controller.LoadedProviders.Keys.ToArray());
+            addProviderBox.Items.Clear();
+
+            // Add them from the controller
+            urlToCopyBox.Items.AddRange(controller.RegisteredProviders.Keys.ToArray());
+            removeProviderBox.Items.AddRange(controller.RegisteredProviders.Keys.ToArray());
+            addProviderBox.Items.AddRange(controller.LoadedProviders.Select(p => p.Name).ToArray());
         }
 
         /// <summary>
@@ -232,10 +213,11 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            var number = (new Random().Next(1000, 9999)).ToString();
+            var number = (new Random().Next(100, 999)).ToString();
             var name = addProviderBox.SelectedItem.ToString();
+            var provider = controller.GetProviderByName(name);
 
-            await controller.LoadProvider($"{name}{number}", name);
+            await controller.RegisterProvider(provider, $"{name} {number}");
 
             addProviderBox.ClearSelected();
         }

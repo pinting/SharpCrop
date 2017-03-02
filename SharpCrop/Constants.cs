@@ -8,13 +8,13 @@ namespace SharpCrop
     public static class Constants
     {
         // List of the registered providers
-        public static readonly IReadOnlyDictionary<string, Type> Providers = new Dictionary<string, Type>()
+        public static readonly IReadOnlyList<Type> Providers = new List<Type>()
         {
-            {"Dropbox", typeof(Dropbox.Provider)},
-            {"GoogleDrive", typeof(GoogleDrive.Provider)},
-            {"OneDrive", typeof(OneDrive.Provider)},
-            {"FTP", typeof(FTP.Provider)},
-            {"LocalFile", typeof(LocalFile.Provider)}
+            typeof(Dropbox.Provider),
+            typeof(GoogleDrive.Provider),
+            typeof(OneDrive.Provider),
+            typeof(FTP.Provider),
+            typeof(LocalFile.Provider)
         };
 
         // List of avaiable image formats (first if default)

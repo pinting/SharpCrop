@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace SharpCrop.Models
 {
-    public class SavedProvider
+    public class LoadedProvider
     {
         public string Id;
-        public string State;
+        public string Name;
+        public Type ProviderType;
     }
 }

@@ -117,19 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CopyPath" xml:space="preserve">
-    <value>Copy path</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
   <data name="ProviderName" xml:space="preserve">
-    <value>FTP</value>
-  </data>
-  <data name="RemotePath" xml:space="preserve">
-    <value>Remote path</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>OneDrive</value>
   </data>
 </root>

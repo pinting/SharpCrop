@@ -29,19 +29,13 @@ namespace SharpCrop.Models
 		public bool NoAutoScaling { get; set; }
 
         [JsonProperty]
-        public bool NoGifRepeat { get; set; }
-
-        [JsonProperty]
-        public bool NoFocus { get; set; }
-
-        [JsonProperty]
         public bool NoTransparency { get; set; }
 
         [JsonProperty]
         public bool EnableMpeg { get; set; }
 
         [JsonProperty]
-        public bool StartupLoad { get; set; }
+        public bool StartupRegister { get; set; }
 
         [JsonProperty]
         public bool NoWelcome { get; set; }
