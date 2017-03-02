@@ -43,16 +43,18 @@ namespace SharpCrop.Utils
 
                 var delay = Stopwatch.StartNew();
                 var image = CaptureHelper.GetBitmap(rectangle, offset);
+                var frame = new GifFrame()
+                {
+                    Image = image,
+                    Delay = freq
+                };
 
                 delay.Stop();
 
                 wait = freq - (int)delay.ElapsedMilliseconds;
+                frame.Delay += (wait < 0 ? -1 * wait : 0);
 
-                frames.Add(new GifFrame()
-                {
-                    Image = image,
-                    Delay = freq + (wait < 0 ? -1 * wait : 0)
-                });
+                frames.Add(frame);
             }
         }
 
