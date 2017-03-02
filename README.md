@@ -8,7 +8,7 @@ This application can capture a part of your screen and upload it to the cloud - 
 * Google Drive
 * OneDrive
 * FTP
-* Local FS
+* Local filesystem
 
 ## Languages
 
