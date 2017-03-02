@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             this.formatBox = new System.Windows.Forms.ComboBox();
             this.noCopyCheckBox = new System.Windows.Forms.CheckBox();
@@ -46,6 +47,7 @@
             this.copyProviderBox = new System.Windows.Forms.Label();
             this.urlToCopyBox = new System.Windows.Forms.ComboBox();
             this.startupLoadCheckBox = new System.Windows.Forms.CheckBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // formatBox
@@ -272,5 +274,6 @@
         private System.Windows.Forms.Label copyProviderBox;
         private System.Windows.Forms.ComboBox urlToCopyBox;
         private System.Windows.Forms.CheckBox startupLoadCheckBox;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

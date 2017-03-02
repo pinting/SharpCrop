@@ -106,7 +106,7 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scalling in percent.
+        ///   Looks up a localized string similar to Scaling levels (in percent) for each monitor, separated by whitespaces (e.g. &quot;100 150 90&quot;).
         /// </summary>
         internal static string ConfigManualScallingHelp {
             get {

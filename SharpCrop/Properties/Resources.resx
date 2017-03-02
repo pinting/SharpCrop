@@ -198,6 +198,6 @@
     <value>OneDrive</value>
   </data>
   <data name="ConfigManualScallingHelp" xml:space="preserve">
-    <value>Scalling in percent</value>
+    <value>Scaling levels (in percent) for each monitor, separated by whitespaces (e.g. "100 150 90")</value>
   </data>
 </root>

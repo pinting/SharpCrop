@@ -52,9 +52,7 @@ namespace SharpCrop.Forms
             formatBox.Text = ConfigHelper.Current.SafeImageExt;
 
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
-            manualScallingBox.Text = string.IsNullOrEmpty(manualScallingBox.Text)
-                ? Resources.ConfigManualScallingHelp
-                : manualScallingBox.Text;
+            toolTip.SetToolTip(manualScallingBox, Resources.ConfigManualScallingHelp);
 
             // Update provider list and register an update event
             UpdateProviderList();

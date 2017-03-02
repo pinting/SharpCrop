@@ -133,7 +133,7 @@
     <value>Manuális skálázás</value>
   </data>
   <data name="ConfigManualScallingHelp" xml:space="preserve">
-    <value>DPI százalékban</value>
+    <value>Skálázási szintek (százalékban), monitoronként, szóközzel elválasztva (pl. "100 150 90")</value>
   </data>
   <data name="ConfigNoCopy" xml:space="preserve">
     <value>URL másolás kikapcsolása</value>
