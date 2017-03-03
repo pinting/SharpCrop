@@ -150,6 +150,9 @@
   <data name="ConfigStartupLoad" xml:space="preserve">
     <value>Szolgáltatások betöltése induláskor</value>
   </data>
+  <data name="ConfigUpdateLink" xml:space="preserve">
+    <value>Új frissítés elérhető!</value>
+  </data>
   <data name="ConfigVideoFps" xml:space="preserve">
     <value>Mozgókép sebessége (FPS)</value>
   </data>
