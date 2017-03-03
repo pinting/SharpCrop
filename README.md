@@ -1,6 +1,6 @@
 ﻿# SharpCrop
 
-This application can capture a part of your screen and upload it to one or more providers - you can find a list of the available services bellow. Currently Windows and Linux are supported, while OS X is not. It could be, however I have no machine to test it on.
+This application can capture a part of your screen and upload it to one or more providers - you can find a list of the available services bellow. Currently Windows and Linux are supported, while macOS (OS X) is not. It could be, however I have no machine to test it on.
 
 ## Overview
 
