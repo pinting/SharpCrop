@@ -6,6 +6,8 @@ This application can capture a part of your screen and upload it to the cloud - 
 
 <a href="https://youtu.be/8ZG1DBFUiK4"><img src="https://github.com/pinting/SharpCrop/raw/master/screenshot.png" width="550"></a>
 
+Click on the screenshot to watch a video of the FFmpeg recording.
+
 ## Providers
 
 * Dropbox
