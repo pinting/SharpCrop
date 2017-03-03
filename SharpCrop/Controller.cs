@@ -410,7 +410,7 @@ namespace SharpCrop
                 dynamic parsed = JObject.Parse(reader.ReadToEnd());
 
                 var tagName = ((string)parsed.tag_name.ToString()).Replace(".", "");
-                var version = int.Parse(tagName) * (int)Math.Pow(10, Constants.VerLength - tagName.Length);
+                var version = (int)(int.Parse(tagName) * Math.Pow(10, Constants.VersionLength - tagName.Length));
 
                 if (version > Constants.Version)
                 {

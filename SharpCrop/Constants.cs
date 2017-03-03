@@ -8,7 +8,7 @@ namespace SharpCrop
     public static class Constants
     {
         // Version
-        public static readonly int Version = 1300;
+        public static readonly int Version = 2000;
 
         // List of the registered providers
         public static readonly IReadOnlyList<Type> Providers = new List<Type>()
@@ -44,7 +44,7 @@ namespace SharpCrop
         public static readonly string SettingsPath = "Settings.json";
         public static readonly Brush LeftColor = Brushes.RoyalBlue;
         public static readonly Brush RightColor = Brushes.PaleVioletRed;
-        public static readonly int VerLength = 4;
+        public static readonly int VersionLength = 4;
         public static readonly int PenWidth = 2;
 
         // For .NET (Bumpkit) GifEncoder
