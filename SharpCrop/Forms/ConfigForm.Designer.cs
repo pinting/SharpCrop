@@ -48,12 +48,13 @@
             this.urlToCopyBox = new System.Windows.Forms.ComboBox();
             this.startupLoadCheckBox = new System.Windows.Forms.CheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.updateLinkLabel = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // formatBox
             // 
             this.formatBox.FormattingEnabled = true;
-            this.formatBox.Location = new System.Drawing.Point(12, 12);
+            this.formatBox.Location = new System.Drawing.Point(30, 29);
             this.formatBox.Name = "formatBox";
             this.formatBox.Size = new System.Drawing.Size(148, 28);
             this.formatBox.TabIndex = 0;
@@ -62,7 +63,7 @@
             // noCopyCheckBox
             // 
             this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(12, 210);
+            this.noCopyCheckBox.Location = new System.Drawing.Point(30, 227);
             this.noCopyCheckBox.Name = "noCopyCheckBox";
             this.noCopyCheckBox.Size = new System.Drawing.Size(161, 24);
             this.noCopyCheckBox.TabIndex = 1;
@@ -73,7 +74,7 @@
             // noScalingCheckBox
             // 
             this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(12, 181);
+            this.noScalingCheckBox.Location = new System.Drawing.Point(30, 198);
             this.noScalingCheckBox.Name = "noScalingCheckBox";
             this.noScalingCheckBox.Size = new System.Drawing.Size(177, 24);
             this.noScalingCheckBox.TabIndex = 2;
@@ -84,7 +85,7 @@
             // videoFpsBox
             // 
             this.videoFpsBox.FormattingEnabled = true;
-            this.videoFpsBox.Location = new System.Drawing.Point(12, 51);
+            this.videoFpsBox.Location = new System.Drawing.Point(30, 68);
             this.videoFpsBox.Name = "videoFpsBox";
             this.videoFpsBox.Size = new System.Drawing.Size(148, 28);
             this.videoFpsBox.TabIndex = 4;
@@ -93,7 +94,7 @@
             // formatLabel
             // 
             this.formatLabel.AutoSize = true;
-            this.formatLabel.Location = new System.Drawing.Point(176, 20);
+            this.formatLabel.Location = new System.Drawing.Point(194, 37);
             this.formatLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.formatLabel.Name = "formatLabel";
             this.formatLabel.Size = new System.Drawing.Size(94, 20);
@@ -103,7 +104,7 @@
             // videoFpsLabel
             // 
             this.videoFpsLabel.AutoSize = true;
-            this.videoFpsLabel.Location = new System.Drawing.Point(176, 57);
+            this.videoFpsLabel.Location = new System.Drawing.Point(194, 74);
             this.videoFpsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.videoFpsLabel.Name = "videoFpsLabel";
             this.videoFpsLabel.Size = new System.Drawing.Size(112, 20);
@@ -113,7 +114,7 @@
             // noTransparencyCheckBox
             // 
             this.noTransparencyCheckBox.AutoSize = true;
-            this.noTransparencyCheckBox.Location = new System.Drawing.Point(12, 240);
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(30, 257);
             this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
             this.noTransparencyCheckBox.Size = new System.Drawing.Size(221, 24);
             this.noTransparencyCheckBox.TabIndex = 9;
@@ -123,7 +124,7 @@
             // 
             // manualScallingBox
             // 
-            this.manualScallingBox.Location = new System.Drawing.Point(12, 132);
+            this.manualScallingBox.Location = new System.Drawing.Point(30, 149);
             this.manualScallingBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.manualScallingBox.Name = "manualScallingBox";
             this.manualScallingBox.Size = new System.Drawing.Size(148, 26);
@@ -133,7 +134,7 @@
             // manualScallingLabel
             // 
             this.manualScallingLabel.AutoSize = true;
-            this.manualScallingLabel.Location = new System.Drawing.Point(176, 135);
+            this.manualScallingLabel.Location = new System.Drawing.Point(194, 152);
             this.manualScallingLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.manualScallingLabel.Name = "manualScallingLabel";
             this.manualScallingLabel.Size = new System.Drawing.Size(155, 20);
@@ -143,7 +144,7 @@
             // enableMpegCheckbox
             // 
             this.enableMpegCheckbox.AutoSize = true;
-            this.enableMpegCheckbox.Location = new System.Drawing.Point(12, 270);
+            this.enableMpegCheckbox.Location = new System.Drawing.Point(30, 287);
             this.enableMpegCheckbox.Name = "enableMpegCheckbox";
             this.enableMpegCheckbox.Size = new System.Drawing.Size(193, 24);
             this.enableMpegCheckbox.TabIndex = 12;
@@ -155,7 +156,7 @@
             // 
             this.addProviderBox.FormattingEnabled = true;
             this.addProviderBox.ItemHeight = 20;
-            this.addProviderBox.Location = new System.Drawing.Point(404, 45);
+            this.addProviderBox.Location = new System.Drawing.Point(422, 62);
             this.addProviderBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.addProviderBox.Name = "addProviderBox";
             this.addProviderBox.Size = new System.Drawing.Size(178, 284);
@@ -166,7 +167,7 @@
             // 
             this.removeProviderBox.FormattingEnabled = true;
             this.removeProviderBox.ItemHeight = 20;
-            this.removeProviderBox.Location = new System.Drawing.Point(630, 45);
+            this.removeProviderBox.Location = new System.Drawing.Point(648, 62);
             this.removeProviderBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.removeProviderBox.Name = "removeProviderBox";
             this.removeProviderBox.Size = new System.Drawing.Size(178, 284);
@@ -176,7 +177,7 @@
             // removeProviderLabel
             // 
             this.removeProviderLabel.AutoSize = true;
-            this.removeProviderLabel.Location = new System.Drawing.Point(626, 12);
+            this.removeProviderLabel.Location = new System.Drawing.Point(644, 29);
             this.removeProviderLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.removeProviderLabel.Name = "removeProviderLabel";
             this.removeProviderLabel.Size = new System.Drawing.Size(157, 20);
@@ -186,7 +187,7 @@
             // addProviderLabel
             // 
             this.addProviderLabel.AutoSize = true;
-            this.addProviderLabel.Location = new System.Drawing.Point(399, 12);
+            this.addProviderLabel.Location = new System.Drawing.Point(417, 29);
             this.addProviderLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.addProviderLabel.Name = "addProviderLabel";
             this.addProviderLabel.Size = new System.Drawing.Size(132, 20);
@@ -196,7 +197,7 @@
             // copyProviderBox
             // 
             this.copyProviderBox.AutoSize = true;
-            this.copyProviderBox.Location = new System.Drawing.Point(176, 97);
+            this.copyProviderBox.Location = new System.Drawing.Point(194, 114);
             this.copyProviderBox.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.copyProviderBox.Name = "copyProviderBox";
             this.copyProviderBox.Size = new System.Drawing.Size(126, 20);
@@ -206,7 +207,7 @@
             // urlToCopyBox
             // 
             this.urlToCopyBox.FormattingEnabled = true;
-            this.urlToCopyBox.Location = new System.Drawing.Point(12, 91);
+            this.urlToCopyBox.Location = new System.Drawing.Point(30, 108);
             this.urlToCopyBox.Name = "urlToCopyBox";
             this.urlToCopyBox.Size = new System.Drawing.Size(148, 28);
             this.urlToCopyBox.TabIndex = 22;
@@ -215,7 +216,7 @@
             // startupLoadCheckBox
             // 
             this.startupLoadCheckBox.AutoSize = true;
-            this.startupLoadCheckBox.Location = new System.Drawing.Point(12, 300);
+            this.startupLoadCheckBox.Location = new System.Drawing.Point(30, 317);
             this.startupLoadCheckBox.Name = "startupLoadCheckBox";
             this.startupLoadCheckBox.Size = new System.Drawing.Size(193, 24);
             this.startupLoadCheckBox.TabIndex = 24;
@@ -223,11 +224,23 @@
             this.startupLoadCheckBox.UseVisualStyleBackColor = true;
             this.startupLoadCheckBox.CheckedChanged += new System.EventHandler(this.OnLoadOnStartup);
             // 
+            // updateLinkLabel
+            // 
+            this.updateLinkLabel.AutoSize = true;
+            this.updateLinkLabel.Location = new System.Drawing.Point(26, 355);
+            this.updateLinkLabel.Name = "updateLinkLabel";
+            this.updateLinkLabel.Size = new System.Drawing.Size(127, 20);
+            this.updateLinkLabel.TabIndex = 25;
+            this.updateLinkLabel.TabStop = true;
+            this.updateLinkLabel.Text = "updateLinkLabel";
+            this.updateLinkLabel.Visible = false;
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 346);
+            this.ClientSize = new System.Drawing.Size(861, 384);
+            this.Controls.Add(this.updateLinkLabel);
             this.Controls.Add(this.startupLoadCheckBox);
             this.Controls.Add(this.copyProviderBox);
             this.Controls.Add(this.urlToCopyBox);
@@ -275,5 +288,6 @@
         private System.Windows.Forms.ComboBox urlToCopyBox;
         private System.Windows.Forms.CheckBox startupLoadCheckBox;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.LinkLabel updateLinkLabel;
     }
 }

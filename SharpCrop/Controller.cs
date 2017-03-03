@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 using SharpCrop.Models;
 using SharpCrop.Properties;
 
@@ -381,6 +383,46 @@ namespace SharpCrop
                 Application.Exit();
 #endif
             });
+        }
+
+        /// <summary>
+        /// Check for updates.
+        /// </summary>
+        /// <returns>URL of the new version or null.</returns>
+        public string CheckUpdate()
+        {
+            var request = (HttpWebRequest)WebRequest.Create(Constants.UpdateLink);
+
+            request.UserAgent = "SharpCrop";
+
+            var response = (HttpWebResponse) request.GetResponse();
+            var stream = response.GetResponseStream();
+
+            if (stream == null)
+            {
+                return null;
+            }
+
+            var reader = new StreamReader(stream);
+            
+            try
+            {
+                dynamic parsed = JObject.Parse(reader.ReadToEnd());
+
+                var tagName = ((string)parsed.tag_name.ToString()).Replace(".", "");
+                var version = int.Parse(tagName) * (int)Math.Pow(10, Constants.VerLength - tagName.Length);
+
+                if (version > Constants.Version)
+                {
+                    return parsed.html_url.ToString();
+                }
+            }
+            catch
+            {
+                // Ignored
+            }
+
+            return null;
         }
 
         /// <summary>

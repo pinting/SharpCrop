@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using SharpCrop.Utils;
 using SharpCrop.Properties;
@@ -34,6 +36,7 @@ namespace SharpCrop.Forms
             addProviderLabel.Text = Resources.ConfigAddProvider;
             removeProviderLabel.Text = Resources.ConfigRemoveProvider;
             manualScallingLabel.Text = Resources.ConfigManualScalling;
+            updateLinkLabel.Text = Resources.ConfigUpdateLink;
             videoFpsLabel.Text = Resources.ConfigVideoFps;
             formatLabel.Text = Resources.ConfigFormat;
 
@@ -54,12 +57,20 @@ namespace SharpCrop.Forms
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
             toolTip.SetToolTip(manualScallingBox, Resources.ConfigManualScallingHelp);
 
+            // Init version checker
+            var url = controller.CheckUpdate();
+
+            if (url != null)
+            {
+                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
+                updateLinkLabel.Show();
+            }
+
             // Update provider list and register an update event
             UpdateProviderList();
             urlToCopyBox.MouseEnter += (s, e) => UpdateProviderList();
             addProviderBox.MouseEnter += (s, e) => UpdateProviderList();
             removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
-
         }
         
         /// <summary>
@@ -234,6 +245,16 @@ namespace SharpCrop.Forms
         {
             base.OnShown(e);
             Focus();
+        }
+
+        /// <summary>
+        /// When update link was clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnUpdateLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Constants.UpdateLink);
         }
     }
 }

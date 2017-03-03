@@ -7,6 +7,9 @@ namespace SharpCrop
 {
     public static class Constants
     {
+        // Version
+        public static readonly int Version = 1300;
+
         // List of the registered providers
         public static readonly IReadOnlyList<Type> Providers = new List<Type>()
         {
@@ -37,9 +40,11 @@ namespace SharpCrop
         };
 
         // General constants
+        public static readonly string UpdateLink = "http://api.github.com/repos/pinting/SharpCrop/releases/latest";
         public static readonly string SettingsPath = "Settings.json";
         public static readonly Brush LeftColor = Brushes.RoyalBlue;
         public static readonly Brush RightColor = Brushes.PaleVioletRed;
+        public static readonly int VerLength = 4;
         public static readonly int PenWidth = 2;
 
         // For .NET (Bumpkit) GifEncoder

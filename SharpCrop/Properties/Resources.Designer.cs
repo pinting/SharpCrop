@@ -160,6 +160,15 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New update available!.
+        /// </summary>
+        internal static string ConfigUpdateLink {
+            get {
+                return ResourceManager.GetString("ConfigUpdateLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Video FPS.
         /// </summary>
         internal static string ConfigVideoFps {
