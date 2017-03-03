@@ -180,8 +180,10 @@ namespace SharpCrop.Utils
             {
                 using (var ffmpeg = new Process())
                 {
+                    var fps = ConfigHelper.Current.SafeVideoFps;
+
                     ffmpeg.StartInfo.FileName = "ffmpeg";
-                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -i pipe:0 -r {ConfigHelper.Current.SafeVideoFps} -an -y -f mp4 {temp}";
+                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -r {fps} -i pipe:0 -r {fps} -an -y -f mp4 {temp}";
                     ffmpeg.StartInfo.RedirectStandardInput = true;
                     ffmpeg.StartInfo.UseShellExecute = false;
                     ffmpeg.StartInfo.CreateNoWindow = true;
