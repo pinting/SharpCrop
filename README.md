@@ -2,6 +2,10 @@
 
 This application can capture a part of your screen and upload it to the cloud - or save it locally.
 
+## Overview
+
+[![Screenshot](https://github.com/pinting/SharpCrop/raw/master/screenshot.png)](https://youtu.be/8ZG1DBFUiK4)
+
 ## Providers
 
 * Dropbox

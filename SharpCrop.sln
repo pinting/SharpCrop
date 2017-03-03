@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Root", "Root", "{734E6433-F
 		icon.ico = icon.ico
 		LICENSE = LICENSE
 		README.md = README.md
+		screenshot.png = screenshot.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrop.Provider", "SharpCrop.Provider\SharpCrop.Provider.csproj", "{318EE826-9014-4869-B84A-B447980229BC}"
