@@ -8,7 +8,7 @@ namespace SharpCrop
     public static class Constants
     {
         // Version
-        public static readonly int Version = 2000;
+        public const int Version = 2000;
 
         // List of the registered providers
         public static readonly IReadOnlyList<Type> Providers = new List<Type>()
@@ -40,18 +40,18 @@ namespace SharpCrop
         };
 
         // General constants
-        public static readonly string UpdateLink = "http://api.github.com/repos/pinting/SharpCrop/releases/latest";
-        public static readonly string SettingsPath = "Settings.json";
-        public static readonly Brush LeftColor = Brushes.RoyalBlue;
+        public const string LatestVersion = "http://api.github.com/repos/pinting/SharpCrop/releases/latest";
         public static readonly Brush RightColor = Brushes.PaleVioletRed;
-        public static readonly int VersionLength = 4;
-        public static readonly int PenWidth = 2;
+        public static readonly Brush LeftColor = Brushes.RoyalBlue;
+        public const string SettingsPath = "Settings.json";
+        public const int VersionLength = 4;
+        public const int PenWidth = 2;
 
         // For .NET (Bumpkit) GifEncoder
-        public static readonly int GifMaxColorDiff = 10;
-        public static readonly int GifCheckStep = 2;
+        public const int GifMaxColorDiff = 10;
+        public const int GifCheckStep = 2;
 
         // For Mono (NGif) GifEncoder
-        public static readonly int GifQuality = 20;
+        public const int GifQuality = 20;
     }
 }

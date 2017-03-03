@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
 using SharpCrop.Utils;
 using SharpCrop.Properties;
@@ -15,16 +14,21 @@ namespace SharpCrop.Forms
     /// </summary>
     public sealed partial class ConfigForm : Form
     {
-        private readonly Controller controller;
-
         /// <summary>
         /// Construct a new ConfigForm and initialize it with ConfigHelper.
         /// </summary>
-        public ConfigForm(Controller controller)
+        public ConfigForm()
         {
-            this.controller = controller;
-
             InitializeComponent();
+
+            // Init version checker
+            var url = UpdateHelper.GetLatest();
+
+            if (url != null)
+            {
+                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
+                updateLinkLabel.Show();
+            }
 
             // Init texts from Resources
             startupLoadCheckBox.Text = Resources.ConfigStartupLoad;
@@ -53,18 +57,8 @@ namespace SharpCrop.Forms
             videoFpsBox.Text = ConfigHelper.Current.SafeVideoFps.ToString();
             urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
             formatBox.Text = ConfigHelper.Current.SafeImageExt;
-
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
             toolTip.SetToolTip(manualScallingBox, Resources.ConfigManualScallingHelp);
-
-            // Init version checker
-            var url = controller.CheckUpdate();
-
-            if (url != null)
-            {
-                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
-                updateLinkLabel.Show();
-            }
 
             // Update provider list and register an update event
             UpdateProviderList();
@@ -193,9 +187,9 @@ namespace SharpCrop.Forms
             addProviderBox.Items.Clear();
 
             // Add them from the controller
-            urlToCopyBox.Items.AddRange(controller.RegisteredProviders.Keys.ToArray());
-            removeProviderBox.Items.AddRange(controller.RegisteredProviders.Keys.ToArray());
-            addProviderBox.Items.AddRange(controller.LoadedProviders.Select(p => p.Name).ToArray());
+            urlToCopyBox.Items.AddRange(ProviderManager.RegisteredProviders.Keys.ToArray());
+            removeProviderBox.Items.AddRange(ProviderManager.RegisteredProviders.Keys.ToArray());
+            addProviderBox.Items.AddRange(ProviderManager.LoadedProviders.Select(p => p.Name).ToArray());
         }
 
         /// <summary>
@@ -212,9 +206,9 @@ namespace SharpCrop.Forms
 
             var number = (new Random().Next(100, 999)).ToString();
             var name = addProviderBox.SelectedItem.ToString();
-            var provider = controller.GetProviderByName(name);
+            var provider = ProviderManager.GetProviderByName(name);
 
-            await controller.RegisterProvider(provider, $"{name} {number}");
+            await ProviderManager.RegisterProvider(provider, $"{name} {number}");
 
             addProviderBox.ClearSelected();
         }
@@ -233,7 +227,7 @@ namespace SharpCrop.Forms
 
             var name = removeProviderBox.SelectedItem.ToString();
 
-            controller.ClearProvider(name);
+            ProviderManager.ClearProvider(name);
             removeProviderBox.ClearSelected();
         }
 
@@ -245,16 +239,6 @@ namespace SharpCrop.Forms
         {
             base.OnShown(e);
             Focus();
-        }
-
-        /// <summary>
-        /// When update link was clicked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnUpdateLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Constants.UpdateLink);
         }
     }
 }

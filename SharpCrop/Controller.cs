@@ -1,16 +1,11 @@
 ﻿using SharpCrop.Forms;
-using SharpCrop.Provider;
 using SharpCrop.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
-using SharpCrop.Models;
 using SharpCrop.Properties;
 
 namespace SharpCrop
@@ -21,8 +16,6 @@ namespace SharpCrop
     /// </summary>
     public class Controller : ApplicationContext
     {
-        private readonly Dictionary<string, IProvider> registeredProviders = new Dictionary<string, IProvider>();
-        private readonly List<LoadedProvider> loadedProviders = new List<LoadedProvider>();
         private readonly List<Form> cropForms = new List<Form>();
         private readonly Form configForm;
 
@@ -32,15 +25,15 @@ namespace SharpCrop
         public Controller()
         {
             // Create a new ConfigForm
-            configForm = new ConfigForm(this);
+            configForm = new ConfigForm();
             configForm.FormClosed += (s, e) => Application.Exit();
-            configForm.Load += (s, e) => RestoreProviders();
+            configForm.Load += (s, e) => ProviderManager.RestoreProviders();
 
             // If there are any registered providers, the config will be hidden
             // Else the config will be closed (along with the whole application)
             configForm.FormClosing += (s, e) =>
             {
-                if (e.CloseReason == CloseReason.UserClosing && registeredProviders.Count > 0)
+                if (e.CloseReason == CloseReason.UserClosing && ProviderManager.RegisteredProviders.Count > 0)
                 {
                     e.Cancel = true;
                     configForm.Hide();
@@ -70,7 +63,7 @@ namespace SharpCrop
             // If StartupRegister is enabled, init providers on the load of the first CropForm
             if(ConfigHelper.Current.StartupRegister)
             {
-                cropForms[0].Load += (s, e) => RestoreProviders();
+                cropForms[0].Load += (s, e) => ProviderManager.RestoreProviders();
             }
 
             // Show settings if no providers gonna be loaded
@@ -167,11 +160,11 @@ namespace SharpCrop
             // Try to load the saved providers (if load on startup is disabled)
             if (!ConfigHelper.Current.StartupRegister)
             {
-                RestoreProviders();
+                ProviderManager.RestoreProviders();
             }
 
             // Save file locally if no providers were registered
-            if (registeredProviders.Count == 0)
+            if (ProviderManager.RegisteredProviders.Count == 0)
             {
                 File.WriteAllBytes(name, stream.ToArray());
                 return null;
@@ -183,7 +176,7 @@ namespace SharpCrop
             string last = null;
 
             // Run the uploads async
-            foreach (var p in registeredProviders)
+            foreach (var p in ProviderManager.RegisteredProviders)
             {
                 if (p.Value != null)
                 {
@@ -216,151 +209,6 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Init loaded providers list.
-        /// </summary>
-        public void LoadProviders()
-        {
-            foreach (var type in Constants.Providers)
-            {
-                // I know, I know, this looks bad
-                // I create a new Instance to write down the Name and Id
-                // To help the bellow elsewere, to create another new instance
-                var provider = (IProvider)Activator.CreateInstance(type);
-
-                loadedProviders.Add(new LoadedProvider()
-                {
-                    Id = provider.Id,
-                    Name = provider.Name,
-                    ProviderType = type
-                });
-            }
-        }
-
-        /// <summary>
-        /// Register providers from USER SETTINGS, where they were previously saved!
-        /// </summary>
-        private void RestoreProviders()
-        {
-            // Load available IProvider types into memory
-            if (loadedProviders.Count == 0)
-            {
-                LoadProviders();
-            }
-
-            var tasks = new List<Task>();
-
-            // ToList() is needed because the original Dictionary is changing while we iterating
-            ConfigHelper.Current.SafeProviders
-                .ToList()
-                .ForEach(p => tasks.Add(
-                    RegisterProvider(GetProviderById(p.Value.Id), p.Key, p.Value.State, false)));
-
-            // Wait for tasks to finish
-            tasks.ForEach(async p => await p);
-        }
-
-        /// <summary>
-        /// Unregister a provider.
-        /// </summary>
-        /// <param name="name"></param>
-        public void ClearProvider(string name)
-        {
-            // Remove from the registered providers
-            if (registeredProviders.ContainsKey(name))
-            {
-                registeredProviders.Remove(name);
-            }
-
-            // Remove from the configuration file
-            if (ConfigHelper.Current.SafeProviders.ContainsKey(name))
-            {
-                ConfigHelper.Current.SafeProviders.Remove(name);
-            }
-        }
-
-        /// <summary>
-        /// Get a new instance of a IProvider class by name.
-        /// </summary>
-        /// <param name="name">Name of the class, can be language specific.</param>
-        /// <returns></returns>
-        public IProvider GetProviderByName(string name)
-        {
-            var loaded = loadedProviders.FirstOrDefault(e => e.Name == name);
-
-            if (loaded != null)
-            {
-                return (IProvider)Activator.CreateInstance(loaded.ProviderType);
-            }
-            
-            return null;
-        }
-
-        /// <summary>
-        /// Get a new instance of a IProvider class by id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public IProvider GetProviderById(string id)
-        {
-            var loaded = loadedProviders.FirstOrDefault(e => e.Id == id);
-
-            if (loaded != null)
-            {
-                return (IProvider)Activator.CreateInstance(loaded.ProviderType);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Try to register a provider.
-        /// </summary>
-        /// <param name="provider">An IProvider class.</param>
-        /// <param name="nick">The nick of the provider - CAN BE ANYTHING!</param>
-        /// <param name="savedState">A saved state that the Provider will try to interpret - if it fails, the registration form will be used.</param>
-        /// <param name="showForm">Enable or disable registration form.</param>
-        /// <returns></returns>
-        public async Task<bool> RegisterProvider(IProvider provider, string nick, string savedState = null, bool showForm = true)
-        {
-            // If there is already a REGISTERED PROVIDER with this (exact) nick, return with false
-            if (provider == null || registeredProviders.ContainsKey(nick))
-            {
-                return false;
-            }
-
-            // Try to register the provider form the savedState
-            var state = await provider.Register(savedState, showForm);
-
-            if (showForm && state == null)
-            {
-                ToastFactory.Create(string.Format(Resources.ProviderRegistrationFailed, provider.Name));
-            }
-            else if (showForm && state != savedState)
-            {
-                // If the token is not changed, there was no new registration
-                ToastFactory.Create(string.Format(Resources.ProviderRegistrationSucceed, provider.Name));
-            }
-
-            // If the the registration failed, return with false
-            if (state == null)
-            {
-                return false;
-            }
-
-            // Save the provider to the config
-            ConfigHelper.Current.Providers[nick] = new SavedProvider()
-            {
-                Id = provider.Id,
-                State = state
-            };
-
-            // Save the provider as registered
-            registeredProviders[nick] = provider;
-
-            return true;
-        }
-
-        /// <summary>
         /// Show the end notifcation. If the url is null, the text gonna tell the user, that the upload has failed.
         /// </summary>
         /// <param name="url"></param>
@@ -386,46 +234,6 @@ namespace SharpCrop
         }
 
         /// <summary>
-        /// Check for updates.
-        /// </summary>
-        /// <returns>URL of the new version or null.</returns>
-        public string CheckUpdate()
-        {
-            var request = (HttpWebRequest)WebRequest.Create(Constants.UpdateLink);
-
-            request.UserAgent = "SharpCrop";
-
-            var response = (HttpWebResponse) request.GetResponse();
-            var stream = response.GetResponseStream();
-
-            if (stream == null)
-            {
-                return null;
-            }
-
-            var reader = new StreamReader(stream);
-            
-            try
-            {
-                dynamic parsed = JObject.Parse(reader.ReadToEnd());
-
-                var tagName = ((string)parsed.tag_name.ToString()).Replace(".", "");
-                var version = (int)(int.Parse(tagName) * Math.Pow(10, Constants.VersionLength - tagName.Length));
-
-                if (version > Constants.Version)
-                {
-                    return parsed.html_url.ToString();
-                }
-            }
-            catch
-            {
-                // Ignored
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Hide every CropForm - if more than one monitor is used.
         /// </summary>
         public void HideCrop() => cropForms.ForEach(e => e.Hide());
@@ -434,16 +242,6 @@ namespace SharpCrop
         /// Show every CropForm.
         /// </summary>
         public void ShowCrop() => cropForms.ForEach(e => e.Show());
-
-        /// <summary>
-        /// Currently registered (working) providers.
-        /// </summary>
-        public IReadOnlyDictionary<string, IProvider> RegisteredProviders => registeredProviders;
-
-        /// <summary>
-        /// Currently loaded (available) providers.
-        /// </summary>
-        public IReadOnlyList<LoadedProvider> LoadedProviders => loadedProviders;
 
         /// <summary>
         /// Protect list from external modification.
