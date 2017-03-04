@@ -10,7 +10,7 @@ Click on the screenshot to watch a video of the FFmpeg recording.
 
 ## Download
 
-Get the latest version from <a href="https://github.com/pinting/SharpCrop/releases">releases.</a>
+Get the latest version from <a href="https://github.com/pinting/SharpCrop/releases">releases</a>.
 
 ## Usage
 
