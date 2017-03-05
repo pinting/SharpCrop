@@ -157,17 +157,17 @@ namespace SharpCrop
             toast = ToastFactory.Create(Resources.StopRecording, Color.OrangeRed, 0, () =>
             {
                 toast = ToastFactory.Create(Resources.Encoding, 0);
-                VideoFactory.Stop();
+                CaptureHelper.StopRecording();
             });
 
             // Use Mpeg if enabled
             if (ConfigHelper.Current.EnableMpeg)
             {
-                stream = await VideoFactory.RecordMpeg(region, offset);
+                stream = await CaptureHelper.RecordMpeg(region, offset);
             }
             else
             {
-                stream = await VideoFactory.RecordGif(region, offset);
+                stream = await CaptureHelper.RecordGif(region, offset);
             }
 
             ToastFactory.Remove(toast);
