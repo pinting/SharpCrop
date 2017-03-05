@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SharpCrop.Models;
-using SharpCrop.Properties;
 using SharpCrop.Provider;
 
 namespace SharpCrop.Utils
@@ -19,7 +18,7 @@ namespace SharpCrop.Utils
         /// <summary>
         /// Init loaded providers list.
         /// </summary>
-        private static void LoadProviders()
+        public static void LoadProviders()
         {
             foreach (var type in Constants.Providers)
             {
@@ -35,29 +34,6 @@ namespace SharpCrop.Utils
                     ProviderType = type
                 });
             }
-        }
-
-        /// <summary>
-        /// Register providers from USER SETTINGS, where they were previously saved!
-        /// </summary>
-        public static void RestoreProviders()
-        {
-            // Load available IProvider types into memory
-            if (loadedProviders.Count == 0)
-            {
-                LoadProviders();
-            }
-
-            var tasks = new List<Task>();
-
-            // ToList() is needed because the original Dictionary is changing while we iterating
-            ConfigHelper.Current.SafeProviders
-                .ToList()
-                .ForEach(p => tasks.Add(
-                    RegisterProvider(GetProviderById(p.Value.Id), p.Key, p.Value.State, false)));
-
-            // Wait for tasks to finish
-            tasks.ForEach(async p => await p);
         }
 
         /// <summary>
@@ -123,24 +99,19 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static async Task<bool> RegisterProvider(IProvider provider, string nick, string savedState = null, bool showForm = true)
         {
-            // If there is already a REGISTERED PROVIDER with this (exact) nick, return with false
-            if (provider == null || registeredProviders.ContainsKey(nick))
+            if (provider == null)
             {
                 return false;
             }
 
+            // If there is already a REGISTERED PROVIDER with this (exact) nick, return with true
+            if (registeredProviders.ContainsKey(nick))
+            {
+                return provider.Name == registeredProviders[nick].Name;
+            }
+
             // Try to register the provider form the savedState
             var state = await provider.Register(savedState, showForm);
-
-            if (showForm && state == null)
-            {
-                ToastFactory.Create(string.Format(Resources.ProviderRegistrationFailed, provider.Name));
-            }
-            else if (showForm && state != savedState)
-            {
-                // If the token is not changed, there was no new registration
-                ToastFactory.Create(string.Format(Resources.ProviderRegistrationSucceed, provider.Name));
-            }
 
             // If the the registration failed, return with false
             if (state == null)

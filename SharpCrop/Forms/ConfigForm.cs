@@ -21,15 +21,6 @@ namespace SharpCrop.Forms
         {
             InitializeComponent();
 
-            // Init version checker
-            var url = UpdateHelper.GetLatest();
-
-            if (url != null)
-            {
-                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
-                updateLinkLabel.Show();
-            }
-
             // Init texts from Resources
             startupLoadCheckBox.Text = Resources.ConfigStartupLoad;
             noTransparencyCheckBox.Text = Resources.ConfigNoTransparency;
@@ -62,9 +53,34 @@ namespace SharpCrop.Forms
 
             // Update provider list and register an update event
             UpdateProviderList();
+
             urlToCopyBox.MouseEnter += (s, e) => UpdateProviderList();
             addProviderBox.MouseEnter += (s, e) => UpdateProviderList();
             removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
+
+            var timer = new Timer();
+
+            timer.Tick += (s, e) => UpdateProviderList();
+            timer.Interval = 1000;
+            timer.Enabled = true;
+            timer.Start();
+
+            // Init version checker
+            var url = UpdateHelper.GetLatest();
+
+            if (url != null)
+            {
+                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
+                updateLinkLabel.Show();
+            }
+
+            // Show welcome message if this is the first launch of the app
+            if (!ConfigHelper.Current.NoWelcome)
+            {
+                // ReSharper disable once LocalizableElement
+                MessageBox.Show(Resources.WelcomeMessage, "SharpCrop");
+                ConfigHelper.Current.NoWelcome = true;
+            }
         }
         
         /// <summary>

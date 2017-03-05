@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpCrop.Properties;
@@ -27,7 +28,7 @@ namespace SharpCrop
             // Create a new ConfigForm
             configForm = new ConfigForm();
             configForm.FormClosed += (s, e) => Application.Exit();
-            configForm.Load += (s, e) => ProviderManager.RestoreProviders();
+            configForm.Load += async (s, e) => await RestoreProviders();
 
             // If there are any registered providers, the config will be hidden
             // Else the config will be closed (along with the whole application)
@@ -60,28 +61,62 @@ namespace SharpCrop
                 cropForms.Add(form);
             }
 
-            // If StartupRegister is enabled, init providers on the load of the first CropForm
-            if(ConfigHelper.Current.StartupRegister)
+            // Run async init
+            (new Action(async () =>
             {
-                cropForms[0].Load += (s, e) => ProviderManager.RestoreProviders();
+                // If StartupRegister is enabled, init providers on the load of the first CropForm
+                if (ConfigHelper.Current.StartupRegister)
+                {
+                    await RestoreProviders();
+
+                    if (ProviderManager.RegisteredProviders.Count > 0)
+                    {
+                        ShowCrop();
+                    }
+                    else
+                    {
+                        configForm.Show();
+                    }
+                }
+                else if (ConfigHelper.Current.SafeProviders.Count > 0)
+                {
+                    // Show settings if no providers gonna be loaded - not safe, this is a prediction
+                    ShowCrop();
+                }
+                else
+                {
+                    configForm.Show();
+                }
+            }))();
+        }
+
+        /// <summary>
+        /// Register providers from user settings, where they were previously saved.
+        /// </summary>
+        private async Task RestoreProviders()
+        {
+            // Load available IProvider types into memory
+            if (ProviderManager.LoadedProviders.Count == 0)
+            {
+                ProviderManager.LoadProviders();
             }
 
-            // Show settings if no providers gonna be loaded
-            if(ConfigHelper.Current.SafeProviders.Count > 0)
-            {
-                ShowCrop();
-            }
-            else
-            {
-                configForm.Show();
-            }
+            var tasks = new Dictionary<string, Task<bool>>();
 
-            // Show welcome message if this is the first launch of the app
-            if (!ConfigHelper.Current.NoWelcome)
+            // ToList() is needed because the original Dictionary is changing while we iterating
+            ConfigHelper.Current.SafeProviders
+                .ToList()
+                .ForEach(p => tasks[p.Key] = ProviderManager.RegisterProvider(
+                    ProviderManager.GetProviderById(p.Value.Id), p.Key, p.Value.State, false));
+
+            // Wait for tasks to finish and remove unloaded providers
+            foreach (var task in tasks)
             {
-                // ReSharper disable once LocalizableElement
-                MessageBox.Show(Resources.WelcomeMessage, "SharpCrop");
-                ConfigHelper.Current.NoWelcome = true;
+                if (!ProviderManager.RegisteredProviders.ContainsKey(task.Key) && !await task.Value)
+                {
+                    ToastFactory.Create(string.Format(Resources.ProviderRegistrationFailed, task.Key));
+                    ProviderManager.ClearProvider(task.Key);
+                }
             }
         }
 
@@ -160,7 +195,7 @@ namespace SharpCrop
             // Try to load the saved providers (if load on startup is disabled)
             if (!ConfigHelper.Current.StartupRegister)
             {
-                ProviderManager.RestoreProviders();
+                await RestoreProviders();
             }
 
             // Save file locally if no providers were registered
