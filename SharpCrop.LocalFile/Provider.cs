@@ -13,13 +13,17 @@ namespace SharpCrop.LocalFile
     {
         private string state;
 
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
+
         /// <summary>
         /// Register a path which will be saved as the state of this provider.
         /// </summary>
         /// <param name="savedState"></param>
         /// <param name="showForm"></param>
         /// <returns></returns>
-        public Task<string> Register(string savedState, bool showForm = true)
+        public Task<string> Register(string savedState = null, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -43,14 +47,14 @@ namespace SharpCrop.LocalFile
             var form = new FolderForm();
             var success = false;
 
-            form.OnResult(path =>
+            form.OnResult += path =>
             {
                 success = true;
                 state = path;
 
                 result.SetResult(path);
                 form.Close();
-            });
+            };
 
             form.FormClosed += (sender, e) =>
             {
@@ -79,9 +83,5 @@ namespace SharpCrop.LocalFile
 
             return Task.FromResult($"{Constants.UrlPrefix}{url}");
         }
-
-        public string Id => Constants.ProviderId;
-
-        public string Name => Resources.ProviderName;
     }
 }

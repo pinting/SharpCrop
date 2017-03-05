@@ -16,6 +16,21 @@ namespace SharpCrop.Utils
         private static readonly List<LoadedProvider> loadedProviders = new List<LoadedProvider>();
 
         /// <summary>
+        /// Executed when registered providers changed
+        /// </summary>
+        public static event Action RegisteredProvidersChanged;
+
+        /// <summary>
+        /// Currently registered (working) providers.
+        /// </summary>
+        public static IReadOnlyDictionary<string, IProvider> RegisteredProviders => registeredProviders;
+
+        /// <summary>
+        /// Currently loaded (available) providers.
+        /// </summary>
+        public static IReadOnlyList<LoadedProvider> LoadedProviders => loadedProviders;
+
+        /// <summary>
         /// Init loaded providers list.
         /// </summary>
         public static void LoadProviders()
@@ -46,6 +61,7 @@ namespace SharpCrop.Utils
             if (registeredProviders.ContainsKey(name))
             {
                 registeredProviders.Remove(name);
+                RegisteredProvidersChanged?.Invoke();
             }
 
             // Remove from the configuration file
@@ -129,17 +145,10 @@ namespace SharpCrop.Utils
             // Save the provider as registered
             registeredProviders[nick] = provider;
 
+            // Notify listeners
+            RegisteredProvidersChanged?.Invoke();
+
             return true;
         }
-
-        /// <summary>
-        /// Currently registered (working) providers.
-        /// </summary>
-        public static IReadOnlyDictionary<string, IProvider> RegisteredProviders => registeredProviders;
-
-        /// <summary>
-        /// Currently loaded (available) providers.
-        /// </summary>
-        public static IReadOnlyList<LoadedProvider> LoadedProviders => loadedProviders;
     }
 }

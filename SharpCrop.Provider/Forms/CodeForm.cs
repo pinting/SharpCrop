@@ -10,8 +10,12 @@ namespace SharpCrop.Provider.Forms
     /// </summary>
     public partial class CodeForm : Form
     {
-        private Action<string> onResult;
         private readonly int length;
+
+        /// <summary>
+        /// Executed when the required code is pasted.
+        /// </summary>
+        public event Action<string> OnResult;
 
         /// <summary>
         /// Construct a new CodePaste form with an URL and a required code length.
@@ -34,15 +38,6 @@ namespace SharpCrop.Provider.Forms
         }
 
         /// <summary>
-        /// Register a callback function.
-        /// </summary>
-        /// <param name="callback"></param>
-        public void OnResult(Action<string> callback)
-        {
-            onResult = callback;
-        }
-
-        /// <summary>
         /// Call the registered callback when the required code length was reached.
         /// </summary>
         /// <param name="sender"></param>
@@ -51,7 +46,7 @@ namespace SharpCrop.Provider.Forms
         {
             if(codeBox.Text.Length >= length)
             {
-                onResult(codeBox.Text);
+                OnResult?.Invoke(codeBox.Text);
             }
         }
 

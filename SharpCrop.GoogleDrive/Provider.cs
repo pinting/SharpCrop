@@ -20,13 +20,17 @@ namespace SharpCrop.GoogleDrive
         private DriveService service;
         private MemoryStore state;
 
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
+
         /// <summary>
         /// Get a working Provider for Google Drive.
         /// </summary>
         /// <param name="savedState">Serialized TokenResponse from the Google Api (and folderId).</param>
         /// <param name="showForm">Show registration form, if the saved state did not work.</param>
         /// <returns></returns>
-        public async Task<string> Register(string savedState, bool showForm = true)
+        public async Task<string> Register(string savedState = null, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -122,9 +126,5 @@ namespace SharpCrop.GoogleDrive
 
             return await createRequest.ExecuteAsync();
         }
-
-        public string Id => Constants.ProviderId;
-
-        public string Name => Resources.ProviderName;
     }
 }

@@ -14,14 +14,18 @@ namespace SharpCrop.FTP
     public class Provider : IProvider
     {
         private LoginCredentials creds;
-        
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
+
         /// <summary>
         /// Register an FTP connection from saved or new credentials.
         /// </summary>
         /// <param name="savedState">The login informations of the FTP.</param>
         /// <param name="showForm">Show the registration form, if the saved state did not work.</param>
         /// <returns></returns>
-        public Task<string> Register(string savedState, bool showForm = true)
+        public Task<string> Register(string savedState = null, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -51,14 +55,14 @@ namespace SharpCrop.FTP
             var form = new LoginForm();
             var success = false;
 
-            form.OnResult(newCreds =>
+            form.OnResult += newCreds =>
             {
                 creds = newCreds;
                 success = true;
 
                 result.SetResult(Obscure.Base64Encode(JsonConvert.SerializeObject(newCreds)));
                 form.Close();
-            });
+            };
 
             form.FormClosed += (sender, e) =>
             {
@@ -100,9 +104,5 @@ namespace SharpCrop.FTP
                 return Task.FromResult((string)null);
             }
         }
-
-        public string Id => Constants.ProviderId;
-
-        public string Name => Resources.ProviderName;
     }
 }

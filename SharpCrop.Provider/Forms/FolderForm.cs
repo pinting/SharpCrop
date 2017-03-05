@@ -9,7 +9,10 @@ namespace SharpCrop.Provider.Forms
     /// </summary>
     public partial class FolderForm : Form
     {
-        private Action<string> onResult;
+        /// <summary>
+        /// Executed when the required code is pasted.
+        /// </summary>
+        public event Action<string> OnResult;
 
         /// <summary>
         /// Init form.
@@ -21,15 +24,6 @@ namespace SharpCrop.Provider.Forms
             // Init texts
             submitButton.Text = Resources.FolderSubmit;
             browseButton.Text = Resources.FolderBrowse;
-        }
-
-        /// <summary>
-        /// Register a function as the callback.
-        /// </summary>
-        /// <param name="callback"></param>
-        public void OnResult(Action<string> callback)
-        {
-            onResult = callback;
         }
 
         /// <summary>
@@ -52,7 +46,7 @@ namespace SharpCrop.Provider.Forms
         /// <param name="e"></param>
         private void OnSubmit(object sender, EventArgs e)
         {
-            onResult(folderBox.Text);
+            OnResult?.Invoke(folderBox.Text);
         }
     }
 }

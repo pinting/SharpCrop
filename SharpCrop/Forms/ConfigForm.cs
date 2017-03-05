@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using SharpCrop.Utils;
 using SharpCrop.Properties;
 
+// ReSharper disable LocalizableElement
 // ReSharper disable CoVariantArrayConversion
 
 namespace SharpCrop.Forms
@@ -51,36 +51,16 @@ namespace SharpCrop.Forms
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
             toolTip.SetToolTip(manualScallingBox, Resources.ConfigManualScallingHelp);
 
-            // Update provider list and register an update event
-            UpdateProviderList();
-
-            urlToCopyBox.MouseEnter += (s, e) => UpdateProviderList();
-            addProviderBox.MouseEnter += (s, e) => UpdateProviderList();
-            removeProviderBox.MouseEnter += (s, e) => UpdateProviderList();
-
-            var timer = new Timer();
-
-            timer.Tick += (s, e) => UpdateProviderList();
-            timer.Interval = 1000;
-            timer.Enabled = true;
-            timer.Start();
-
-            // Init version checker
-            var url = UpdateHelper.GetLatest();
-
-            if (url != null)
-            {
-                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
-                updateLinkLabel.Show();
-            }
-
             // Show welcome message if this is the first launch of the app
             if (!ConfigHelper.Current.NoWelcome)
             {
-                // ReSharper disable once LocalizableElement
                 MessageBox.Show(Resources.WelcomeMessage, "SharpCrop");
                 ConfigHelper.Current.NoWelcome = true;
             }
+
+            // Update provider list and register an update event
+            ProviderManager.RegisteredProvidersChanged += UpdateProviderList;
+            UpdateProviderList();
         }
         
         /// <summary>

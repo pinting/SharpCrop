@@ -10,7 +10,10 @@ namespace SharpCrop.FTP.Forms
     /// </summary>
     public partial class LoginForm : Form
     {
-        private Action<LoginCredentials> onResult;
+        /// <summary>
+        /// Executed on form submit.
+        /// </summary>
+        public event Action<LoginCredentials> OnResult;
 
         /// <summary>
         /// Consturct a new LoginForm.
@@ -27,15 +30,6 @@ namespace SharpCrop.FTP.Forms
         }
 
         /// <summary>
-        /// Register for callback.
-        /// </summary>
-        /// <param name="callback"></param>
-        public void OnResult(Action<LoginCredentials> callback)
-        {
-            onResult = callback;
-        }
-
-        /// <summary>
         /// Executed when the login button is clicked.
         /// </summary>
         /// <param name="sender"></param>
@@ -44,7 +38,7 @@ namespace SharpCrop.FTP.Forms
         {
             try
             {
-                onResult?.Invoke(new LoginCredentials()
+                OnResult?.Invoke(new LoginCredentials()
                 {
                     Username = usernameBox.Text,
                     Password = passwordBox.Text,

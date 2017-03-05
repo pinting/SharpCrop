@@ -15,7 +15,11 @@ namespace SharpCrop.Dropbox
     public class Provider : IProvider
     {
         private DropboxClient client;
-        
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
+
         /// <summary>
         /// Create a new DropboxClient and test it.
         /// </summary>
@@ -43,7 +47,7 @@ namespace SharpCrop.Dropbox
         /// </summary>
         /// <param name="savedState"></param>
         /// <param name="showForm"></param>
-        public async Task<string> Register(string savedState, bool showForm = true)
+        public async Task<string> Register(string savedState = null, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -66,7 +70,7 @@ namespace SharpCrop.Dropbox
             var form = new CodeForm(url.ToString(), 43);
             var success = false;
 
-            form.OnResult(async code =>
+            form.OnResult += async code =>
             {
                 success = true;
                 form.Close();
@@ -81,7 +85,7 @@ namespace SharpCrop.Dropbox
                 {
                     result.SetResult(null);
                 }
-            });
+            };
 
             form.FormClosed += (sender, args) =>
             {
@@ -117,9 +121,5 @@ namespace SharpCrop.Dropbox
 
             return meta.Url;
         }
-
-        public string Id => Constants.ProviderId;
-
-        public string Name => Resources.ProviderName;
     }
 }

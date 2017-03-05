@@ -12,7 +12,7 @@ namespace SharpCrop.GoogleDrive.Utils
     /// </summary>
     public class CodeReceiver : ICodeReceiver
     {
-        private bool showForm;
+        private readonly bool showForm;
         private bool executed;
         
         public CodeReceiver(bool showForm = true)
@@ -34,13 +34,13 @@ namespace SharpCrop.GoogleDrive.Utils
             var form = new CodeForm(url, 45);
             var success = false;
 
-            form.OnResult(code =>
+            form.OnResult += code =>
             {
                 success = true;
 
                 form.Close();
                 result.SetResult(new AuthorizationCodeResponseUrl() { Code = code });
-            });
+            };
 
             form.FormClosed += (sender, e) =>
             {

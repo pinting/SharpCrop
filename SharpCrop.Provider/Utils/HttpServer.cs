@@ -18,21 +18,23 @@ namespace SharpCrop.Provider.Utils
         private readonly string[] indexFiles = {
             "index.html"
         };
-
-        private readonly Action<HttpListenerRequest> onRequest;
+        
         private readonly HttpListener listener;
         private readonly Thread thread;
         private readonly string root;
+        
+        /// <summary>
+        /// Executed when the required code is pasted.
+        /// </summary>
+        public event Action<HttpListenerRequest> OnRequest;
 
         /// <summary>
         /// Construct a HTTP server with given port.
         /// </summary>
         /// <param name="root">Directory path to serve.</param>
         /// <param name="port">Port of the server.</param>
-        /// <param name="onRequest">Callback function for incoming requests.</param>
-        public HttpServer(string root, int port, Action<HttpListenerRequest> onRequest)
+        public HttpServer(string root, int port)
         {
-            this.onRequest = onRequest;
             this.root = root;
 
             listener = new HttpListener();
@@ -67,7 +69,7 @@ namespace SharpCrop.Provider.Utils
         /// <param name="context"></param>
         private void Process(HttpListenerContext context)
         {
-            onRequest(context.Request);
+            OnRequest?.Invoke(context.Request);
 
             var filename = context.Request.Url.AbsolutePath.Substring(1);
 

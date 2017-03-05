@@ -18,7 +18,11 @@ namespace SharpCrop.OneDrive
     public class Provider : IProvider
     {
         private OneDriveClient client;
-        
+
+        public string Id => Constants.ProviderId;
+
+        public string Name => Resources.ProviderName;
+
         /// <summary>
         /// Try to create a new OneDriveClient.
         /// </summary>
@@ -46,7 +50,7 @@ namespace SharpCrop.OneDrive
         /// <param name="savedState">Previous serialized TokenResponse from OneDrive.</param>
         /// <param name="showForm"></param>
         /// <returns></returns>
-        public async Task<string> Register(string savedState, bool showForm = true)
+        public async Task<string> Register(string savedState = null, bool showForm = true)
         {
             var result = new TaskCompletionSource<string>();
             var provider = new AuthProvider();
@@ -74,7 +78,7 @@ namespace SharpCrop.OneDrive
             var form = new CodeForm(provider.Url, 37);
             var success = false;
 
-            form.OnResult(async code =>
+            form.OnResult += async code =>
             {
                 success = true;
 
@@ -89,7 +93,7 @@ namespace SharpCrop.OneDrive
                 {
                     result.SetResult(null);
                 }
-            });
+            };
 
             form.FormClosed += (sender, e) =>
             {
@@ -125,9 +129,5 @@ namespace SharpCrop.OneDrive
 
             return result.Link.WebUrl;
         }
-
-        public string Id => Constants.ProviderId;
-
-        public string Name => Resources.ProviderName;
     }
 }
