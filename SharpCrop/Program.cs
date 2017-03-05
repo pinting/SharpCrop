@@ -1,8 +1,8 @@
-﻿using SharpCrop.Utils;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SharpCrop.Models;
+using SharpCrop.Modules;
 
 namespace SharpCrop
 {
@@ -14,7 +14,7 @@ namespace SharpCrop
         [STAThread]
         public static void Main()
         {
-            if (VersionHelper.GetOpSystem() == OpSystem.Windows && Environment.OSVersion.Version.Major >= 6)
+            if (VersionHelper.GetSystemType() == SystemType.Windows && Environment.OSVersion.Version.Major >= 6)
             {
                 SetProcessDPIAware();
             }

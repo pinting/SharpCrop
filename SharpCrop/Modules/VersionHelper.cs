@@ -4,7 +4,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using SharpCrop.Models;
 
-namespace SharpCrop.Utils
+namespace SharpCrop.Modules
 {
     public static class VersionHelper
     {
@@ -12,24 +12,24 @@ namespace SharpCrop.Utils
         /// Check for updates.
         /// </summary>
         /// <returns>URL of the new version or null.</returns>
-        public static string GetLatest()
+        public static string GetLatestLink()
         {
             var request = (HttpWebRequest)WebRequest.Create(Constants.LatestVersion);
 
             request.UserAgent = "SharpCrop";
 
-            var response = (HttpWebResponse)request.GetResponse();
-            var stream = response.GetResponseStream();
-
-            if (stream == null)
-            {
-                return null;
-            }
-
-            var reader = new StreamReader(stream);
-
             try
             {
+                var response = (HttpWebResponse)request.GetResponse();
+                var stream = response.GetResponseStream();
+
+                if (stream == null)
+                {
+                    return null;
+                }
+
+                var reader = new StreamReader(stream);
+
                 dynamic parsed = JObject.Parse(reader.ReadToEnd());
 
                 var tagName = ((string)parsed.tag_name.ToString()).Replace(".", "");
@@ -48,7 +48,11 @@ namespace SharpCrop.Utils
             return null;
         }
 
-        public static OpSystem GetOpSystem()
+        /// <summary>
+        /// Get the type of the operation system.
+        /// </summary>
+        /// <returns></returns>
+        public static SystemType GetSystemType()
         {
             var os = Environment.OSVersion.Platform;
 
@@ -59,11 +63,11 @@ namespace SharpCrop.Utils
                 case PlatformID.Win32S:
                 case PlatformID.WinCE:
                 case PlatformID.Xbox:
-                    return OpSystem.Windows;
+                    return SystemType.Windows;
                 case PlatformID.MacOSX:
-                    return OpSystem.Mac;
+                    return SystemType.Mac;
                 default:
-                    return OpSystem.Linux;
+                    return SystemType.Linux;
             }
         }
     }

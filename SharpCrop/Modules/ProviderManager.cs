@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using SharpCrop.Models;
 using SharpCrop.Provider;
 
-namespace SharpCrop.Utils
+namespace SharpCrop.Modules
 {
     /// <summary>
     /// ProviderManager is responsible for handling IProvider objects.

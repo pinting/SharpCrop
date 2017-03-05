@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using SharpCrop.Utils;
+using SharpCrop.Modules;
 using SharpCrop.Properties;
 
 // ReSharper disable LocalizableElement
@@ -60,7 +60,7 @@ namespace SharpCrop.Forms
             }
 
             // Init version checker
-            var url = VersionHelper.GetLatest();
+            var url = VersionHelper.GetLatestLink();
 
             if (url != null)
             {

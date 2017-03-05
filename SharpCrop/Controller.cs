@@ -1,5 +1,4 @@
 ﻿using SharpCrop.Forms;
-using SharpCrop.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpCrop.Models;
+using SharpCrop.Modules;
 using SharpCrop.Properties;
 
 namespace SharpCrop
@@ -18,83 +18,49 @@ namespace SharpCrop
     /// </summary>
     public class Controller : ApplicationContext
     {
-        private readonly List<Form> cropForms = new List<Form>();
-        private readonly Form configForm;
-
         /// <summary>
         /// Construct a new Controller class.
         /// </summary>
         public Controller()
         {
-            // Create a new ConfigForm
-            configForm = new ConfigForm();
-            configForm.FormClosed += (s, e) => Application.Exit();
-            configForm.Load += async (s, e) => await RestoreProviders();
+            FormManager.Init(this);
+            Run();
+        }
 
-            // If there are any registered providers, the config will be hidden
-            // Else the config will be closed (along with the whole application)
-            configForm.FormClosing += (s, e) =>
+        /// <summary>
+        /// Start the application async.
+        /// </summary>
+        private async void Run()
+        {
+            // If StartupRegister is enabled, init providers on the load of the first CropForm
+            if (ConfigHelper.Current.StartupRegister)
             {
-                if (e.CloseReason == CloseReason.UserClosing && ProviderManager.RegisteredProviders.Count > 0)
+                await RestoreProviders();
+
+                if (ProviderManager.RegisteredProviders.Count > 0)
                 {
-                    e.Cancel = true;
-                    configForm.Hide();
-                }
-            };
-
-            // Show crop forms if the config is hidden
-            configForm.VisibleChanged += (s, e) =>
-            {
-                if (!configForm.Visible)
-                {
-                    ShowCrop();
-                }
-            };
-
-            // Create a CropForm for every screen and show them
-            for (var i = 0; i < Screen.AllScreens.Length; i++)
-            {
-                var screen = Screen.AllScreens[i];
-                var form = new CropForm(this, screen.Bounds, i);
-
-                form.FormClosed += (s, e) => Application.Exit();
-
-                cropForms.Add(form);
-            }
-
-            // Run async init
-            (new Action(async () =>
-            {
-                // If StartupRegister is enabled, init providers on the load of the first CropForm
-                if (ConfigHelper.Current.StartupRegister)
-                {
-                    await RestoreProviders();
-
-                    if (ProviderManager.RegisteredProviders.Count > 0)
-                    {
-                        ShowCrop();
-                    }
-                    else
-                    {
-                        configForm.Show();
-                    }
-                }
-                else if (ConfigHelper.Current.SafeProviders.Count > 0)
-                {
-                    // Show settings if no providers gonna be loaded - not safe, this is a prediction
-                    ShowCrop();
+                    FormManager.ShowCropForms();
                 }
                 else
                 {
-                    configForm.Show();
+                    FormManager.ConfigForm.Show();
                 }
-            }))();
+            }
+            else if (ConfigHelper.Current.SafeProviders.Count > 0)
+            {
+                // Show settings if no providers gonna be loaded - not safe, this is a prediction
+                FormManager.ShowCropForms();
+            }
+            else
+            {
+                FormManager.ConfigForm.Show();
+            }
         }
 
         /// <summary>
         /// Register providers from user settings, where they were previously saved.
         /// </summary>
-        private async Task RestoreProviders()
+        public async Task RestoreProviders()
         {
             // Load available IProvider types into memory
             if (ProviderManager.LoadedProviders.Count == 0)
@@ -248,47 +214,27 @@ namespace SharpCrop
         /// Show the end notifcation. If the url is null, the text gonna tell the user, that the upload has failed.
         /// </summary>
         /// <param name="url"></param>
-        private void CompleteCapture(string url = null)
+        private static void CompleteCapture(string url = null)
         {
             if (!ConfigHelper.Current.NoCopy && !string.IsNullOrEmpty(url))
             {
                 Clipboard.SetText(url);
 
-                if (VersionHelper.GetOpSystem() != OpSystem.Windows)
+                if (VersionHelper.GetSystemType() != SystemType.Windows)
                 {
                     var form = new CopyForm(url);
-                    form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
+                    form.FormClosed += (s, e) => Application.Exit();
                     form.Show();
                 }
             }
 
             ToastFactory.Create(string.IsNullOrEmpty(url) ? Resources.UploadFailed : Resources.UploadCompleted, 3000, () =>
             {
-                if (VersionHelper.GetOpSystem() != OpSystem.Windows)
+                if (VersionHelper.GetSystemType() != SystemType.Windows)
                 {
                     Application.Exit();
                 }
             });
         }
-
-        /// <summary>
-        /// Hide every CropForm - if more than one monitor is used.
-        /// </summary>
-        public void HideCrop() => cropForms.ForEach(e => e.Hide());
-
-        /// <summary>
-        /// Show every CropForm.
-        /// </summary>
-        public void ShowCrop() => cropForms.ForEach(e => e.Show());
-
-        /// <summary>
-        /// Protect list from external modification.
-        /// </summary>
-        public IReadOnlyList<Form> CropForms => cropForms;
-
-        /// <summary>
-        /// Protect variable from external modification.
-        /// </summary>
-        public Form ConfigForm => configForm;
     }
 }

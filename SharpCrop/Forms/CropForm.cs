@@ -1,9 +1,9 @@
-﻿using SharpCrop.Utils;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System;
 using SharpCrop.Models;
+using SharpCrop.Modules;
 
 namespace SharpCrop.Forms
 {
@@ -63,7 +63,7 @@ namespace SharpCrop.Forms
             MakeClickable();
             ResetMouse();
 
-            if(controller.CropForms.Count == 1)
+            if(FormManager.CropForms.Count == 1)
             {
                 Focus();
             }
@@ -81,7 +81,7 @@ namespace SharpCrop.Forms
             MakeClickable();
             ResetMouse();
 
-            if (controller.CropForms.Count == 1)
+            if (FormManager.CropForms.Count == 1)
             {
                 Focus();
             }
@@ -92,8 +92,8 @@ namespace SharpCrop.Forms
         /// </summary>
         private void ShowConfig()
         {
-            controller.HideCrop();
-            controller.ConfigForm.Show();
+            FormManager.HideCropForms();
+            FormManager.ConfigForm.Show();
         }
         
         /// <summary>
@@ -140,10 +140,10 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            controller.HideCrop();
+            FormManager.HideCropForms();
             Application.DoEvents();
             CaptureHelper.SetManualScaling(index);
-            Thread.Sleep(VersionHelper.GetOpSystem() == OpSystem.Windows ? 50 : 500);
+            Thread.Sleep(VersionHelper.GetSystemType() == SystemType.Windows ? 50 : 500);
 
             switch (e.Button)
             {
@@ -252,7 +252,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeClickable()
         {
-            if(VersionHelper.GetOpSystem() != OpSystem.Windows || ConfigHelper.Current.NoTransparency)
+            if(VersionHelper.GetSystemType() != SystemType.Windows || ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
@@ -266,7 +266,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeInvisible()
         {
-            if (VersionHelper.GetOpSystem() != OpSystem.Windows || ConfigHelper.Current.NoTransparency)
+            if (VersionHelper.GetSystemType() != SystemType.Windows || ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
