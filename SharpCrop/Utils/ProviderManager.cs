@@ -21,6 +21,11 @@ namespace SharpCrop.Utils
         public static event Action RegisteredProvidersChanged;
 
         /// <summary>
+        /// Executed when registered loaded changed
+        /// </summary>
+        public static event Action LoadedProvidersChanged;
+
+        /// <summary>
         /// Currently registered (working) providers.
         /// </summary>
         public static IReadOnlyDictionary<string, IProvider> RegisteredProviders => registeredProviders;
@@ -49,6 +54,8 @@ namespace SharpCrop.Utils
                     ProviderType = type
                 });
             }
+
+            LoadedProvidersChanged?.Invoke();
         }
 
         /// <summary>

@@ -68,8 +68,9 @@ namespace SharpCrop.Forms
                 updateLinkLabel.Show();
             }
 
-            // Update provider list and register an update event
+            // Register an update event and update provider list
             ProviderManager.RegisteredProvidersChanged += UpdateProviderList;
+            ProviderManager.LoadedProvidersChanged += UpdateProviderList;
             UpdateProviderList();
         }
         
