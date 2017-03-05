@@ -121,33 +121,23 @@ namespace SharpCrop.Utils
                 ManualScaling = list[index] / 100.0f;
             }
         }
-
-#if __MonoCS__
-
+        
 		/// <summary>
-		/// Get the percentage of scalling for Mono on Linux.
+		/// Get the percentage of scalling.
 		/// </summary>
 		/// <returns></returns>
 		private static float GetScaling()
 		{
-            float result;
-
-            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+            // For Unix
+		    if (VersionHelper.GetOpSystem() != OpSystem.Windows)
             {
-                result = graphics.DpiX / 96;
+                using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+                {
+                    return graphics.DpiX / 96;
+                }
             }
 
-            return result;
-		}
-
-#else
-
-        /// <summary>
-        /// Get the percentage of scaling for .NET on Windows.
-        /// </summary>
-        /// <returns></returns>
-        private static float GetScaling()
-        {
+            // For Windows
             var gfx = Graphics.FromHwnd(IntPtr.Zero);
             var desktop = gfx.GetHdc();
 
@@ -155,12 +145,7 @@ namespace SharpCrop.Utils
             var physicalHeight = GetDeviceCaps(desktop, 117);
 
             return (float)physicalHeight / logicalHeight;
-        }
-
-        [DllImport("gdi32.dll")]
-        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-#endif
+		}
 
         /// <summary>
         /// Start capturing frames with CaptureHelper.
@@ -224,13 +209,11 @@ namespace SharpCrop.Utils
 
             return true;
         }
-
-#if __MonoCS__
         
         /// <summary>
         /// Old NGif encoder for Mono.
         /// </summary>
-        private static void EncodeGif()
+        private static void EncodeGifUnix()
         {
             var stream = new MemoryStream();
             var gif = new NGif.AnimatedGifEncoder();
@@ -258,8 +241,6 @@ namespace SharpCrop.Utils
             result.SetResult(stream);
         }
 
-#else
-
         /// <summary>
         /// Start encoding GIF while waiting for new frames. If the capture process is still recording, the algorithm
         /// waits for minimum 2 frames, then it will compares them. If they are the same, there is no need to save
@@ -270,14 +251,17 @@ namespace SharpCrop.Utils
             var stream = new MemoryStream();
 
             // Wait for the first frame
-            while (!FrameExists(0)) { }
+            while (!FrameExists(0))
+            {
+            }
 
             using (var gif = new GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, 0))
             {
                 while (recording || frames.Count > 0)
                 {
                     // Check if it is possible to remove a frame
-                    if (FrameExists(1) && CompareFrames(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
+                    if (FrameExists(1) &&
+                        CompareFrames(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
                     {
                         frames[0].Delay += frames[1].Delay;
                         frames[1].Image.Dispose();
@@ -299,8 +283,6 @@ namespace SharpCrop.Utils
             StopRecording();
             result.SetResult(stream);
         }
-
-#endif
 
         /// <summary>
         /// RecordVideo Mpeg using FFmpeg. Sadly pipes are not seekable, so we have to use the file system as a destination
@@ -406,7 +388,12 @@ namespace SharpCrop.Utils
         /// <returns></returns>
         public static Task<MemoryStream> RecordGif(Rectangle region, Point offset)
         {
-            return RecordVideo(region, offset, EncodeGif);
+            if (VersionHelper.GetOpSystem() == OpSystem.Windows)
+            {
+                return RecordVideo(region, offset, EncodeGif);
+            }
+
+            return RecordVideo(region, offset, EncodeGifUnix);
         }
 
         /// <summary>
@@ -428,5 +415,14 @@ namespace SharpCrop.Utils
             recording = false;
         }
 
+
+        /// <summary>
+        /// Get display informations on Windows.
+        /// </summary>
+        /// <param name="hdc"></param>
+        /// <param name="nIndex"></param>
+        /// <returns></returns>
+        [DllImport("gdi32.dll")]
+        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
     }
 }

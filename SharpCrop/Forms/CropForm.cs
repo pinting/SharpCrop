@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System;
+using SharpCrop.Models;
 
 namespace SharpCrop.Forms
 {
@@ -142,12 +143,7 @@ namespace SharpCrop.Forms
             controller.HideCrop();
             Application.DoEvents();
             CaptureHelper.SetManualScaling(index);
-
-#if __MonoCS__
-            Thread.Sleep(500);
-#else
-            Thread.Sleep(50);
-#endif
+            Thread.Sleep(VersionHelper.GetOpSystem() == OpSystem.Windows ? 50 : 500);
 
             switch (e.Button)
             {
@@ -208,7 +204,7 @@ namespace SharpCrop.Forms
                     return;
                 }
 
-                var path = new Point[]
+                var path = new[]
                 {
                     new Point { X = r.X, Y = r.Y },
                     new Point { X = r.X + r.Width , Y = r.Y },
@@ -256,15 +252,13 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeClickable()
         {
-#if !__MonoCS__
-            if(ConfigHelper.Current.NoTransparency)
+            if(VersionHelper.GetOpSystem() != OpSystem.Windows || ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
 
             TransparencyKey = Color.White;
             Opacity = 0.005D;
-#endif
         }
 
         /// <summary>
@@ -272,15 +266,13 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeInvisible()
         {
-#if !__MonoCS__
-            if (ConfigHelper.Current.NoTransparency)
+            if (VersionHelper.GetOpSystem() != OpSystem.Windows || ConfigHelper.Current.NoTransparency)
             {
                 return;
             }
 
             TransparencyKey = Color.Black;
             Opacity = 0.75D;
-#endif
         }
     }
 }

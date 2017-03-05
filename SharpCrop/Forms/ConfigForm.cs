@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using SharpCrop.Utils;
@@ -56,6 +57,15 @@ namespace SharpCrop.Forms
             {
                 MessageBox.Show(Resources.WelcomeMessage, "SharpCrop");
                 ConfigHelper.Current.NoWelcome = true;
+            }
+
+            // Init version checker
+            var url = VersionHelper.GetLatest();
+
+            if (url != null)
+            {
+                updateLinkLabel.LinkClicked += (s, e) => Process.Start(url);
+                updateLinkLabel.Show();
             }
 
             // Update provider list and register an update event

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCrop.Models;
 using SharpCrop.Properties;
 
 namespace SharpCrop
@@ -253,18 +254,20 @@ namespace SharpCrop
             {
                 Clipboard.SetText(url);
 
-#if __MonoCS__
-                var form = new CopyForm(url);
-                form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
-                form.Show();
-#endif
+                if (VersionHelper.GetOpSystem() != OpSystem.Windows)
+                {
+                    var form = new CopyForm(url);
+                    form.FormClosed += (object sender, FormClosedEventArgs e) => Application.Exit();
+                    form.Show();
+                }
             }
 
             ToastFactory.Create(string.IsNullOrEmpty(url) ? Resources.UploadFailed : Resources.UploadCompleted, 3000, () =>
             {
-#if !__MonoCS__
-                Application.Exit();
-#endif
+                if (VersionHelper.GetOpSystem() != OpSystem.Windows)
+                {
+                    Application.Exit();
+                }
             });
         }
 

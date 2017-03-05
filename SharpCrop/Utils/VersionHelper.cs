@@ -2,10 +2,11 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using SharpCrop.Models;
 
 namespace SharpCrop.Utils
 {
-    public static class UpdateHelper
+    public static class VersionHelper
     {
         /// <summary>
         /// Check for updates.
@@ -45,6 +46,25 @@ namespace SharpCrop.Utils
             }
 
             return null;
+        }
+
+        public static OpSystem GetOpSystem()
+        {
+            var os = Environment.OSVersion.Platform;
+
+            switch (os)
+            {
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.WinCE:
+                case PlatformID.Xbox:
+                    return OpSystem.Windows;
+                case PlatformID.MacOSX:
+                    return OpSystem.Mac;
+                default:
+                    return OpSystem.Linux;
+            }
         }
     }
 }

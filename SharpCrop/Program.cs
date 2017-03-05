@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using SharpCrop.Models;
 
 namespace SharpCrop
 {
@@ -13,12 +14,10 @@ namespace SharpCrop
         [STAThread]
         public static void Main()
         {
-#if !__MonoCS__
-            if (Environment.OSVersion.Version.Major >= 6)
+            if (VersionHelper.GetOpSystem() == OpSystem.Windows && Environment.OSVersion.Version.Major >= 6)
             {
                 SetProcessDPIAware();
             }
-#endif
 
             ConfigHelper.Load();
 
@@ -29,17 +28,11 @@ namespace SharpCrop
             ConfigHelper.Save();
         }
 
-
-#if !__MonoCS__
-
         /// <summary>
         /// DPI aware Windows feature.
         /// </summary>
         /// <returns></returns>
         [DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
-
-#endif
-
     }
 }

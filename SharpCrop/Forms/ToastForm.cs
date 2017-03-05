@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCrop.Models;
+using SharpCrop.Utils;
 
 namespace SharpCrop.Forms
 {
@@ -72,8 +74,6 @@ namespace SharpCrop.Forms
             Close();
         }
 
-#if !__MonoCS__
-
         /// <summary>
         /// Keep focus for other windows while topmost.
         /// </summary>
@@ -82,6 +82,11 @@ namespace SharpCrop.Forms
             get
             {
                 var baseParams = base.CreateParams;
+
+                if (VersionHelper.GetOpSystem() != OpSystem.Windows)
+                {
+                    return baseParams;
+                }
 
                 const int wsExNoactivate = 0x08000000;
                 const int wsExToolwindow = 0x00000080;
@@ -96,8 +101,5 @@ namespace SharpCrop.Forms
         /// Do not steal focus from other windows.
         /// </summary>
         protected override bool ShowWithoutActivation => true;
-
-#endif
-
     }
 }

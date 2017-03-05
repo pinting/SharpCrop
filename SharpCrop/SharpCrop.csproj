@@ -87,6 +87,7 @@
     <Compile Include="Models\Config.cs" />
     <Compile Include="Models\GifFrame.cs" />
     <Compile Include="Models\LoadedProvider.cs" />
+    <Compile Include="Models\OpSystem.cs" />
     <Compile Include="Models\SavedProvider.cs" />
     <Compile Include="Utils\CaptureHelper.cs" />
     <Compile Include="Program.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="Utils\ConfigHelper.cs" />
     <Compile Include="Utils\BumpKit\GifEncoder.cs" />
     <Compile Include="Utils\ProviderManager.cs" />
-    <Compile Include="Utils\UpdateHelper.cs" />
+    <Compile Include="Utils\VersionHelper.cs" />
     <Compile Include="Utils\NGif\AnimatedGifEncoder.cs" />
     <Compile Include="Utils\NGif\LZWEncoder.cs" />
     <Compile Include="Utils\NGif\NeuQuant.cs" />
