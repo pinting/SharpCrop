@@ -21,6 +21,7 @@ namespace SharpCrop.Forms
         private Point mouseDownPoint = Point.Empty;
         private Point mouseUpPoint = Point.Empty;
         private bool isMouseDown;
+        private Rectangle last;
 
         /// <summary>
         /// Consturct a new CropForm with the given provider.
@@ -200,33 +201,58 @@ namespace SharpCrop.Forms
             {
                 if (!ConfigHelper.Current.NoTransparency)
                 {
-                    e.Graphics.FillRectangle(color, r);
-                    return;
+                    var back = new SolidBrush(BackColor);
+
+                    if (last.X < r.X)
+                    {
+                        e.Graphics.FillRectangle(back, last.X, last.Y, r.X - last.X, last.Height);
+                    }
+
+                    if (last.Y < r.Y)
+                    {
+                        e.Graphics.FillRectangle(back, last.X, last.Y, last.Width, r.Y - last.Y);
+                    }
+
+                    if (last.Y + last.Height > r.Y + r.Height)
+                    {
+                        e.Graphics.FillRectangle(back, last.X, r.Y + r.Height, last.Width, last.Y + last.Height - (r.Y + r.Height));
+                    }
+
+                    if (last.X + last.Width > r.X + r.Width)
+                    {
+                        e.Graphics.FillRectangle(back, r.X + r.Width, last.Y, last.X + last.Width - (r.X + r.Width), last.Height);
+                    }
+
+                    e.Graphics.FillRectangle(color, r.X, r.Y, r.Width, r.Height);
                 }
-
-                var path = new[]
+                else
                 {
-                    new Point { X = r.X, Y = r.Y },
-                    new Point { X = r.X + r.Width , Y = r.Y },
-                    new Point { X = r.X + r.Width , Y = r.Y + r.Height },
-                    new Point { X = r.X , Y = r.Y + r.Height },
-                    new Point { X = r.X, Y = r.Y }
-                };
+                    var path = new[]
+                    {
+                        new Point { X = r.X, Y = r.Y },
+                        new Point { X = r.X + r.Width , Y = r.Y },
+                        new Point { X = r.X + r.Width , Y = r.Y + r.Height },
+                        new Point { X = r.X , Y = r.Y + r.Height },
+                        new Point { X = r.X, Y = r.Y }
+                    };
 
-                e.Graphics.DrawLines(new Pen(color, Constants.PenWidth), path);
+                    e.Graphics.DrawLines(new Pen(color, Constants.PenWidth), path);
+                }
             });
 
-            var region = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
+            var rectangle = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
 
             switch (mouseButtonUsed)
             {
                 case MouseButtons.Left:
-                    draw(Constants.LeftColor, region);
+                    draw(Constants.LeftColor, rectangle);
                     break;
                 case MouseButtons.Right:
-                    draw(Constants.RightColor, region);
+                    draw(Constants.RightColor, rectangle);
                     break;
             }
+
+            last = rectangle;
         }
 
         /// <summary>
