@@ -26,19 +26,19 @@ namespace SharpCrop.Models
         public string CopyProvider { get; set; }
 
         [JsonProperty]
-        public bool NoCopy { get; set; }
-
-		[JsonProperty]
-		public bool NoAutoScaling { get; set; }
-
-        [JsonProperty]
-        public bool NoTransparency { get; set; }
+        public bool StartupRegister { get; set; }
 
         [JsonProperty]
         public bool EnableMpeg { get; set; }
 
         [JsonProperty]
-        public bool StartupRegister { get; set; }
+        public bool NoUrlCopy { get; set; }
+
+        [JsonProperty]
+        public bool NoImageCopy { get; set; }
+
+        [JsonProperty]
+        public bool NoTransparency { get; set; }
 
         [JsonProperty]
         public bool NoWelcome { get; set; }

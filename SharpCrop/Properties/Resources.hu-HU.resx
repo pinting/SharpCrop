@@ -138,6 +138,9 @@
   <data name="ConfigNoCopy" xml:space="preserve">
     <value>URL másolás kikapcsolása</value>
   </data>
+  <data name="ConfigNoImageCopy" xml:space="preserve">
+    <value>Kép másolás kikapcsolása</value>
+  </data>
   <data name="ConfigNoScaling" xml:space="preserve">
     <value>Manuális skálázás bekapcsolása</value>
   </data>

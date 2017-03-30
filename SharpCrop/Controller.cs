@@ -94,20 +94,27 @@ namespace SharpCrop
         /// <param name="offset"></param>
         public async void CaptureImage(Rectangle region, Point offset)
         {
-            using (var stream = new MemoryStream())
+            var stream = new MemoryStream();
+            var bitmap = CaptureHelper.GetBitmap(region, offset);
+            
+            bitmap.Save(stream, ConfigHelper.Current.ImageFormat);
+
+            // Generate filename and start the upload(s)
+            var url = await UploadAll(stream, ConfigHelper.Current.SafeImageExt);
+
+            if (!ConfigHelper.Current.NoImageCopy)
             {
-                // Capture the frame
-                using (var bitmap = CaptureHelper.GetBitmap(region, offset))
-                {
-                    bitmap.Save(stream, ConfigHelper.Current.ImageFormat);
-                }
-
-                // Generate filename and start the upload(s)
-                var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{ConfigHelper.Current.SafeImageExt}";
-                var url = await UploadAll(name, stream);
-
-                CompleteCapture(url);
+                CopyImage(bitmap); // Copy bitmap to the clipboard
             }
+            else
+            {
+                CopyUrl(url); 
+            }
+
+            bitmap.Dispose();
+            stream.Dispose();
+
+            Complete(url != null); // Exits the application
         }
 
         /// <summary>
@@ -140,25 +147,25 @@ namespace SharpCrop
             ToastFactory.Remove(toast);
 
             // Generate filename and start the upload(s)
-            toast = ToastFactory.Create(string.Format(Resources.Uploading, $"{(double)stream.Length / (1024 * 1024):0.00} MB"), 0);
+            var url = await UploadAll(stream, ConfigHelper.Current.EnableMpeg ? "mp4" : "gif");
 
-            var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{(ConfigHelper.Current.EnableMpeg ? "mp4" : "gif")}";
-            var url = await UploadAll(name, stream);
-
-            ToastFactory.Remove(toast);
             stream.Dispose();
 
-            CompleteCapture(url);
+            CopyUrl(url);
+            Complete(url != null); // Exits the application
         }
 
         /// <summary>
         /// Upload the given stream with all loaded providers.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="ext"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        private async Task<string> UploadAll(string name, MemoryStream stream)
+        private async Task<string> UploadAll(MemoryStream stream, string ext)
         {
+            var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{ext}";
+            var toast = ToastFactory.Create(string.Format(Resources.Uploading, $"{(double)stream.Length / (1024 * 1024):0.00} MB"), 0);
+
             // Try to load the saved providers (if load on startup is disabled)
             if (!ConfigHelper.Current.StartupRegister)
             {
@@ -169,6 +176,7 @@ namespace SharpCrop
             if (ProviderManager.RegisteredProviders.Count == 0)
             {
                 File.WriteAllBytes(name, stream.ToArray());
+                ToastFactory.Remove(toast);
                 return null;
             }
 
@@ -193,6 +201,7 @@ namespace SharpCrop
 
                 if (string.IsNullOrEmpty(url))
                 {
+                    ToastFactory.Remove(toast);
                     ToastFactory.Create(string.Format(Resources.ProviderUploadFailed, p.Key));
                 }
                 else
@@ -206,31 +215,53 @@ namespace SharpCrop
                 }
             }
 
+            ToastFactory.Remove(toast);
+
             // If the chosen URL was not found (or null), use the URL of the last successful one
             return string.IsNullOrEmpty(result) ? last : result;
         }
 
         /// <summary>
-        /// Show the end notifcation. If the url is null, the text gonna tell the user, that the upload has failed.
+        /// Copy the given link the the clipboard.
         /// </summary>
         /// <param name="url"></param>
-        private static void CompleteCapture(string url = null)
+        private void CopyUrl(string url = null)
         {
-            if (!ConfigHelper.Current.NoCopy && !string.IsNullOrEmpty(url))
+            if (!ConfigHelper.Current.NoUrlCopy && !string.IsNullOrEmpty(url))
             {
                 Clipboard.SetText(url);
 
                 if (VersionHelper.GetSystemType() != SystemType.Windows)
                 {
                     var form = new CopyForm(url);
+
                     form.FormClosed += (s, e) => Application.Exit();
                     form.Show();
                 }
             }
+        }
 
-            ToastFactory.Create(string.IsNullOrEmpty(url) ? Resources.UploadFailed : Resources.UploadCompleted, 3000, () =>
+        /// <summary>
+        /// Copy the given image to the clipboard if this feature is enabled in the config.
+        /// </summary>
+        /// <param name="image"></param>
+        private void CopyImage(Image image)
+        {
+            if (!ConfigHelper.Current.NoImageCopy)
             {
-                if (VersionHelper.GetSystemType() != SystemType.Windows)
+                Clipboard.SetImage(image);
+            }
+        }
+
+        /// <summary>
+        /// Show the end notifcation.
+        /// </summary>
+        /// <param name="success">If success is false, the text gonna tell the user, that the upload has failed.</param>
+        private void Complete(bool success)
+        {
+            ToastFactory.Create(success ? Resources.UploadCompleted : Resources.UploadFailed, 3000, () =>
+            {
+                if (VersionHelper.GetSystemType() == SystemType.Windows)
                 {
                     Application.Exit();
                 }

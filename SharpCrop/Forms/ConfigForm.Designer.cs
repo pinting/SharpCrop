@@ -31,8 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             this.formatBox = new System.Windows.Forms.ComboBox();
-            this.noCopyCheckBox = new System.Windows.Forms.CheckBox();
-            this.noScalingCheckBox = new System.Windows.Forms.CheckBox();
+            this.noUrlCopyCheckBox = new System.Windows.Forms.CheckBox();
             this.videoFpsBox = new System.Windows.Forms.ComboBox();
             this.formatLabel = new System.Windows.Forms.Label();
             this.videoFpsLabel = new System.Windows.Forms.Label();
@@ -49,6 +48,7 @@
             this.startupLoadCheckBox = new System.Windows.Forms.CheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.updateLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.noImageCopyCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // formatBox
@@ -60,27 +60,16 @@
             this.formatBox.TabIndex = 0;
             this.formatBox.SelectedIndexChanged += new System.EventHandler(this.FormatChanged);
             // 
-            // noCopyCheckBox
+            // noUrlCopyCheckBox
             // 
-            this.noCopyCheckBox.AutoSize = true;
-            this.noCopyCheckBox.Location = new System.Drawing.Point(30, 227);
-            this.noCopyCheckBox.Name = "noCopyCheckBox";
-            this.noCopyCheckBox.Size = new System.Drawing.Size(161, 24);
-            this.noCopyCheckBox.TabIndex = 1;
-            this.noCopyCheckBox.Text = "noCopyCheckBox";
-            this.noCopyCheckBox.UseVisualStyleBackColor = true;
-            this.noCopyCheckBox.CheckedChanged += new System.EventHandler(this.NoCopyChanged);
-            // 
-            // noScalingCheckBox
-            // 
-            this.noScalingCheckBox.AutoSize = true;
-            this.noScalingCheckBox.Location = new System.Drawing.Point(30, 198);
-            this.noScalingCheckBox.Name = "noScalingCheckBox";
-            this.noScalingCheckBox.Size = new System.Drawing.Size(177, 24);
-            this.noScalingCheckBox.TabIndex = 2;
-            this.noScalingCheckBox.Text = "noScalingCheckBox";
-            this.noScalingCheckBox.UseVisualStyleBackColor = true;
-            this.noScalingCheckBox.CheckedChanged += new System.EventHandler(this.NoScalingChanged);
+            this.noUrlCopyCheckBox.AutoSize = true;
+            this.noUrlCopyCheckBox.Location = new System.Drawing.Point(30, 185);
+            this.noUrlCopyCheckBox.Name = "noUrlCopyCheckBox";
+            this.noUrlCopyCheckBox.Size = new System.Drawing.Size(174, 24);
+            this.noUrlCopyCheckBox.TabIndex = 1;
+            this.noUrlCopyCheckBox.Text = "noUrlCopyCheckBox";
+            this.noUrlCopyCheckBox.UseVisualStyleBackColor = true;
+            this.noUrlCopyCheckBox.CheckedChanged += new System.EventHandler(this.NoCopyChanged);
             // 
             // videoFpsBox
             // 
@@ -114,9 +103,9 @@
             // noTransparencyCheckBox
             // 
             this.noTransparencyCheckBox.AutoSize = true;
-            this.noTransparencyCheckBox.Location = new System.Drawing.Point(30, 257);
+            this.noTransparencyCheckBox.Location = new System.Drawing.Point(30, 245);
             this.noTransparencyCheckBox.Name = "noTransparencyCheckBox";
-            this.noTransparencyCheckBox.Size = new System.Drawing.Size(221, 24);
+            this.noTransparencyCheckBox.Size = new System.Drawing.Size(214, 24);
             this.noTransparencyCheckBox.TabIndex = 9;
             this.noTransparencyCheckBox.Text = "noTransparencyCheckBox";
             this.noTransparencyCheckBox.UseVisualStyleBackColor = true;
@@ -144,9 +133,9 @@
             // enableMpegCheckbox
             // 
             this.enableMpegCheckbox.AutoSize = true;
-            this.enableMpegCheckbox.Location = new System.Drawing.Point(30, 287);
+            this.enableMpegCheckbox.Location = new System.Drawing.Point(30, 275);
             this.enableMpegCheckbox.Name = "enableMpegCheckbox";
-            this.enableMpegCheckbox.Size = new System.Drawing.Size(193, 24);
+            this.enableMpegCheckbox.Size = new System.Drawing.Size(186, 24);
             this.enableMpegCheckbox.TabIndex = 12;
             this.enableMpegCheckbox.Text = "enableMpegCheckbox";
             this.enableMpegCheckbox.UseVisualStyleBackColor = true;
@@ -216,9 +205,9 @@
             // startupLoadCheckBox
             // 
             this.startupLoadCheckBox.AutoSize = true;
-            this.startupLoadCheckBox.Location = new System.Drawing.Point(30, 317);
+            this.startupLoadCheckBox.Location = new System.Drawing.Point(30, 305);
             this.startupLoadCheckBox.Name = "startupLoadCheckBox";
-            this.startupLoadCheckBox.Size = new System.Drawing.Size(193, 24);
+            this.startupLoadCheckBox.Size = new System.Drawing.Size(186, 24);
             this.startupLoadCheckBox.TabIndex = 24;
             this.startupLoadCheckBox.Text = "startupLoadCheckBox";
             this.startupLoadCheckBox.UseVisualStyleBackColor = true;
@@ -227,7 +216,7 @@
             // updateLinkLabel
             // 
             this.updateLinkLabel.AutoSize = true;
-            this.updateLinkLabel.Location = new System.Drawing.Point(26, 355);
+            this.updateLinkLabel.Location = new System.Drawing.Point(26, 337);
             this.updateLinkLabel.Name = "updateLinkLabel";
             this.updateLinkLabel.Size = new System.Drawing.Size(127, 20);
             this.updateLinkLabel.TabIndex = 25;
@@ -235,11 +224,23 @@
             this.updateLinkLabel.Text = "updateLinkLabel";
             this.updateLinkLabel.Visible = false;
             // 
+            // noImageCopyCheckBox
+            // 
+            this.noImageCopyCheckBox.AutoSize = true;
+            this.noImageCopyCheckBox.Location = new System.Drawing.Point(30, 215);
+            this.noImageCopyCheckBox.Name = "noImageCopyCheckBox";
+            this.noImageCopyCheckBox.Size = new System.Drawing.Size(199, 24);
+            this.noImageCopyCheckBox.TabIndex = 26;
+            this.noImageCopyCheckBox.Text = "noImageCopyCheckBox";
+            this.noImageCopyCheckBox.UseVisualStyleBackColor = true;
+            this.noImageCopyCheckBox.CheckedChanged += new System.EventHandler(this.NoImageCopyChanged);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 384);
+            this.ClientSize = new System.Drawing.Size(861, 366);
+            this.Controls.Add(this.noImageCopyCheckBox);
             this.Controls.Add(this.updateLinkLabel);
             this.Controls.Add(this.startupLoadCheckBox);
             this.Controls.Add(this.copyProviderBox);
@@ -255,8 +256,7 @@
             this.Controls.Add(this.videoFpsLabel);
             this.Controls.Add(this.formatLabel);
             this.Controls.Add(this.videoFpsBox);
-            this.Controls.Add(this.noScalingCheckBox);
-            this.Controls.Add(this.noCopyCheckBox);
+            this.Controls.Add(this.noUrlCopyCheckBox);
             this.Controls.Add(this.formatBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -271,8 +271,7 @@
         #endregion
 
         private System.Windows.Forms.ComboBox formatBox;
-        private System.Windows.Forms.CheckBox noCopyCheckBox;
-        private System.Windows.Forms.CheckBox noScalingCheckBox;
+        private System.Windows.Forms.CheckBox noUrlCopyCheckBox;
         private System.Windows.Forms.ComboBox videoFpsBox;
         private System.Windows.Forms.Label formatLabel;
         private System.Windows.Forms.Label videoFpsLabel;
@@ -289,5 +288,6 @@
         private System.Windows.Forms.CheckBox startupLoadCheckBox;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.LinkLabel updateLinkLabel;
+        private System.Windows.Forms.CheckBox noImageCopyCheckBox;
     }
 }

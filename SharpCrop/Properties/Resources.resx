@@ -170,9 +170,6 @@
   <data name="ConfigNoCopy" xml:space="preserve">
     <value>Disable URL copy</value>
   </data>
-  <data name="ConfigNoScaling" xml:space="preserve">
-    <value>Enable manual scaling</value>
-  </data>
   <data name="ConfigNoTransparency" xml:space="preserve">
     <value>Disable transparency</value>
   </data>
@@ -202,5 +199,8 @@
   </data>
   <data name="ConfigUpdateLink" xml:space="preserve">
     <value>New update available!</value>
+  </data>
+  <data name="ConfigNoImageCopy" xml:space="preserve">
+    <value>Disable image copy</value>
   </data>
 </root>

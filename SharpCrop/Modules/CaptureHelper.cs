@@ -83,7 +83,7 @@ namespace SharpCrop.Modules
         {
             float scaling;
 
-            if(ConfigHelper.Current.NoAutoScaling && ManualScaling > 0.0f)
+            if(ConfigHelper.Current.SafeManualScaling.Count > 0 && ManualScaling > 0.0f)
             {
                 scaling = ManualScaling;
             }

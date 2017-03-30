@@ -26,22 +26,22 @@ namespace SharpCrop.Forms
             startupLoadCheckBox.Text = Resources.ConfigStartupLoad;
             noTransparencyCheckBox.Text = Resources.ConfigNoTransparency;
             enableMpegCheckbox.Text = Resources.ConfigEnableMpeg;
-            noScalingCheckBox.Text = Resources.ConfigNoScaling;
             copyProviderBox.Text = Resources.ConfigCopyProvider;
-            noCopyCheckBox.Text = Resources.ConfigNoCopy;
+            noUrlCopyCheckBox.Text = Resources.ConfigNoCopy;
             addProviderLabel.Text = Resources.ConfigAddProvider;
             removeProviderLabel.Text = Resources.ConfigRemoveProvider;
             manualScallingLabel.Text = Resources.ConfigManualScalling;
             updateLinkLabel.Text = Resources.ConfigUpdateLink;
             videoFpsLabel.Text = Resources.ConfigVideoFps;
             formatLabel.Text = Resources.ConfigFormat;
+            noImageCopyCheckBox.Text = Resources.ConfigNoImageCopy;
 
             // Init checkboxes
-            noCopyCheckBox.Checked = ConfigHelper.Current.NoCopy;
-            noScalingCheckBox.Checked = ConfigHelper.Current.NoAutoScaling;
+            noUrlCopyCheckBox.Checked = ConfigHelper.Current.NoUrlCopy;
             noTransparencyCheckBox.Checked = ConfigHelper.Current.NoTransparency;
             enableMpegCheckbox.Checked = ConfigHelper.Current.EnableMpeg;
             startupLoadCheckBox.Checked = ConfigHelper.Current.StartupRegister;
+            noImageCopyCheckBox.Checked = ConfigHelper.Current.NoImageCopy;
 
             // Init lists and boxes
             formatBox.Items.AddRange(Constants.ImageFormats.Keys.ToArray());
@@ -50,6 +50,8 @@ namespace SharpCrop.Forms
             urlToCopyBox.Text = ConfigHelper.Current.CopyProvider;
             formatBox.Text = ConfigHelper.Current.SafeImageExt;
             manualScallingBox.Text = string.Join(" ", ConfigHelper.Current.SafeManualScaling);
+
+            // Set tooltips
             toolTip.SetToolTip(manualScallingBox, Resources.ConfigManualScallingHelp);
 
             // Show welcome message if this is the first launch of the app
@@ -134,23 +136,23 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Disable or enable scaling checker.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NoScalingChanged(object sender, EventArgs e)
-        {
-            ConfigHelper.Current.NoAutoScaling = noScalingCheckBox.Checked;
-        }
-
-        /// <summary>
         /// Disable or enable URL copy.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void NoCopyChanged(object sender, EventArgs e)
         {
-            ConfigHelper.Current.NoCopy = noCopyCheckBox.Checked;
+            ConfigHelper.Current.NoUrlCopy = noUrlCopyCheckBox.Checked;
+        }
+
+        /// <summary>
+        /// Change image copy value.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NoImageCopyChanged(object sender, EventArgs e)
+        {
+            ConfigHelper.Current.NoImageCopy = noImageCopyCheckBox.Checked;
         }
 
         /// <summary>

@@ -124,11 +124,11 @@ namespace SharpCrop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable manual scaling.
+        ///   Looks up a localized string similar to Disable image copy.
         /// </summary>
-        internal static string ConfigNoScaling {
+        internal static string ConfigNoImageCopy {
             get {
-                return ResourceManager.GetString("ConfigNoScaling", resourceCulture);
+                return ResourceManager.GetString("ConfigNoImageCopy", resourceCulture);
             }
         }
         
