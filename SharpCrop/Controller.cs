@@ -99,14 +99,17 @@ namespace SharpCrop
             
             bitmap.Save(stream, ConfigHelper.Current.ImageFormat);
 
+            // Copy bitmap to the clipboard
+            if (!ConfigHelper.Current.NoImageCopy)
+            {
+                CopyImage(bitmap);
+            }
+
             // Generate filename and start the upload(s)
             var url = await UploadAll(stream, ConfigHelper.Current.SafeImageExt);
 
-            if (!ConfigHelper.Current.NoImageCopy)
-            {
-                CopyImage(bitmap); // Copy bitmap to the clipboard
-            }
-            else
+            // Try to copy URL 
+            if(ConfigHelper.Current.NoImageCopy)
             {
                 CopyUrl(url); 
             }
