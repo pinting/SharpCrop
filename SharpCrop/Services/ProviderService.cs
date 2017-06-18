@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using SharpCrop.Models;
 using SharpCrop.Provider;
 
-namespace SharpCrop.Modules
+namespace SharpCrop.Services
 {
     /// <summary>
-    /// ProviderManager is responsible for handling IProvider objects.
+    /// ProviderService is responsible for handling IProvider objects.
     /// </summary>
-    public static class ProviderManager
+    public static class ProviderService
     {
         private static readonly Dictionary<string, IProvider> registeredProviders = new Dictionary<string, IProvider>();
         private static readonly List<LoadedProvider> loadedProviders = new List<LoadedProvider>();
@@ -72,9 +72,9 @@ namespace SharpCrop.Modules
             }
 
             // Remove from the configuration file
-            if (ConfigHelper.Current.SafeProviders.ContainsKey(name))
+            if (ConfigService.Current.SafeProviders.ContainsKey(name))
             {
-                ConfigHelper.Current.SafeProviders.Remove(name);
+                ConfigService.Current.SafeProviders.Remove(name);
             }
         }
 
@@ -143,7 +143,7 @@ namespace SharpCrop.Modules
             }
 
             // Save the provider to the config
-            ConfigHelper.Current.Providers[nick] = new SavedProvider()
+            ConfigService.Current.Providers[nick] = new SavedProvider()
             {
                 Id = provider.Id,
                 State = state

@@ -9,12 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using SharpCrop.Models;
 
-namespace SharpCrop.Modules
+namespace SharpCrop.Services
 {
     /// <summary>
-    /// Capture helper is responsible for capturing a part of the screen (with or without scaling).
+    /// Capture service is responsible for capturing a part of the screen (with or without scaling).
     /// </summary>
-    public static class CaptureHelper
+    public static class CaptureService
     {
         private static readonly List<GifFrame> frames = new List<GifFrame>();
         private static TaskCompletionSource<MemoryStream> result;
@@ -83,7 +83,7 @@ namespace SharpCrop.Modules
         {
             float scaling;
 
-            if(ConfigHelper.Current.SafeManualScaling.Count > 0 && ManualScaling > 0.0f)
+            if(ConfigService.Current.SafeManualScaling.Count > 0 && ManualScaling > 0.0f)
             {
                 scaling = ManualScaling;
             }
@@ -107,12 +107,12 @@ namespace SharpCrop.Modules
         }
         
         /// <summary>
-        /// Set manual scalling from the ConfigHelper by screen index.
+        /// Set manual scalling from the ConfigService by screen index.
         /// </summary>
         /// <param name="index"></param>
         public static void SetManualScaling(int index)
         {
-            var list = ConfigHelper.Current.SafeManualScaling;
+            var list = ConfigService.Current.SafeManualScaling;
 
             if (index < list.Count)
             {
@@ -128,7 +128,7 @@ namespace SharpCrop.Modules
 		private static float GetScaling()
 		{
             // For Unix
-		    if (VersionHelper.GetSystemType() != SystemType.Windows)
+		    if (VersionService.GetPlatform() != PlatformType.Windows)
             {
                 using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
                 {
@@ -153,7 +153,7 @@ namespace SharpCrop.Modules
         /// <param name="offset"></param>
         private static void CaptureFrames(Rectangle rectangle, Point offset)
         {
-            var freq = (1000 / ConfigHelper.Current.SafeVideoFps);
+            var freq = (1000 / ConfigService.Current.SafeVideoFps);
             var wait = 0;
 
             while (recording)
@@ -233,7 +233,7 @@ namespace SharpCrop.Modules
                 frames.RemoveAt(0);
             }
 
-            gif.SetDelay(1000 / ConfigHelper.Current.SafeVideoFps);
+            gif.SetDelay(1000 / ConfigService.Current.SafeVideoFps);
             gif.Finish();
             StopRecording();
 
@@ -296,7 +296,7 @@ namespace SharpCrop.Modules
             {
                 using (var ffmpeg = new Process())
                 {
-                    var fps = ConfigHelper.Current.SafeVideoFps;
+                    var fps = ConfigService.Current.SafeVideoFps;
 
                     ffmpeg.StartInfo.FileName = "ffmpeg";
                     ffmpeg.StartInfo.Arguments = $"-f image2pipe -r {fps} -i pipe:0 -r {fps} -an -y -f mp4 {temp}";
@@ -323,6 +323,55 @@ namespace SharpCrop.Modules
                     }
 
                     ffmpeg.StandardInput.BaseStream.Close();
+                    ffmpeg.WaitForExit();
+                }
+
+                // TODO: Experiment with something (RAMDisk?)
+                using (var file = new FileStream(temp, FileMode.Open))
+                {
+                    var buffer = new byte[512];
+
+                    while (file.Read(buffer, 0, buffer.Length) > 0)
+                    {
+                        output.Write(buffer, 0, buffer.Length);
+                    }
+                }
+
+                result.SetResult(output);
+            }
+            catch
+            {
+                output.Dispose();
+                result.SetResult(new MemoryStream(0));
+            }
+            finally
+            {
+                if (File.Exists(temp))
+                {
+                    File.Delete(temp);
+                }
+
+                StopRecording();
+            }
+        }
+
+        private static void EncodeMpegTest()
+        {
+            var temp = Guid.NewGuid().ToString();
+            var output = new MemoryStream();
+
+            try
+            {
+                using (var ffmpeg = new Process())
+                {
+                    var fps = ConfigService.Current.SafeVideoFps;
+
+                    ffmpeg.StartInfo.FileName = "ffmpeg";
+                    ffmpeg.StartInfo.Arguments = $"-y -f gdigrab -r {fps} -offset_x 158 -offset_y 84 -video_size 1484x800 -i desktop -r {fps} {temp}";
+                    ffmpeg.StartInfo.UseShellExecute = false;
+                    ffmpeg.StartInfo.CreateNoWindow = true;
+
+                    ffmpeg.Start();
                     ffmpeg.WaitForExit();
                 }
 
@@ -387,7 +436,7 @@ namespace SharpCrop.Modules
         /// <returns></returns>
         public static Task<MemoryStream> RecordGif(Rectangle region, Point offset)
         {
-            if (VersionHelper.GetSystemType() == SystemType.Windows)
+            if (VersionService.GetPlatform() == PlatformType.Windows)
             {
                 return RecordVideo(region, offset, EncodeGif);
             }

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpCrop.Models;
-using SharpCrop.Modules;
+using SharpCrop.Services;
 
 namespace SharpCrop.Forms
 {
@@ -83,7 +83,7 @@ namespace SharpCrop.Forms
             {
                 var baseParams = base.CreateParams;
 
-                if (VersionHelper.GetSystemType() != SystemType.Windows)
+                if (VersionService.GetPlatform() != PlatformType.Windows)
                 {
                     return baseParams;
                 }

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SharpCrop.Models;
-using SharpCrop.Modules;
+using SharpCrop.Services;
 
 namespace SharpCrop
 {
@@ -14,18 +14,18 @@ namespace SharpCrop
         [STAThread]
         public static void Main()
         {
-            if (VersionHelper.GetSystemType() == SystemType.Windows && Environment.OSVersion.Version.Major >= 6)
+            if (VersionService.GetPlatform() == PlatformType.Windows && Environment.OSVersion.Version.Major >= 6)
             {
                 SetProcessDPIAware();
             }
 
-            ConfigHelper.Load();
+            ConfigService.Load();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Controller());
 
-            ConfigHelper.Save();
+            ConfigService.Save();
         }
 
         /// <summary>

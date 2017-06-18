@@ -1,6 +1,6 @@
 ﻿namespace SharpCrop.Models
 {
-    public enum SystemType
+    public enum PlatformType
     {
         Windows,
         Linux,

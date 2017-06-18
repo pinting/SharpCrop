@@ -2,9 +2,9 @@
 using System.Windows.Forms;
 using SharpCrop.Forms;
 
-namespace SharpCrop.Modules
+namespace SharpCrop.Services
 {
-    public static class FormManager
+    public static class FormService
     {
         private static readonly List<Form> cropForms = new List<Form>();
         private static Form configForm;
@@ -20,7 +20,7 @@ namespace SharpCrop.Modules
             // Else the config will be closed (along with the whole application)
             configForm.FormClosing += (s, e) =>
             {
-                if (e.CloseReason == CloseReason.UserClosing && ProviderManager.RegisteredProviders.Count > 0)
+                if (e.CloseReason == CloseReason.UserClosing && ProviderService.RegisteredProviders.Count > 0)
                 {
                     e.Cancel = true;
                     configForm.Hide();

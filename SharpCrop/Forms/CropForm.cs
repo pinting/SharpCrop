@@ -3,7 +3,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System;
 using SharpCrop.Models;
-using SharpCrop.Modules;
+using SharpCrop.Services;
 
 namespace SharpCrop.Forms
 {
@@ -64,7 +64,7 @@ namespace SharpCrop.Forms
             MakeClickable();
             ResetMouse();
 
-            if(FormManager.CropForms.Count == 1)
+            if(FormService.CropForms.Count == 1)
             {
                 Focus();
             }
@@ -82,7 +82,7 @@ namespace SharpCrop.Forms
             MakeClickable();
             ResetMouse();
 
-            if (FormManager.CropForms.Count == 1)
+            if (FormService.CropForms.Count == 1)
             {
                 Focus();
             }
@@ -93,8 +93,8 @@ namespace SharpCrop.Forms
         /// </summary>
         private void ShowConfig()
         {
-            FormManager.HideCropForms();
-            FormManager.ConfigForm.Show();
+            FormService.HideCropForms();
+            FormService.ConfigForm.Show();
         }
         
         /// <summary>
@@ -134,17 +134,17 @@ namespace SharpCrop.Forms
             mouseButtonUsed = e.Button;
             isMouseDown = false;
             
-            var region = CaptureHelper.GetRectangle(mouseDownPoint, mouseUpPoint);
+            var region = CaptureService.GetRectangle(mouseDownPoint, mouseUpPoint);
 
             if (region.X < 0 || region.Y < 0 || region.Width < 1 || region.Height < 1)
             {
                 return;
             }
 
-            FormManager.HideCropForms();
+            FormService.HideCropForms();
             Application.DoEvents();
-            CaptureHelper.SetManualScaling(index);
-            Thread.Sleep(VersionHelper.GetSystemType() == SystemType.Windows ? 50 : 500);
+            CaptureService.SetManualScaling(index);
+            Thread.Sleep(VersionService.GetPlatform() == PlatformType.Windows ? 50 : 500);
 
             switch (e.Button)
             {
@@ -152,7 +152,7 @@ namespace SharpCrop.Forms
                     controller.CaptureImage(region, screen.Location);
                     break;
                 case MouseButtons.Right:
-                    controller.CaptureGif(region, screen.Location);
+                    controller.CaptureVideo(region, screen.Location);
                     break;
             }
         }
@@ -199,7 +199,7 @@ namespace SharpCrop.Forms
 
             var draw = new Action<Brush, Rectangle>((color, r) => 
             {
-                if (!ConfigHelper.Current.NoTransparency)
+                if (!ConfigService.Current.NoTransparency)
                 {
                     var back = new SolidBrush(BackColor);
 
@@ -240,7 +240,7 @@ namespace SharpCrop.Forms
                 }
             });
 
-            var rectangle = CaptureHelper.GetRectangle(mouseDownPoint, mouseMovePoint);
+            var rectangle = CaptureService.GetRectangle(mouseDownPoint, mouseMovePoint);
 
             switch (mouseButtonUsed)
             {
@@ -260,16 +260,16 @@ namespace SharpCrop.Forms
         /// </summary>
         private void RefreshBackground()
         {
-            if (!ConfigHelper.Current.NoTransparency)
+            if (!ConfigService.Current.NoTransparency)
             {
                 return;
             }
 
-            CaptureHelper.SetManualScaling(index);
+            CaptureService.SetManualScaling(index);
 
-            var bitmap = CaptureHelper.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
+            var bitmap = CaptureService.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
 
-            BackgroundImage = CaptureHelper.ResizeBitmap(bitmap, Width, Height);
+            BackgroundImage = CaptureService.ResizeBitmap(bitmap, Width, Height);
             Opacity = 1.0D;
         }
 
@@ -278,7 +278,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeClickable()
         {
-            if(VersionHelper.GetSystemType() != SystemType.Windows || ConfigHelper.Current.NoTransparency)
+            if(VersionService.GetPlatform() != PlatformType.Windows || ConfigService.Current.NoTransparency)
             {
                 return;
             }
@@ -292,7 +292,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeInvisible()
         {
-            if (VersionHelper.GetSystemType() != SystemType.Windows || ConfigHelper.Current.NoTransparency)
+            if (VersionService.GetPlatform() != PlatformType.Windows || ConfigService.Current.NoTransparency)
             {
                 return;
             }

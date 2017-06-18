@@ -3,12 +3,12 @@ using SharpCrop.Models;
 using System;
 using System.IO;
 
-namespace SharpCrop.Modules
+namespace SharpCrop.Services
 {
     /// <summary>
     /// ConfigHelper reads the configuration JSON into the memory and modifies it if it is needed.
     /// </summary>
-    public static class ConfigHelper
+    public static class ConfigService
     {
         /// <summary>
         /// In-memory settings.

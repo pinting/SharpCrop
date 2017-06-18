@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace SharpCrop.Modules
+namespace SharpCrop.Services
 {
     /// <summary>
-    /// ToastFactory creates new ToastForms for the user and handles there numbers.
+    /// ToastService creates new ToastForms for the user and handles there numbers.
     /// </summary>
-    public static class ToastFactory
+    public static class ToastService
     {
         private static readonly Dictionary<int, Form> toasts = new Dictionary<int, Form>();
         private static int index = 1;

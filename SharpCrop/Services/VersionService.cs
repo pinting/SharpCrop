@@ -4,9 +4,9 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using SharpCrop.Models;
 
-namespace SharpCrop.Modules
+namespace SharpCrop.Services
 {
-    public static class VersionHelper
+    public static class VersionService
     {
         /// <summary>
         /// Check for updates.
@@ -52,7 +52,7 @@ namespace SharpCrop.Modules
         /// Get the type of the operation system.
         /// </summary>
         /// <returns></returns>
-        public static SystemType GetSystemType()
+        public static PlatformType GetPlatform()
         {
             var os = Environment.OSVersion.Platform;
 
@@ -63,11 +63,11 @@ namespace SharpCrop.Modules
                 case PlatformID.Win32S:
                 case PlatformID.WinCE:
                 case PlatformID.Xbox:
-                    return SystemType.Windows;
+                    return PlatformType.Windows;
                 case PlatformID.MacOSX:
-                    return SystemType.Mac;
+                    return PlatformType.Mac;
                 default:
-                    return SystemType.Linux;
+                    return PlatformType.Linux;
             }
         }
     }
