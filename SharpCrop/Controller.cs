@@ -264,6 +264,7 @@ namespace SharpCrop
         {
             ToastService.Create(success ? Resources.UploadCompleted : Resources.UploadFailed, 3000, () =>
             {
+                // We only exit on Windows, because other platforms shows us the CopyForm
                 if (VersionService.GetPlatform() == PlatformType.Windows)
                 {
                     Application.Exit();
