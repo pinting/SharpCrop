@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SharpCrop.Services;
 using SharpCrop.Properties;
+using System.Collections.Generic;
 
 // ReSharper disable LocalizableElement
 // ReSharper disable CoVariantArrayConversion
@@ -120,19 +121,21 @@ namespace SharpCrop.Forms
         /// <param name="e"></param>
         private void ManualScalingChanged(object sender, EventArgs e)
         {
+            List<int> list = null;
+
             try
             {
-                var list = manualScallingBox.Text
+                list = manualScallingBox.Text
                     .Split(' ')
                     .Select(int.Parse)
                     .ToList();
-
-                ConfigService.Current.ManualScaling = list;
             }
             catch
             {
-                // Ignored
+                list = null;
             }
+
+            ConfigService.Current.ManualScaling = list;
         }
 
         /// <summary>
