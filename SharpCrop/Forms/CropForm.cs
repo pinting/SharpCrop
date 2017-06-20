@@ -143,7 +143,10 @@ namespace SharpCrop.Forms
 
             FormService.HideCropForms();
             Application.DoEvents();
-            CaptureService.SetManualScaling(index);
+
+            SetScaling();
+
+            // Wait the crop form to be hidden
             Thread.Sleep(VersionService.GetPlatform() == PlatformType.Windows ? 50 : 500);
 
             switch (e.Button)
@@ -265,7 +268,7 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            CaptureService.SetManualScaling(index);
+            SetScaling();
 
             var bitmap = CaptureService.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
 
@@ -299,6 +302,26 @@ namespace SharpCrop.Forms
 
             TransparencyKey = Color.Black;
             Opacity = 0.75D;
+        }
+
+
+        /// <summary>
+        /// Set scalling by screen index.
+        /// </summary>
+        /// <param name="index"></param>
+        public void SetScaling()
+        {
+            var list = ConfigService.Current.SafeManualScaling;
+
+            if (index < list.Count)
+            {
+                // ManualScalling is in percentage
+                CaptureService.Scaling = list[index] / 100.0f;
+            }
+            else
+            {
+                CaptureService.Scaling = CaptureService.GetScaling();
+            }
         }
     }
 }

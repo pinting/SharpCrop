@@ -18,26 +18,17 @@ namespace SharpCrop.Services
     {
         private static readonly List<GifFrame> frames = new List<GifFrame>();
         private static TaskCompletionSource<MemoryStream> result;
-        private static float manualScaling;
         private static bool recording;
+
+        private static float scaling = 1.0f;
 
         /// <summary>
         /// Safe manual scaling.
         /// </summary>
-        private static float ManualScaling
+        public static float Scaling
         {
-            get { return manualScaling; }
-            set { manualScaling = value > 0 ? value : manualScaling; }
-        }
-
-        /// <summary>
-        /// Check if a frame exists.
-        /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
-        private static bool FrameExists(int i)
-        {
-            return frames.Count > i && frames[i] != null;
+            get { return scaling; }
+            set { scaling = value > 0 ? value : scaling; }
         }
 
         /// <summary>
@@ -81,17 +72,6 @@ namespace SharpCrop.Services
         /// <returns></returns>
         public static Bitmap GetBitmap(Rectangle rectangle, Point offset)
         {
-            float scaling;
-
-            if(ConfigService.Current.SafeManualScaling.Count > 0 && ManualScaling > 0.0f)
-            {
-                scaling = ManualScaling;
-            }
-            else
-            {
-                scaling = GetScaling();
-            }
-
             var r = new Rectangle(
                 (int)(rectangle.X * scaling) + offset.X, 
                 (int)(rectangle.Y * scaling) + offset.Y, 
@@ -106,26 +86,11 @@ namespace SharpCrop.Services
             return bitmap;
         }
         
-        /// <summary>
-        /// Set manual scalling from the ConfigService by screen index.
-        /// </summary>
-        /// <param name="index"></param>
-        public static void SetManualScaling(int index)
-        {
-            var list = ConfigService.Current.SafeManualScaling;
-
-            if (index < list.Count)
-            {
-                // ManualScalling is in percentage
-                ManualScaling = list[index] / 100.0f;
-            }
-        }
-        
 		/// <summary>
 		/// Get the percentage of scalling.
 		/// </summary>
 		/// <returns></returns>
-		private static float GetScaling()
+		public static float GetScaling()
 		{
             // For Unix
 		    if (VersionService.GetPlatform() != PlatformType.Windows)
@@ -147,7 +112,7 @@ namespace SharpCrop.Services
 		}
 
         /// <summary>
-        /// Start capturing frames with CaptureHelper.
+        /// Start capturing frames.
         /// </summary>
         /// <param name="rectangle"></param>
         /// <param name="offset"></param>
@@ -173,7 +138,10 @@ namespace SharpCrop.Services
                 wait = freq - (int)delay.ElapsedMilliseconds;
                 frame.Delay += (wait < 0 ? -1 * wait : 0);
 
-                frames.Add(frame);
+                lock(frames)
+                {
+                    frames.Add(frame);
+                }
             }
         }
 
@@ -221,13 +189,8 @@ namespace SharpCrop.Services
             gif.SetQuality(Constants.GifQuality);
             gif.SetRepeat(0);
 
-            while (recording || frames.Count > 0)
+            while (recording || frames.Count >= 1)
             {
-                if (!FrameExists(0))
-                {
-                    continue;
-                }
-
                 gif.AddFrame(frames[0].Image);
                 frames[0].Image.Dispose();
                 frames.RemoveAt(0);
@@ -235,6 +198,7 @@ namespace SharpCrop.Services
 
             gif.SetDelay(1000 / ConfigService.Current.SafeVideoFps);
             gif.Finish();
+
             StopRecording();
 
             result.SetResult(stream);
@@ -249,18 +213,14 @@ namespace SharpCrop.Services
         {
             var stream = new MemoryStream();
 
-            // Wait for the first frame
-            while (!FrameExists(0))
-            {
-            }
+            while (frames.Count == 0) ;
 
             using (var gif = new Utils.BumpKit.GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, 0))
             {
-                while (recording || frames.Count > 0)
+                while (recording || frames.Count >= 1)
                 {
-                    // Check if it is possible to remove a frame
-                    if (FrameExists(1) &&
-                        CompareFrames(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
+                    // Check if it is possible to remove a frameff
+                    if (frames.Count >= 2 && CompareFrames(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
                     {
                         frames[0].Delay += frames[1].Delay;
                         frames[1].Image.Dispose();
@@ -270,7 +230,7 @@ namespace SharpCrop.Services
                     // Save a frame to the Gif
                     // - if 0 and 1 are different
                     // - if there is one last frame left (and the capture process is stopped)
-                    else if (FrameExists(1) || FrameExists(0) && !recording)
+                    else if (frames.Count >= 2 || frames.Count >= 1 && !recording)
                     {
                         gif.AddFrame(frames[0].Image, 0, 0, TimeSpan.FromMilliseconds(frames[0].Delay));
                         frames[0].Image.Dispose();
@@ -306,9 +266,9 @@ namespace SharpCrop.Services
 
                     ffmpeg.Start();
 
-                    while (recording || frames.Count > 0)
+                    while (recording || frames.Count >= 1)
                     {
-                        if (!FrameExists(0))
+                        if(frames.Count == 0)
                         {
                             continue;
                         }
@@ -355,55 +315,6 @@ namespace SharpCrop.Services
             }
         }
 
-        private static void EncodeMpegTest()
-        {
-            var temp = Guid.NewGuid().ToString();
-            var output = new MemoryStream();
-
-            try
-            {
-                using (var ffmpeg = new Process())
-                {
-                    var fps = ConfigService.Current.SafeVideoFps;
-
-                    ffmpeg.StartInfo.FileName = "ffmpeg";
-                    ffmpeg.StartInfo.Arguments = $"-y -f gdigrab -r {fps} -offset_x 158 -offset_y 84 -video_size 1484x800 -i desktop -r {fps} {temp}";
-                    ffmpeg.StartInfo.UseShellExecute = false;
-                    ffmpeg.StartInfo.CreateNoWindow = true;
-
-                    ffmpeg.Start();
-                    ffmpeg.WaitForExit();
-                }
-
-                // TODO: Experiment with something (RAMDisk?)
-                using (var file = new FileStream(temp, FileMode.Open))
-                {
-                    var buffer = new byte[512];
-
-                    while (file.Read(buffer, 0, buffer.Length) > 0)
-                    {
-                        output.Write(buffer, 0, buffer.Length);
-                    }
-                }
-
-                result.SetResult(output);
-            }
-            catch
-            {
-                output.Dispose();
-                result.SetResult(new MemoryStream(0));
-            }
-            finally
-            {
-                if (File.Exists(temp))
-                {
-                    File.Delete(temp);
-                }
-
-                StopRecording();
-            }
-        }
-
         /// <summary>
         /// Start a recording with the given encoder.
         /// </summary>
@@ -418,12 +329,15 @@ namespace SharpCrop.Services
                 return Task.FromResult<MemoryStream>(null);
             }
 
-            recording = true;
             result = new TaskCompletionSource<MemoryStream>();
+            recording = true;
 
             // Run the two process in the same time
-            Task.Run(() => CaptureFrames(region, offset));
-            Task.Run(encoder);
+            var captureThread = new Thread(() => CaptureFrames(region, offset));
+            var encoderThread = new Thread(() => encoder());
+            
+            captureThread.Start();
+            encoderThread.Start();
 
             return result.Task;
         }
@@ -462,7 +376,6 @@ namespace SharpCrop.Services
         {
             recording = false;
         }
-
 
         /// <summary>
         /// Get display informations on Windows.
