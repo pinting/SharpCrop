@@ -36,7 +36,7 @@ Get the latest version from <a href="https://github.com/pinting/SharpCrop/releas
 
 Anyone can help make this project better.
 
-### TODOs
+## TODOs
 
 * Switch to Eto From (see EtoCrop project on my GitHub)
 * Automatic ffmpeg detection
