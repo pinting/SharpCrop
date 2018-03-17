@@ -8,7 +8,7 @@ namespace SharpCrop
     public static class Constants
     {
         // Version
-        public const int Version = 2100;
+        public const int Version = 2200;
 
         // List of the registered providers
         public static readonly IReadOnlyList<Type> Providers = new List<Type>()

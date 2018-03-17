@@ -38,11 +38,11 @@ Anyone can help make this project better.
 
 ## TODOs
 
-* Switch to Eto From (see EtoCrop project on my GitHub)
+* Switch to GtkSharp
 * Automatic ffmpeg detection
 * Use gdigrab and x11grab - if available
 * Option to hide the application for fast relaunch
 
 ## License
 
-Copyright (c) 2017 Tornyi Dénes. Licensed under the MIT license.
+Copyright (c) 2018 Tornyi Dénes. Licensed under the MIT license.
