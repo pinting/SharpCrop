@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-using Google.Apis.Auth.OAuth2;
+﻿using System.Diagnostics;
 using System.Threading;
-using Google.Apis.Auth.OAuth2.Responses;
+using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Requests;
+using Google.Apis.Auth.OAuth2.Responses;
 using SharpCrop.Provider.Forms;
 
 namespace SharpCrop.GoogleDrive.Utils
@@ -39,7 +40,7 @@ namespace SharpCrop.GoogleDrive.Utils
                 success = true;
 
                 form.Close();
-                result.SetResult(new AuthorizationCodeResponseUrl() { Code = code });
+                result.SetResult(new AuthorizationCodeResponseUrl { Code = code });
             };
 
             form.FormClosed += (sender, e) =>
@@ -50,7 +51,7 @@ namespace SharpCrop.GoogleDrive.Utils
                 }
             };
 
-            System.Diagnostics.Process.Start(url);
+            Process.Start(url);
             form.Show();
 
             executed = true;

@@ -1,13 +1,13 @@
-﻿using Microsoft.Graph;
-using Newtonsoft.Json;
-using SharpCrop.OneDrive.Models;
-using SharpCrop.Provider.Utils;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Graph;
+using Newtonsoft.Json;
+using SharpCrop.OneDrive.Models;
+using SharpCrop.Provider.Utils;
 
 // ReSharper disable UseStringInterpolation
 
@@ -27,9 +27,9 @@ namespace SharpCrop.OneDrive.Utils
         /// </summary>
         public string Url => string.Format(
             "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope={1}&response_type=code&redirect_uri={2}",
-            Obscure.CaesarDecode(Constants.AppKey),
-            string.Join("+", Constants.Scopes),
-            Constants.RedirectUrl);
+            Obscure.CaesarDecode(Config.AppKey),
+            string.Join("+", Config.Scopes),
+            Config.RedirectUrl);
 
         /// <summary>
         /// Process a code and obtain a TokenResponse.
@@ -43,9 +43,9 @@ namespace SharpCrop.OneDrive.Utils
             var request = WebRequest.Create("https://login.live.com/oauth20_token.srf");
             var array = Encoding.UTF8.GetBytes(string.Format(
                 "client_id={0}&client_secret={1}&redirect_uri={2}&code={3}&grant_type=authorization_code",
-                Obscure.CaesarDecode(Constants.AppKey),
-                Obscure.CaesarDecode(Constants.AppSecret),
-                Constants.RedirectUrl,
+                Obscure.CaesarDecode(Config.AppKey),
+                Obscure.CaesarDecode(Config.AppSecret),
+                Config.RedirectUrl,
                 code));
 
             request.ContentType = "application/x-www-form-urlencoded";

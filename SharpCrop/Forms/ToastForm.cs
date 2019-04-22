@@ -10,9 +10,10 @@ namespace SharpCrop.Forms
     /// <summary>
     /// ToastForm is responsible for the right-bottom side toast boxes.
     /// </summary>
-    public partial class ToastForm : Form
+    public class ToastForm : Form
     {
         private const int margin = 5;
+        private Label label;
 
         /// <summary>
         /// Construct a new ToastForm. Index is managed by ToastFactory.
@@ -47,21 +48,44 @@ namespace SharpCrop.Forms
                 }
             });
         }
+        
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+            
+            label = new Label();
+            label.Location = new Point(15, 15);
+            label.Size = new Size(100, 20);
+            label.AutoSize = true;
+            label.TabIndex = 0;
+            label.TextAlign = ContentAlignment.MiddleCenter;
+            
+            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(500, 60);
+            FormBorderStyle = FormBorderStyle.None;
+            StartPosition = FormStartPosition.Manual;
+            Opacity = 0.9D;
+            ControlBox = false;
+            TopMost = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            
+            Controls.Add(label);
+            ResumeLayout(false);
+            PerformLayout();
+
+        }
 
         /// <summary>
         /// Access virtual property in constructor.
         /// </summary>
         public sealed override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
-
-            set
-            {
-                base.BackColor = value;
-            }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
 
         /// <summary>

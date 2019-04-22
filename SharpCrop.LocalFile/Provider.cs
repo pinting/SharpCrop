@@ -13,7 +13,7 @@ namespace SharpCrop.LocalFile
     {
         private string state;
 
-        public string Id => Constants.ProviderId;
+        public string Id => Config.ProviderId;
 
         public string Name => Resources.ProviderName;
 
@@ -81,7 +81,7 @@ namespace SharpCrop.LocalFile
 
             File.WriteAllBytes(url, stream.ToArray());
 
-            return Task.FromResult($"{Constants.UrlPrefix}{url}");
+            return Task.FromResult($"{Config.UrlPrefix}{url}");
         }
     }
 }

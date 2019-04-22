@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
-using SharpCrop.Models;
-using System;
+﻿using System;
 using System.IO;
+using Newtonsoft.Json;
+using SharpCrop.Models;
 
 namespace SharpCrop.Services
 {
     /// <summary>
-    /// ConfigHelper reads the configuration JSON into the memory and modifies it if it is needed.
+    /// Settings service reads the configuration JSON into the memory and can modify it.
     /// </summary>
-    public static class ConfigService
+    public static class SettingsService
     {
         /// <summary>
         /// In-memory settings.
         /// </summary>
-        public static Config Current;
+        public static Settings Current;
 
         /// <summary>
         /// Load settings into memory.
@@ -22,11 +22,11 @@ namespace SharpCrop.Services
         {
             try
             {
-                Current = JsonConvert.DeserializeObject<Config>(File.ReadAllText(Constants.SettingsPath));
+                Current = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Config.SettingsPath));
             }
             catch
             {
-                Current = new Config();
+                Current = new Settings();
             }
 
         }
@@ -38,7 +38,7 @@ namespace SharpCrop.Services
         {
             try
             {
-                File.WriteAllText(Constants.SettingsPath, JsonConvert.SerializeObject(Current, Formatting.Indented));
+                File.WriteAllText(Config.SettingsPath, JsonConvert.SerializeObject(Current, Formatting.Indented));
             }
             catch(Exception e)
             {
@@ -51,7 +51,7 @@ namespace SharpCrop.Services
         /// </summary>
         public static void Reset()
         {
-            Current = new Config();
+            Current = new Settings();
         }
     }
 }

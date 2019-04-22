@@ -1,14 +1,16 @@
-﻿using SharpCrop.Provider;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
-using Google.Apis.Services;
-using System.Threading;
-using SharpCrop.Provider.Utils;
-using SharpCrop.GoogleDrive.Utils;
-using System.Collections.Generic;
 using Google.Apis.Drive.v3.Data;
+using Google.Apis.Services;
 using SharpCrop.GoogleDrive.Properties;
+using SharpCrop.GoogleDrive.Utils;
+using SharpCrop.Provider;
+using SharpCrop.Provider.Utils;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace SharpCrop.GoogleDrive
 {
@@ -20,7 +22,7 @@ namespace SharpCrop.GoogleDrive
         private DriveService service;
         private MemoryStore state;
 
-        public string Id => Constants.ProviderId;
+        public string Id => Config.ProviderId;
 
         public string Name => Resources.ProviderName;
 
@@ -39,15 +41,15 @@ namespace SharpCrop.GoogleDrive
                 state = new MemoryStore(Obscure.Base64Decode(savedState));
 
                 // Try to use the previously saved TokenResponse and if it fails, show the registration form (if the showForm parameter allows it)
-                var secret = new ClientSecrets() { ClientId = Obscure.CaesarDecode(Constants.AppKey), ClientSecret = Obscure.CaesarDecode(Constants.AppSecret) };
+                var secret = new ClientSecrets { ClientId = Obscure.CaesarDecode(Config.AppKey), ClientSecret = Obscure.CaesarDecode(Config.AppSecret) };
                 var receiver = new CodeReceiver(showForm);
 
-                var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Constants.Scopes, "token", CancellationToken.None, state, receiver);
+                var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Config.Scopes, "token", CancellationToken.None, state, receiver);
 
-                service = new DriveService(new BaseClientService.Initializer()
+                service = new DriveService(new BaseClientService.Initializer
                 {
                     HttpClientInitializer = credentials,
-                    ApplicationName = "SharpCrop",
+                    ApplicationName = "SharpCrop"
                 });
                 
                 // Try to use the saved application folder or get a new one
@@ -77,16 +79,16 @@ namespace SharpCrop.GoogleDrive
         /// <param name="name"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public async Task<string> Upload(string name, System.IO.MemoryStream stream)
+        public async Task<string> Upload(string name, MemoryStream stream)
         {
             var folderId = await state.GetAsync<string>("folderId");
-            var uploadBody = new File() { Name = name,  Parents = new List<string> { folderId } };
-            var uploadType = $"image/{MimeLookup.Find(System.IO.Path.GetExtension(name))}";
+            var uploadBody = new File { Name = name,  Parents = new List<string> { folderId } };
+            var uploadType = $"image/{MimeLookup.Find(Path.GetExtension(name))}";
             var uploadRequest = service.Files.Create(uploadBody, stream, uploadType);
 
             await uploadRequest.UploadAsync();
 
-            var uploadPermission = service.Permissions.Create(new Permission() { Type = "anyone", Role = "reader" }, uploadRequest.ResponseBody.Id);
+            var uploadPermission = service.Permissions.Create(new Permission { Type = "anyone", Role = "reader" }, uploadRequest.ResponseBody.Id);
 
             await uploadPermission.ExecuteAsync();
 
@@ -100,10 +102,10 @@ namespace SharpCrop.GoogleDrive
         private async Task<File> GetFolder()
         {
             // Use a random generated number as a description to always find the folder
-            var folderBody = new File()
+            var folderBody = new File
             {
-                Name = Constants.FolderName,
-                Description = Constants.FolderDescription,
+                Name = Config.FolderName,
+                Description = Config.FolderDescription,
                 MimeType = "application/vnd.google-apps.folder"
             };
 

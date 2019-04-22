@@ -1,13 +1,13 @@
-﻿using SharpCrop.FTP.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
+using SharpCrop.FTP.Models;
 
 namespace SharpCrop.FTP.Utils
 {
     /// <summary>
-    /// FTPUploader is a lightly modified version of the official FtpWebRequest example. It can upload a MemoryStream to the given
-    /// server using a username and a password.
+    /// FTPUploader is a lightly modified version of the official FtpWebRequest example.
+    /// It can upload a MemoryStream to the given server using a username and a password.
     /// </summary>
     public static class FtpUploader
     {
@@ -60,13 +60,11 @@ namespace SharpCrop.FTP.Utils
 
                 var buffer = new byte[bufferLength];
                 int readBytes;
-                var count = 0;
 
                 do
                 {
                     readBytes = state.Stream.Read(buffer, 0, bufferLength);
                     requestStream.Write(buffer, 0, readBytes);
-                    count += readBytes;
                 }
                 while (readBytes != 0);
 

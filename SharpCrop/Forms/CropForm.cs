@@ -1,7 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using System;
 using SharpCrop.Models;
 using SharpCrop.Services;
 
@@ -10,37 +10,51 @@ namespace SharpCrop.Forms
     /// <summary>
     /// CropForm helps the user to select a rectangle which gonna be captured and uploaded.
     /// </summary>
-    public partial class CropForm : Form
+    public class CropForm : Form
     {
         private readonly Controller controller;
         private readonly Rectangle screen;
-        private readonly int index;
 
         private MouseButtons mouseButtonUsed = MouseButtons.Left;
         private Point mouseMovePoint = Point.Empty;
         private Point mouseDownPoint = Point.Empty;
         private Point mouseUpPoint = Point.Empty;
         private bool isMouseDown;
-        private Rectangle last;
+        private Rectangle lastRegion;
 
         /// <summary>
-        /// Consturct a new CropForm with the given provider.
+        /// Construct a new CropForm with the given provider.
         /// </summary>
         /// <param name="controller"></param>
         /// <param name="screen">Screen bounds</param>
-        /// <param name="index">Screen index in Screen.AllScreens</param>
-        public CropForm(Controller controller, Rectangle screen, int index = -1)
+        public CropForm(Controller controller, Rectangle screen)
         {
             this.controller = controller;
             this.screen = screen;
-            this.index = index;
+            
+            InitializeComponent();
             
             Location = screen.Location;
             ClientSize = Size = screen.Size;
 
-            InitializeComponent();
             RefreshBackground();
             MakeClickable();
+        }
+
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+            
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            FormBorderStyle = FormBorderStyle.Sizable;
+            StartPosition = FormStartPosition.Manual;
+            WindowState = FormWindowState.Maximized;
+            BackColor = Color.Black;
+            DoubleBuffered = true;
+            Opacity = 0.25D;
+            Text = "SharpCrop";
+            TopMost = false;
         }
 
         /// <summary>
@@ -89,7 +103,7 @@ namespace SharpCrop.Forms
         }
 
         /// <summary>
-        /// Consturct a new ConfigForm and hide CropForm.
+        /// Construct a new ConfigForm and hide CropForm.
         /// </summary>
         private void ShowConfig()
         {
@@ -134,9 +148,12 @@ namespace SharpCrop.Forms
             mouseButtonUsed = e.Button;
             isMouseDown = false;
             
-            var region = CaptureService.GetRectangle(mouseDownPoint, mouseUpPoint);
+            // IMPORTANT: Convert the local (window) points to absolute (screen) points
+            var region = CaptureService.GetRectangle(
+                PointToScreen(mouseDownPoint),
+                PointToScreen(mouseUpPoint));
 
-            if (region.X < 0 || region.Y < 0 || region.Width < 1 || region.Height < 1)
+            if (region.Width < 1 || region.Height < 1)
             {
                 return;
             }
@@ -144,18 +161,16 @@ namespace SharpCrop.Forms
             FormService.HideCropForms();
             Application.DoEvents();
 
-            SetScaling();
-
-            // Wait the crop form to be hidden
-            Thread.Sleep(VersionService.GetPlatform() == PlatformType.Windows ? 50 : 500);
+            // Wait the form to be hidden
+            Thread.Sleep(200);
 
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    controller.CaptureImage(region, screen.Location);
+                    controller.CaptureImage(region);
                     break;
                 case MouseButtons.Right:
-                    controller.CaptureVideo(region, screen.Location);
+                    controller.CaptureVideo(region);
                     break;
             }
         }
@@ -187,6 +202,59 @@ namespace SharpCrop.Forms
 
             Invalidate();
         }
+
+        /// <summary>
+        /// Draw the select rectangle on the screen.
+        /// It uses the lastRegion variable to repaint only the difference.
+        /// </summary>
+        /// <param name="gfx"></param>
+        /// <param name="color"></param>
+        /// <param name="r"></param>
+        private void DrawSelectRectangle(Graphics gfx, Brush color, Rectangle r)
+        {
+            if (SettingsService.Current.NoTransparency)
+            {
+
+                var path = new[]
+                {
+                    new Point { X = r.X, Y = r.Y },
+                    new Point { X = r.X + r.Width , Y = r.Y },
+                    new Point { X = r.X + r.Width , Y = r.Y + r.Height },
+                    new Point { X = r.X , Y = r.Y + r.Height },
+                    new Point { X = r.X, Y = r.Y }
+                };
+
+                gfx.DrawLines(new Pen(color, Config.PenWidth), path);
+
+                return;
+            }
+            
+            var old = lastRegion;
+            var b = new SolidBrush(BackColor);
+
+            if (old.X < r.X)
+            {
+                gfx.FillRectangle(b, old.X, old.Y, r.X - old.X, old.Height);
+            }
+
+            if (old.Y < r.Y)
+            {
+                gfx.FillRectangle(b, old.X, old.Y, old.Width, r.Y - old.Y);
+            }
+
+            if (old.Y + old.Height > r.Y + r.Height)
+            {
+                gfx.FillRectangle(b, old.X, r.Y + r.Height, old.Width, old.Y + old.Height - (r.Y + r.Height));
+            }
+
+            if (old.X + old.Width > r.X + r.Width)
+            {
+                gfx.FillRectangle(b, r.X + r.Width, old.Y, old.X + old.Width - (r.X + r.Width), old.Height);
+            }
+
+            gfx.FillRectangle(color, r.X, r.Y, r.Width, r.Height);
+        }
+        
         /// <summary>
         /// Paint the rectangle if the mouse button is down.
         /// </summary>
@@ -200,62 +268,18 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            var draw = new Action<Brush, Rectangle>((color, r) => 
+            var region = CaptureService.GetRectangle(mouseDownPoint, mouseMovePoint);
+
+            if (mouseButtonUsed == MouseButtons.Left)
             {
-                if (!ConfigService.Current.NoTransparency)
-                {
-                    var back = new SolidBrush(BackColor);
-
-                    if (last.X < r.X)
-                    {
-                        e.Graphics.FillRectangle(back, last.X, last.Y, r.X - last.X, last.Height);
-                    }
-
-                    if (last.Y < r.Y)
-                    {
-                        e.Graphics.FillRectangle(back, last.X, last.Y, last.Width, r.Y - last.Y);
-                    }
-
-                    if (last.Y + last.Height > r.Y + r.Height)
-                    {
-                        e.Graphics.FillRectangle(back, last.X, r.Y + r.Height, last.Width, last.Y + last.Height - (r.Y + r.Height));
-                    }
-
-                    if (last.X + last.Width > r.X + r.Width)
-                    {
-                        e.Graphics.FillRectangle(back, r.X + r.Width, last.Y, last.X + last.Width - (r.X + r.Width), last.Height);
-                    }
-
-                    e.Graphics.FillRectangle(color, r.X, r.Y, r.Width, r.Height);
-                }
-                else
-                {
-                    var path = new[]
-                    {
-                        new Point { X = r.X, Y = r.Y },
-                        new Point { X = r.X + r.Width , Y = r.Y },
-                        new Point { X = r.X + r.Width , Y = r.Y + r.Height },
-                        new Point { X = r.X , Y = r.Y + r.Height },
-                        new Point { X = r.X, Y = r.Y }
-                    };
-
-                    e.Graphics.DrawLines(new Pen(color, Constants.PenWidth), path);
-                }
-            });
-
-            var rectangle = CaptureService.GetRectangle(mouseDownPoint, mouseMovePoint);
-
-            switch (mouseButtonUsed)
+                DrawSelectRectangle(e.Graphics, Config.LeftColor, region);
+            }
+            else if (mouseButtonUsed == MouseButtons.Right)
             {
-                case MouseButtons.Left:
-                    draw(Constants.LeftColor, rectangle);
-                    break;
-                case MouseButtons.Right:
-                    draw(Constants.RightColor, rectangle);
-                    break;
+                DrawSelectRectangle(e.Graphics, Config.RightColor, region);
             }
 
-            last = rectangle;
+            lastRegion = region;
         }
 
         /// <summary>
@@ -263,16 +287,14 @@ namespace SharpCrop.Forms
         /// </summary>
         private void RefreshBackground()
         {
-            if (!ConfigService.Current.NoTransparency)
+            if (!SettingsService.Current.NoTransparency)
             {
                 return;
             }
 
-            SetScaling();
+            var bitmap = CaptureService.CaptureBitmap(new Rectangle(screen.Location, screen.Size));
 
-            var bitmap = CaptureService.GetBitmap(new Rectangle(Point.Empty, screen.Size), screen.Location);
-
-            BackgroundImage = CaptureService.ResizeBitmap(bitmap, Width, Height);
+            BackgroundImage = bitmap;
             Opacity = 1.0D;
         }
 
@@ -281,7 +303,7 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeClickable()
         {
-            if(VersionService.GetPlatform() != PlatformType.Windows || ConfigService.Current.NoTransparency)
+            if(VersionService.GetPlatform() != PlatformType.Windows || SettingsService.Current.NoTransparency)
             {
                 return;
             }
@@ -295,33 +317,13 @@ namespace SharpCrop.Forms
         /// </summary>
         private void MakeInvisible()
         {
-            if (VersionService.GetPlatform() != PlatformType.Windows || ConfigService.Current.NoTransparency)
+            if (VersionService.GetPlatform() != PlatformType.Windows || SettingsService.Current.NoTransparency)
             {
                 return;
             }
 
             TransparencyKey = Color.Black;
             Opacity = 0.75D;
-        }
-
-
-        /// <summary>
-        /// Set scalling by screen index.
-        /// </summary>
-        /// <param name="index"></param>
-        public void SetScaling()
-        {
-            var list = ConfigService.Current.SafeManualScaling;
-
-            if (index < list.Count)
-            {
-                // ManualScalling is in percentage
-                CaptureService.Scaling = list[index] / 100.0f;
-            }
-            else
-            {
-                CaptureService.Scaling = CaptureService.GetScaling();
-            }
         }
     }
 }

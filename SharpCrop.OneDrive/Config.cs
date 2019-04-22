@@ -1,6 +1,6 @@
 ﻿namespace SharpCrop.OneDrive
 {
-    public static class Constants
+    public static class Config
     {
         public static readonly string AppKey = "Vz9bQVRAWEFRDFUOXAlYQFYMURRUQFUJVkKFFFo9WRNdD4lC";
         public static readonly string AppSecret = "i06LT2VBXVZdMIZfezBMY2hNcCtkQ24=";

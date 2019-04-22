@@ -1,11 +1,12 @@
-﻿using SharpCrop.Provider;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 using Dropbox.Api;
 using Dropbox.Api.Files;
-using System.IO;
-using SharpCrop.Provider.Utils;
-using System.Threading.Tasks;
 using SharpCrop.Dropbox.Properties;
+using SharpCrop.Provider;
 using SharpCrop.Provider.Forms;
+using SharpCrop.Provider.Utils;
 
 namespace SharpCrop.Dropbox
 {
@@ -16,7 +17,7 @@ namespace SharpCrop.Dropbox
     {
         private DropboxClient client;
 
-        public string Id => Constants.ProviderId;
+        public string Id => Config.ProviderId;
 
         public string Name => Resources.ProviderName;
 
@@ -66,7 +67,7 @@ namespace SharpCrop.Dropbox
             }
 
             // If it is not, try to get a new one
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Code, Obscure.CaesarDecode(Constants.AppKey), (string)null);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Code, Obscure.CaesarDecode(Config.AppKey), (string)null);
             var form = new CodeForm(url.ToString(), 43);
             var success = false;
 
@@ -75,7 +76,7 @@ namespace SharpCrop.Dropbox
                 success = true;
                 form.Close();
 
-                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(code, Obscure.CaesarDecode(Constants.AppKey), Obscure.CaesarDecode(Constants.AppSecret));
+                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(code, Obscure.CaesarDecode(Config.AppKey), Obscure.CaesarDecode(Config.AppSecret));
 
                 if (response?.AccessToken != null && await ClientFactory(response.AccessToken))
                 {
@@ -95,7 +96,7 @@ namespace SharpCrop.Dropbox
                 }
             };
 
-            System.Diagnostics.Process.Start(url.ToString());
+            Process.Start(url.ToString());
             form.Show();
 
             return await result.Task;

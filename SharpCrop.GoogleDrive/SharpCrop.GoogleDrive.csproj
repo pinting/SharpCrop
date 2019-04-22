@@ -41,7 +41,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Utils\CodeReceiver.cs" />
     <Compile Include="Utils\MemoryStore.cs" />

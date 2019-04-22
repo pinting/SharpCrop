@@ -1,14 +1,14 @@
-﻿using SharpCrop.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCrop.Forms;
 using SharpCrop.Models;
-using SharpCrop.Services;
 using SharpCrop.Properties;
+using SharpCrop.Services;
 
 namespace SharpCrop
 {
@@ -32,23 +32,10 @@ namespace SharpCrop
         /// </summary>
         private async void Run()
         {
-            // If StartupRegister is enabled, init providers on the load of the first CropForm
-            if (ConfigService.Current.StartupRegister)
-            {
-                await RestoreProviders();
+            await RestoreProviders();
 
-                if (ProviderService.RegisteredProviders.Count > 0)
-                {
-                    FormService.ShowCropForms();
-                }
-                else
-                {
-                    FormService.ConfigForm.Show();
-                }
-            }
-            else if (ConfigService.Current.SafeProviders.Count > 0)
+            if (ProviderService.Loaded.Count > 0)
             {
-                // Show settings if no providers gonna be loaded - not safe, this is a prediction
                 FormService.ShowCropForms();
             }
             else
@@ -63,15 +50,15 @@ namespace SharpCrop
         public async Task RestoreProviders()
         {
             // Load available IProvider types into memory
-            if (ProviderService.LoadedProviders.Count == 0)
+            if (ProviderService.Available.Count == 0)
             {
                 ProviderService.LoadProviders();
             }
 
-            var tasks = new Dictionary<string, Task<bool>>();
+            var tasks = new Dictionary<string, Task<bool>>(); 
 
             // ToList() is needed because the original Dictionary is changing while we iterating
-            ConfigService.Current.SafeProviders
+            SettingsService.Current.SafeProviders
                 .ToList()
                 .ForEach(p => tasks[p.Key] = ProviderService.RegisterProvider(
                     ProviderService.GetProviderById(p.Value.Id), p.Key, p.Value.State, false));
@@ -79,7 +66,7 @@ namespace SharpCrop
             // Wait for tasks to finish and remove unloaded providers
             foreach (var task in tasks)
             {
-                if (!ProviderService.RegisteredProviders.ContainsKey(task.Key) && !await task.Value)
+                if (!ProviderService.Loaded.ContainsKey(task.Key) && !await task.Value)
                 {
                     ToastService.Create(string.Format(Resources.ProviderRegistrationFailed, task.Key));
                     ProviderService.ClearProvider(task.Key);
@@ -91,25 +78,24 @@ namespace SharpCrop
         /// Capture one Bitmap.
         /// </summary>
         /// <param name="region"></param>
-        /// <param name="offset"></param>
-        public async void CaptureImage(Rectangle region, Point offset)
+        public async void CaptureImage(Rectangle region)
         {
             var stream = new MemoryStream();
-            var bitmap = CaptureService.GetBitmap(region, offset);
+            var bitmap = CaptureService.CaptureBitmap(region);
             
-            bitmap.Save(stream, ConfigService.Current.ImageFormat);
+            bitmap.Save(stream, SettingsService.Current.ImageFormat);
 
             // Copy bitmap to the clipboard
-            if (!ConfigService.Current.NoImageCopy)
+            if (!SettingsService.Current.NoImageCopy)
             {
                 CopyImage(bitmap);
             }
 
             // Generate filename and start the upload(s)
-            var url = await UploadAll(stream, ConfigService.Current.SafeImageExt);
+            var url = await UploadAll(stream, SettingsService.Current.SafeImageExt);
 
             // Try to copy URL 
-            if(ConfigService.Current.NoImageCopy)
+            if(SettingsService.Current.NoImageCopy)
             {
                 CopyUrl(url); 
             }
@@ -124,8 +110,7 @@ namespace SharpCrop
         /// Capture a lot of bitmaps and convert them to video.
         /// </summary>
         /// <param name="region"></param>
-        /// <param name="offset"></param>
-        public async void CaptureVideo(Rectangle region, Point offset)
+        public async void CaptureVideo(Rectangle region)
         {
             MemoryStream stream;
             var toast = -1;
@@ -136,21 +121,13 @@ namespace SharpCrop
                 toast = ToastService.Create(Resources.Encoding, 0);
                 CaptureService.StopRecording();
             });
-
-            // Use Mpeg if enabled
-            if (ConfigService.Current.EnableMpeg)
-            {
-                stream = await CaptureService.RecordMpeg(region, offset);
-            }
-            else
-            {
-                stream = await CaptureService.RecordGif(region, offset);
-            }
+            
+            stream = await CaptureService.RecordVideo(region, Config.VideoExt, SettingsService.Current.SafeVideoFps);
 
             ToastService.Remove(toast);
 
             // Generate filename and start the upload(s)
-            var url = await UploadAll(stream, ConfigService.Current.EnableMpeg ? "mp4" : "gif");
+            var url = await UploadAll(stream, "mp4");
 
             stream.Dispose();
 
@@ -167,16 +144,12 @@ namespace SharpCrop
         private async Task<string> UploadAll(MemoryStream stream, string ext)
         {
             var name = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.{ext}";
-            var toast = ToastService.Create(string.Format(Resources.Uploading, $"{(double)stream.Length / (1024 * 1024):0.00} MB"), 0);
+            var progress = $"{(double) stream.Length / (1024 * 1024):0.00} MB";
+            var toast = ToastService.Create(string.Format(Resources.Uploading, progress), 0);
 
-            // Try to load the saved providers (if load on startup is disabled)
-            if (!ConfigService.Current.StartupRegister)
-            {
-                await RestoreProviders();
-            }
-
-            // Save file locally if no providers were registered
-            if (ProviderService.RegisteredProviders.Count == 0)
+            // Save file locally if no providers are loaded
+            // TODO: Can this happen?
+            if (ProviderService.Loaded.Count == 0)
             {
                 File.WriteAllBytes(name, stream.ToArray());
                 ToastService.Remove(toast);
@@ -189,7 +162,7 @@ namespace SharpCrop
             string last = null;
 
             // Run the uploads async
-            foreach (var p in ProviderService.RegisteredProviders)
+            foreach (var p in ProviderService.Loaded)
             {
                 if (p.Value != null)
                 {
@@ -211,7 +184,7 @@ namespace SharpCrop
                 {
                     last = url;
 
-                    if (p.Key == ConfigService.Current.CopyProvider)
+                    if (p.Key == SettingsService.Current.CopyProvider)
                     {
                         result = url;
                     }
@@ -230,17 +203,19 @@ namespace SharpCrop
         /// <param name="url"></param>
         private void CopyUrl(string url = null)
         {
-            if (!ConfigService.Current.NoUrlCopy && !string.IsNullOrEmpty(url))
+            if (SettingsService.Current.NoUrlCopy || string.IsNullOrEmpty(url))
             {
-                Clipboard.SetText(url);
+                return;
+            }
+            
+            Clipboard.SetText(url);
 
-                if (VersionService.GetPlatform() != PlatformType.Windows)
-                {
-                    var form = new CopyForm(url);
+            if (VersionService.GetPlatform() != PlatformType.Windows)
+            {
+                var form = new CopyForm(url);
 
-                    form.FormClosed += (s, e) => Application.Exit();
-                    form.Show();
-                }
+                form.FormClosed += (s, e) => Application.Exit();
+                form.Show();
             }
         }
 
@@ -250,7 +225,7 @@ namespace SharpCrop
         /// <param name="image"></param>
         private void CopyImage(Image image)
         {
-            if (!ConfigService.Current.NoImageCopy)
+            if (!SettingsService.Current.NoImageCopy)
             {
                 Clipboard.SetImage(image);
             }

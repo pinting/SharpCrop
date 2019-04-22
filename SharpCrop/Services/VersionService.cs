@@ -14,7 +14,7 @@ namespace SharpCrop.Services
         /// <returns>URL of the new version or null.</returns>
         public static string GetLatestLink()
         {
-            var request = (HttpWebRequest)WebRequest.Create(Constants.LatestVersion);
+            var request = (HttpWebRequest)WebRequest.Create(Config.LatestVersion);
 
             request.UserAgent = "SharpCrop";
 
@@ -33,9 +33,9 @@ namespace SharpCrop.Services
                 dynamic parsed = JObject.Parse(reader.ReadToEnd());
 
                 var tagName = ((string)parsed.tag_name.ToString()).Replace(".", "");
-                var version = (int)(int.Parse(tagName) * Math.Pow(10, Constants.VersionLength - tagName.Length));
+                var version = (int)(int.Parse(tagName) * Math.Pow(10, Config.VersionLength - tagName.Length));
 
-                if (version > Constants.Version)
+                if (version > Config.Version)
                 {
                     return parsed.html_url.ToString();
                 }

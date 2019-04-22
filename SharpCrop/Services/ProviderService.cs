@@ -12,8 +12,8 @@ namespace SharpCrop.Services
     /// </summary>
     public static class ProviderService
     {
-        private static readonly Dictionary<string, IProvider> registeredProviders = new Dictionary<string, IProvider>();
-        private static readonly List<LoadedProvider> loadedProviders = new List<LoadedProvider>();
+        private static readonly Dictionary<string, IProvider> loaded = new Dictionary<string, IProvider>();
+        private static readonly List<LoadedProvider> available = new List<LoadedProvider>();
 
         /// <summary>
         /// Executed when registered providers changed
@@ -26,28 +26,25 @@ namespace SharpCrop.Services
         public static event Action LoadedProvidersChanged;
 
         /// <summary>
-        /// Currently registered (working) providers.
+        /// Currently registered (available) providers.
         /// </summary>
-        public static IReadOnlyDictionary<string, IProvider> RegisteredProviders => registeredProviders;
+        public static IReadOnlyDictionary<string, IProvider> Loaded => loaded;
 
         /// <summary>
-        /// Currently loaded (available) providers.
+        /// Currently loaded (working) providers.
         /// </summary>
-        public static IReadOnlyList<LoadedProvider> LoadedProviders => loadedProviders;
+        public static IReadOnlyList<LoadedProvider> Available => available;
 
         /// <summary>
         /// Init loaded providers list.
         /// </summary>
         public static void LoadProviders()
         {
-            foreach (var type in Constants.Providers)
+            foreach (var type in Config.Providers)
             {
-                // I know, I know, this looks bad
-                // I create a new Instance to write down the Name and Id
-                // To help the bellow elsewere, to create another new instance
                 var provider = (IProvider)Activator.CreateInstance(type);
 
-                loadedProviders.Add(new LoadedProvider()
+                available.Add(new LoadedProvider
                 {
                     Id = provider.Id,
                     Name = provider.Name,
@@ -65,16 +62,16 @@ namespace SharpCrop.Services
         public static void ClearProvider(string name)
         {
             // Remove from the registered providers
-            if (registeredProviders.ContainsKey(name))
+            if (loaded.ContainsKey(name))
             {
-                registeredProviders.Remove(name);
+                loaded.Remove(name);
                 RegisteredProvidersChanged?.Invoke();
             }
 
             // Remove from the configuration file
-            if (ConfigService.Current.SafeProviders.ContainsKey(name))
+            if (SettingsService.Current.SafeProviders.ContainsKey(name))
             {
-                ConfigService.Current.SafeProviders.Remove(name);
+                SettingsService.Current.SafeProviders.Remove(name);
             }
         }
 
@@ -85,11 +82,11 @@ namespace SharpCrop.Services
         /// <returns></returns>
         public static IProvider GetProviderByName(string name)
         {
-            var loaded = loadedProviders.FirstOrDefault(e => e.Name == name);
+            var provider = available.FirstOrDefault(e => e.Name == name);
 
-            if (loaded != null)
+            if (provider != null)
             {
-                return (IProvider)Activator.CreateInstance(loaded.ProviderType);
+                return (IProvider)Activator.CreateInstance(provider.ProviderType);
             }
 
             return null;
@@ -102,11 +99,11 @@ namespace SharpCrop.Services
         /// <returns></returns>
         public static IProvider GetProviderById(string id)
         {
-            var loaded = loadedProviders.FirstOrDefault(e => e.Id == id);
+            var provider = available.FirstOrDefault(e => e.Id == id);
 
-            if (loaded != null)
+            if (provider != null)
             {
-                return (IProvider)Activator.CreateInstance(loaded.ProviderType);
+                return (IProvider)Activator.CreateInstance(provider.ProviderType);
             }
 
             return null;
@@ -116,7 +113,7 @@ namespace SharpCrop.Services
         /// Try to register a provider.
         /// </summary>
         /// <param name="provider">An IProvider class.</param>
-        /// <param name="nick">The nick of the provider - CAN BE ANYTHING!</param>
+        /// <param name="nick">The nick of the provider.</param>
         /// <param name="savedState">A saved state that the Provider will try to interpret - if it fails, the registration form will be used.</param>
         /// <param name="showForm">Enable or disable registration form.</param>
         /// <returns></returns>
@@ -128,9 +125,9 @@ namespace SharpCrop.Services
             }
 
             // If there is already a REGISTERED PROVIDER with this (exact) nick, return with true
-            if (registeredProviders.ContainsKey(nick))
+            if (loaded.ContainsKey(nick))
             {
-                return provider.Name == registeredProviders[nick].Name;
+                return provider.Name == loaded[nick].Name;
             }
 
             // Try to register the provider form the savedState
@@ -143,14 +140,14 @@ namespace SharpCrop.Services
             }
 
             // Save the provider to the config
-            ConfigService.Current.Providers[nick] = new SavedProvider()
+            SettingsService.Current.Providers[nick] = new SavedProvider
             {
                 Id = provider.Id,
                 State = state
             };
 
             // Save the provider as registered
-            registeredProviders[nick] = provider;
+            loaded[nick] = provider;
 
             // Notify listeners
             RegisteredProvidersChanged?.Invoke();

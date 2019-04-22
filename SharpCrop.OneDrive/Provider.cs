@@ -1,13 +1,14 @@
-﻿using SharpCrop.Provider;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Graph;
 using Microsoft.OneDrive.Sdk;
 using Newtonsoft.Json;
-using Microsoft.Graph;
-using SharpCrop.Provider.Forms;
-using SharpCrop.OneDrive.Utils;
 using SharpCrop.OneDrive.Models;
 using SharpCrop.OneDrive.Properties;
+using SharpCrop.OneDrive.Utils;
+using SharpCrop.Provider;
+using SharpCrop.Provider.Forms;
 using SharpCrop.Provider.Utils;
 
 namespace SharpCrop.OneDrive
@@ -19,7 +20,7 @@ namespace SharpCrop.OneDrive
     {
         private OneDriveClient client;
 
-        public string Id => Constants.ProviderId;
+        public string Id => Config.ProviderId;
 
         public string Name => Resources.ProviderName;
 
@@ -103,7 +104,7 @@ namespace SharpCrop.OneDrive
                 }
             };
 
-            System.Diagnostics.Process.Start(provider.Url);
+            Process.Start(provider.Url);
             form.Show();
 
             return await result.Task;

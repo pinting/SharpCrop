@@ -1,15 +1,24 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 using SharpCrop.Provider.Properties;
 
 namespace SharpCrop.Provider.Forms
 {
     /// <summary>
-    /// CodeForm shows the token request link and it waits for the user 
-    /// to copy the API code into its input box.
+    /// CodeForm shows the token request link and waits for the user 
+    /// to copy the API code into the input box.
     /// </summary>
-    public partial class CodeForm : Form
+    public class CodeForm : Form
     {
+        private LinkLabel linkLabel;
+        private TextBox linkBox;
+        private Label helpLabel;
+        private Label stepTwoLabel;
+        private TextBox codeBox;
+        private Label stepOneLabel;
+        
         private readonly int length;
 
         /// <summary>
@@ -18,27 +27,96 @@ namespace SharpCrop.Provider.Forms
         public event Action<string> OnResult;
 
         /// <summary>
-        /// Construct a new CodePaste form with an URL and a required code length.
+        /// Construct a new CodeForm with an URL and a required code length.
         /// </summary>
         /// <param name="url"></param>
         /// <param name="length">Required length of the activation code.</param>
         public CodeForm(string url = "", int length = 128)
         {
-            InitializeComponent();
-
-            // Init texts
-            stepOneLabel.Text = Resources.CodeStepOne;
-            linkLabel.Text = Resources.CodeLink;
-            stepTwoLabel.Text = Resources.CodeStepTwo;
-            helpLabel.Text = Resources.CodeHelp;
-
-            // Init variables
+            InitializeComponent(url);
+            
             this.length = length;
-            linkBox.Text = url;
+        }
+        
+        private void InitializeComponent(string link)
+        {
+            SuspendLayout();
+            
+            var font = new Font("Sans Serif", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            
+            // Link Label
+            linkLabel = new LinkLabel();
+            linkLabel.AutoSize = true;
+            linkLabel.Location = new Point(5, 40);
+            linkLabel.Size = new Size(50, 15);
+            linkLabel.TabIndex = 3;
+            linkLabel.TabStop = true;
+            linkLabel.Text = Resources.CodeLink;
+            linkLabel.LinkClicked += LinkClicked;
+            
+            // Link box
+            linkBox = new TextBox();
+            linkBox.Location = new Point(5, 55);
+            linkBox.ReadOnly = true;
+            linkBox.Size = new Size(280, 20);
+            linkBox.TabIndex = 2;
+            linkBox.Text = link;
+            
+            // Step 1 label
+            stepOneLabel = new Label();
+            stepOneLabel.AutoSize = true;
+            stepOneLabel.Location = new Point(5, 5);
+            stepOneLabel.Size = new Size(215, 40);
+            stepOneLabel.TabIndex = 6;
+            stepOneLabel.Text = Resources.CodeStepOne;
+            stepOneLabel.TextAlign = ContentAlignment.MiddleCenter;
+            stepOneLabel.Font = font;
+            
+            // Code box
+            codeBox = new TextBox();
+            codeBox.Location = new Point(5, 140);
+            codeBox.Size = new Size(280, 20);
+            codeBox.TabIndex = 5;
+            codeBox.TextChanged += CodeBoxChanged;
+            
+            // Step 2 label
+            stepTwoLabel = new Label();
+            stepTwoLabel.AutoSize = true;
+            stepTwoLabel.Location = new Point(5, 90);
+            stepTwoLabel.Size = new Size(215, 35);
+            stepTwoLabel.TabIndex = 7;
+            stepTwoLabel.Text = Resources.CodeStepTwo;
+            stepTwoLabel.TextAlign = ContentAlignment.MiddleCenter;
+            stepTwoLabel.Font = font;
+            
+            // Help label
+            helpLabel = new Label();
+            helpLabel.AutoSize = true;
+            helpLabel.Location = new Point(5, 125);
+            helpLabel.Size = new Size(55, 15);
+            helpLabel.TabIndex = 4;
+            helpLabel.Text = Resources.CodeHelp;
+            
+            AutoScaleDimensions = new SizeF(6F, 13F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(295, 170);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "SharpCrop";
+
+            Controls.Add(stepTwoLabel);
+            Controls.Add(stepOneLabel);
+            Controls.Add(codeBox);
+            Controls.Add(helpLabel);
+            Controls.Add(linkLabel);
+            Controls.Add(linkBox);
+            
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         /// <summary>
-        /// Call the registered callback when the required code length was reached.
+        /// Call the registered callback when the required code length is reached.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -57,7 +135,7 @@ namespace SharpCrop.Provider.Forms
         /// <param name="e"></param>
         private void LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(linkBox.Text);
+            Process.Start(linkBox.Text);
         }
     }
 }

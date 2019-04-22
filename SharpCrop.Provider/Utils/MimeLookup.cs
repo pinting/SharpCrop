@@ -568,7 +568,7 @@ namespace SharpCrop.Provider.Utils
             {".xtp", "application/octet-stream"},
             {".xwd", "image/x-xwindowdump"},
             {".z", "application/x-compress"},
-            {".zip", "application/x-zip-compressed"},
+            {".zip", "application/x-zip-compressed"}
         };
 
         /// <summary>

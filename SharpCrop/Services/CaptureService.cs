@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using SharpCrop.Models;
@@ -16,38 +15,9 @@ namespace SharpCrop.Services
     /// </summary>
     public static class CaptureService
     {
-        private static readonly List<GifFrame> frames = new List<GifFrame>();
-        private static TaskCompletionSource<MemoryStream> result;
-        private static bool recording;
-
-        private static float scaling = 1.0f;
-
-        /// <summary>
-        /// Safe manual scaling.
-        /// </summary>
-        public static float Scaling
-        {
-            get { return scaling; }
-            set { scaling = value > 0 ? value : scaling; }
-        }
-
-        /// <summary>
-        /// Resize a Bitmap.
-        /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
-        /// <returns></returns>
-        public static Bitmap ResizeBitmap(Bitmap bitmap, int w, int h)
-        {
-            var resized = new Bitmap(w, h);
-            var graph = Graphics.FromImage(resized);
-            
-            graph.FillRectangle(Brushes.Black, new RectangleF(0, 0, w, h));
-            graph.DrawImage(bitmap, new Rectangle(0, 0, w, h));
-
-            return resized;
-        }
+        private static readonly List<Frame> videoFrames = new List<Frame>();
+        private static TaskCompletionSource<MemoryStream> videoResult;
+        private static bool isRecording;
 
         /// <summary>
         /// Private helper function to construct a rectangle from two points.
@@ -65,225 +35,105 @@ namespace SharpCrop.Services
         }
 
         /// <summary>
-        /// Get a Bitmap from screen in the size of the given rectangle.
+        /// Capture a Bitmap from screen in the size of the given rectangle.
         /// </summary>
-        /// <param name="rectangle"></param>
-        /// <param name="offset"></param>
+        /// <param name="region"></param>
         /// <returns></returns>
-        public static Bitmap GetBitmap(Rectangle rectangle, Point offset)
+        public static Bitmap CaptureBitmap(Rectangle region)
         {
-            var r = new Rectangle(
-                (int)(rectangle.X * scaling) + offset.X, 
-                (int)(rectangle.Y * scaling) + offset.Y, 
-                (int)(rectangle.Width * scaling), 
-                (int)(rectangle.Height * scaling));
-
-            var bitmap = new Bitmap(r.Width, r.Height, PixelFormat.Format32bppArgb);
+            var bitmap = new Bitmap(region.Width, region.Height, PixelFormat.Format32bppArgb);
             var gfx = Graphics.FromImage(bitmap);
             
-            gfx.CopyFromScreen(r.X, r.Y, 0, 0, new Size(r.Width, r.Height), CopyPixelOperation.SourceCopy);
+            gfx.CopyFromScreen(
+                region.X, 
+                region.Y, 
+                0, 
+                0, 
+                new Size(region.Width, region.Height), 
+                CopyPixelOperation.SourceCopy);
 
             return bitmap;
         }
-        
-		/// <summary>
-		/// Get the percentage of scalling.
-		/// </summary>
-		/// <returns></returns>
-		public static float GetScaling()
-		{
-            // For Unix
-		    if (VersionService.GetPlatform() != PlatformType.Windows)
-            {
-                using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
-                {
-                    return graphics.DpiX / 96;
-                }
-            }
-
-            // For Windows
-            var gfx = Graphics.FromHwnd(IntPtr.Zero);
-            var desktop = gfx.GetHdc();
-
-            var logicalHeight = GetDeviceCaps(desktop, 10);
-            var physicalHeight = GetDeviceCaps(desktop, 117);
-
-            return (float)physicalHeight / logicalHeight;
-		}
 
         /// <summary>
         /// Start capturing frames.
         /// </summary>
-        /// <param name="rectangle"></param>
-        /// <param name="offset"></param>
-        private static void CaptureFrames(Rectangle rectangle, Point offset)
+        /// <param name="region"></param>
+        /// <param name="fps">FPS to record with.</param>
+        private static void CaptureFrames(Rectangle region, int fps)
         {
-            var freq = (1000 / ConfigService.Current.SafeVideoFps);
+            var freq = 1000 / fps;
             var wait = 0;
 
-            while (recording)
+            while (isRecording)
             {
                 Thread.Sleep(wait < 0 ? 0 : wait);
 
                 var delay = Stopwatch.StartNew();
-                var image = GetBitmap(rectangle, offset);
-                var frame = new GifFrame()
-                {
-                    Image = image,
-                    Delay = freq
-                };
+                var image = CaptureBitmap(region);
+                var frame = new Frame { Image = image, Delay = freq };
 
                 delay.Stop();
 
                 wait = freq - (int)delay.ElapsedMilliseconds;
-                frame.Delay += (wait < 0 ? -1 * wait : 0);
+                frame.Delay += wait < 0 ? -1 * wait : 0;
 
-                lock(frames)
+                lock(videoFrames)
                 {
-                    frames.Add(frame);
+                    videoFrames.Add(frame);
                 }
             }
         }
 
         /// <summary>
-        /// Check if two frames are the same.
+        /// Record video using FFMpeg. Sadly pipes are not seekable, so we have to use the file system as
+        /// a destination for the output and read it back MemoryStream. This is bad for solid states drives.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="step">Distance between tested pixels</param>
-        /// <param name="diff">Maximum difference in colors</param>
-        /// <returns></returns>
-        private static bool CompareFrames(GifFrame a, GifFrame b, int step = 1, int diff = 0)
-        {
-            if (!a.Image.Size.Equals(b.Image.Size))
-            {
-                return false;
-            }
-
-            for (var x = 0; x < a.Image.Width; x += step)
-            {
-                for (var y = 0; y < a.Image.Height; y += step)
-                {
-                    var p = a.Image.GetPixel(x, y);
-                    var q = b.Image.GetPixel(x, y);
-
-                    if (Math.Abs(p.R - q.R) > diff || Math.Abs(p.G - q.G) > diff || Math.Abs(p.B - q.B) > diff)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-        
-        /// <summary>
-        /// Old NGif encoder for Mono.
-        /// </summary>
-        private static void EncodeGifUnix()
-        {
-            var stream = new MemoryStream();
-            var gif = new Utils.NGif.AnimatedGifEncoder();
-
-            gif.Start(stream);
-            gif.SetQuality(Constants.GifQuality);
-            gif.SetRepeat(0);
-
-            while (recording || frames.Count >= 1)
-            {
-                gif.AddFrame(frames[0].Image);
-                frames[0].Image.Dispose();
-                frames.RemoveAt(0);
-            }
-
-            gif.SetDelay(1000 / ConfigService.Current.SafeVideoFps);
-            gif.Finish();
-
-            StopRecording();
-
-            result.SetResult(stream);
-        }
-
-        /// <summary>
-        /// Start encoding GIF while waiting for new frames. If the capture process is still recording, the algorithm
-        /// waits for minimum 2 frames, then it will compares them. If they are the same, there is no need to save
-        /// each, the first one gonna have an additional delay, while the second one will be deleted.
-        /// </summary>
-        private static void EncodeGif()
-        {
-            var stream = new MemoryStream();
-
-            while (frames.Count == 0) ;
-
-            using (var gif = new Utils.BumpKit.GifEncoder(stream, frames[0].Image.Width, frames[0].Image.Height, 0))
-            {
-                while (recording || frames.Count >= 1)
-                {
-                    // Check if it is possible to remove a frameff
-                    if (frames.Count >= 2 && CompareFrames(frames[0], frames[1], Constants.GifCheckStep, Constants.GifMaxColorDiff))
-                    {
-                        frames[0].Delay += frames[1].Delay;
-                        frames[1].Image.Dispose();
-                        frames.RemoveAt(1);
-                    }
-
-                    // Save a frame to the Gif
-                    // - if 0 and 1 are different
-                    // - if there is one last frame left (and the capture process is stopped)
-                    else if (frames.Count >= 2 || frames.Count >= 1 && !recording)
-                    {
-                        gif.AddFrame(frames[0].Image, 0, 0, TimeSpan.FromMilliseconds(frames[0].Delay));
-                        frames[0].Image.Dispose();
-                        frames.RemoveAt(0);
-                    }
-                }
-            }
-
-            StopRecording();
-            result.SetResult(stream);
-        }
-
-        /// <summary>
-        /// RecordVideo Mpeg using FFmpeg. Sadly pipes are not seekable, so we have to use the file system as a destination
-        /// for the output and read it back MemoryStream. This is extremely bad for solid states drives.
-        /// </summary>
-        private static void EncodeMpeg()
+        /// <param name="ext">Container type to use. FFMpeg default codec gonna be used for this type.</param>
+        /// <param name="fps">FPS to record with.</param>
+        private static void EncodeVideo(string ext, int fps)
         {
             var temp = Guid.NewGuid().ToString();
             var output = new MemoryStream();
 
             try
             {
-                using (var ffmpeg = new Process())
+                using (var process = new Process())
                 {
-                    var fps = ConfigService.Current.SafeVideoFps;
+                    process.StartInfo.FileName = "ffmpeg";
+                    process.StartInfo.Arguments = $"-f image2pipe -r {fps} -i pipe:0 -r {fps} -an -y -f {ext} {temp}";
+                    process.StartInfo.RedirectStandardInput = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true;
 
-                    ffmpeg.StartInfo.FileName = "ffmpeg";
-                    ffmpeg.StartInfo.Arguments = $"-f image2pipe -r {fps} -i pipe:0 -r {fps} -an -y -f mp4 {temp}";
-                    ffmpeg.StartInfo.RedirectStandardInput = true;
-                    ffmpeg.StartInfo.UseShellExecute = false;
-                    ffmpeg.StartInfo.CreateNoWindow = true;
+                    process.Start();
 
-                    ffmpeg.Start();
-
-                    while (recording || frames.Count >= 1)
+                    while (isRecording)
                     {
-                        if(frames.Count == 0)
+                        Frame frame;
+                        
+                        lock (videoFrames)
                         {
-                            continue;
+                            if(videoFrames.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            frame = videoFrames[0];
+                            videoFrames.RemoveAt(0);
                         }
 
                         using (var stream = new MemoryStream())
                         {
-                            frames[0].Image.Save(stream, ImageFormat.Bmp);
-                            stream.WriteTo(ffmpeg.StandardInput.BaseStream);
-                            frames[0].Image.Dispose();
-                            frames.RemoveAt(0);
+                            stream.WriteTo(process.StandardInput.BaseStream);
+                            frame.Image.Save(stream, ImageFormat.Bmp);
                         }
+                            
+                        frame.Image.Dispose();
                     }
 
-                    ffmpeg.StandardInput.BaseStream.Close();
-                    ffmpeg.WaitForExit();
+                    process.StandardInput.BaseStream.Close();
+                    process.WaitForExit();
                 }
 
                 // TODO: Experiment with something (RAMDisk?)
@@ -297,12 +147,12 @@ namespace SharpCrop.Services
                     }
                 }
 
-                result.SetResult(output);
+                videoResult.SetResult(output);
             }
             catch
             {
                 output.Dispose();
-                result.SetResult(new MemoryStream(0));
+                videoResult.SetResult(new MemoryStream(0));
             }
             finally
             {
@@ -316,57 +166,30 @@ namespace SharpCrop.Services
         }
 
         /// <summary>
-        /// Start a recording with the given encoder.
+        /// Start a video recording with FFMpeg.
         /// </summary>
         /// <param name="region"></param>
-        /// <param name="offset"></param>
-        /// <param name="encoder"></param>
+        /// <param name="ext">Container type to use. FFMpeg default codec gonna be used for this type.</param>
+        /// <param name="fps">FPS to record with.</param>
         /// <returns></returns>
-        private static Task<MemoryStream> RecordVideo(Rectangle region, Point offset, Action encoder)
+        public static Task<MemoryStream> RecordVideo(Rectangle region, string ext, int fps)
         {
-            if (result != null && !result.Task.IsCompleted)
+            if (videoResult != null && !videoResult.Task.IsCompleted)
             {
                 return Task.FromResult<MemoryStream>(null);
             }
 
-            result = new TaskCompletionSource<MemoryStream>();
-            recording = true;
+            videoResult = new TaskCompletionSource<MemoryStream>();
+            isRecording = true;
 
             // Run the two process in the same time
-            var captureThread = new Thread(() => CaptureFrames(region, offset));
-            var encoderThread = new Thread(() => encoder());
+            var captureThread = new Thread(() => CaptureFrames(region, fps));
+            var encoderThread = new Thread(() => EncodeVideo(ext, fps));
             
             captureThread.Start();
             encoderThread.Start();
 
-            return result.Task;
-        }
-
-        /// <summary>
-        /// RecordVideo video into GIF.
-        /// </summary>
-        /// <param name="region"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        public static Task<MemoryStream> RecordGif(Rectangle region, Point offset)
-        {
-            if (VersionService.GetPlatform() == PlatformType.Windows)
-            {
-                return RecordVideo(region, offset, EncodeGif);
-            }
-
-            return RecordVideo(region, offset, EncodeGifUnix);
-        }
-
-        /// <summary>
-        /// RecordVideo video into Mpeg.
-        /// </summary>
-        /// <param name="region"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        public static Task<MemoryStream> RecordMpeg(Rectangle region, Point offset)
-        {
-            return RecordVideo(region, offset, EncodeMpeg);
+            return videoResult.Task;
         }
 
         /// <summary>
@@ -374,16 +197,7 @@ namespace SharpCrop.Services
         /// </summary>
         public static void StopRecording()
         {
-            recording = false;
+            isRecording = false;
         }
-
-        /// <summary>
-        /// Get display informations on Windows.
-        /// </summary>
-        /// <param name="hdc"></param>
-        /// <param name="nIndex"></param>
-        /// <returns></returns>
-        [DllImport("gdi32.dll")]
-        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
     }
 }

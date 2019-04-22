@@ -1,12 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
-using SharpCrop.Provider;
-using System;
-using SharpCrop.FTP.Models;
-using SharpCrop.FTP.Utils;
-using SharpCrop.FTP.Forms;
 using Newtonsoft.Json;
+using SharpCrop.FTP.Forms;
+using SharpCrop.FTP.Models;
 using SharpCrop.FTP.Properties;
+using SharpCrop.FTP.Utils;
+using SharpCrop.Provider;
 using SharpCrop.Provider.Utils;
 
 namespace SharpCrop.FTP
@@ -15,7 +15,7 @@ namespace SharpCrop.FTP
     {
         private LoginCredentials creds;
 
-        public string Id => Constants.ProviderId;
+        public string Id => Config.ProviderId;
 
         public string Name => Resources.ProviderName;
 

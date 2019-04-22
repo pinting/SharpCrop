@@ -1,7 +1,7 @@
-﻿using Google.Apis.Util.Store;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Google.Apis.Util.Store;
+using Newtonsoft.Json;
 
 namespace SharpCrop.GoogleDrive.Utils
 {

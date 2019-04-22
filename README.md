@@ -1,6 +1,6 @@
 # SharpCrop
 
-This application can capture a part of your screen and upload it to one or more providers - you can find a list of the available services bellow. Currently Windows and Linux are supported, while macOS (OS X) is not. It could be, however I have no machine to test it on.
+This application can capture a part of your screen and upload it to one or more providers - you can find a list of the available services bellow. Currently only Windows and Linux are supported.
 
 ## Overview
 
@@ -38,11 +38,10 @@ Anyone can help make this project better.
 
 ## TODOs
 
-* Switch to GtkSharp
 * Automatic ffmpeg detection
 * Use gdigrab and x11grab - if available
 * Option to hide the application for fast relaunch
 
 ## License
 
-Copyright (c) 2018 Tornyi Dénes. Licensed under the MIT license.
+Copyright (c) 2019 Tornyi Dénes. Licensed under the MIT license.

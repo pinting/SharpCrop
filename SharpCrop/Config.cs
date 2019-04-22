@@ -5,13 +5,13 @@ using System.Drawing.Imaging;
 
 namespace SharpCrop
 {
-    public static class Constants
+    public static class Config
     {
         // Version
-        public const int Version = 2200;
+        public const int Version = 3000;
 
-        // List of the registered providers
-        public static readonly IReadOnlyList<Type> Providers = new List<Type>()
+        // List of the available providers
+        public static readonly IReadOnlyList<Type> Providers = new List<Type>
         {
             typeof(Dropbox.Provider),
             typeof(GoogleDrive.Provider),
@@ -20,8 +20,8 @@ namespace SharpCrop
             typeof(LocalFile.Provider)
         };
 
-        // List of avaiable image formats (first if default)
-        public static readonly IReadOnlyDictionary<string, ImageFormat> ImageFormats = new Dictionary<string, ImageFormat>()
+        // List of available image formats (first is the default)
+        public static readonly IReadOnlyDictionary<string, ImageFormat> ImageFormats = new Dictionary<string, ImageFormat>
         {
             {"png", ImageFormat.Png},
             {"jpg", ImageFormat.Jpeg},
@@ -29,7 +29,7 @@ namespace SharpCrop
         };
         
         // List of available FPS values (the first must be the greatest)
-        public static readonly IReadOnlyList<string> FpsList = new List<string>()
+        public static readonly IReadOnlyList<string> FpsList = new List<string>
         {
             "30",
             "25",
@@ -39,19 +39,13 @@ namespace SharpCrop
             "5"
         };
 
-        // General constants
+        // General stuff
         public const string LatestVersion = "http://api.github.com/repos/pinting/SharpCrop/releases/latest";
         public static readonly Brush RightColor = Brushes.PaleVioletRed;
         public static readonly Brush LeftColor = Brushes.RoyalBlue;
         public const string SettingsPath = "Settings.json";
         public const int VersionLength = 4;
         public const int PenWidth = 2;
-
-        // For .NET (Bumpkit) GifEncoder
-        public const int GifMaxColorDiff = 10;
-        public const int GifCheckStep = 2;
-
-        // For Mono (NGif) GifEncoder
-        public const int GifQuality = 20;
+        public const string VideoExt = "mp4";
     }
 }

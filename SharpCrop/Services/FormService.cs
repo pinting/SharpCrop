@@ -20,7 +20,7 @@ namespace SharpCrop.Services
             // Else the config will be closed (along with the whole application)
             configForm.FormClosing += (s, e) =>
             {
-                if (e.CloseReason == CloseReason.UserClosing && ProviderService.RegisteredProviders.Count > 0)
+                if (e.CloseReason == CloseReason.UserClosing && ProviderService.Loaded.Count > 0)
                 {
                     e.Cancel = true;
                     configForm.Hide();
@@ -37,10 +37,9 @@ namespace SharpCrop.Services
             };
 
             // Create a CropForm for every screen and show them
-            for (var i = 0; i < Screen.AllScreens.Length; i++)
+            foreach (var screen in Screen.AllScreens)
             {
-                var screen = Screen.AllScreens[i];
-                var form = new CropForm(controller, screen.Bounds, i);
+                var form = new CropForm(controller, screen.Bounds);
 
                 form.FormClosed += (s, e) => Application.Exit();
 

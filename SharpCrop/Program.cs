@@ -19,13 +19,13 @@ namespace SharpCrop
                 SetProcessDPIAware();
             }
 
-            ConfigService.Load();
+            SettingsService.Load();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Controller());
 
-            ConfigService.Save();
+            SettingsService.Save();
         }
 
         /// <summary>
