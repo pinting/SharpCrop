@@ -127,7 +127,7 @@ namespace SharpCrop
             ToastService.Remove(toast);
 
             // Generate filename and start the upload(s)
-            var url = await UploadAll(stream, "mp4");
+            var url = await UploadAll(stream, Config.VideoExt);
 
             stream.Dispose();
 

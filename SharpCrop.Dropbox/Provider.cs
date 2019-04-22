@@ -47,8 +47,8 @@ namespace SharpCrop.Dropbox
         /// Get a working provider (so, an access token) from Dropbox.
         /// </summary>
         /// <param name="savedState"></param>
-        /// <param name="showForm"></param>
-        public async Task<string> Register(string savedState = null, bool showForm = true)
+        /// <param name="silent"></param>
+        public async Task<string> Register(string savedState = null, bool silent = false)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -59,15 +59,19 @@ namespace SharpCrop.Dropbox
                 return await result.Task;
             }
 
-            // If the saved token was not usable and showForm is false, return with failure
-            if (!showForm)
+            // If the saved token was not usable and silent is true, return with failure
+            if (silent)
             {
                 result.SetResult(null);
                 return await result.Task;
             }
 
             // If it is not, try to get a new one
-            var url = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Code, Obscure.CaesarDecode(Config.AppKey), (string)null);
+            var url = DropboxOAuth2Helper.GetAuthorizeUri(
+                OAuthResponseType.Code, 
+                Obscure.CaesarDecode(Config.AppKey), 
+                (string)null);
+            
             var form = new CodeForm(url.ToString(), 43);
             var success = false;
 
@@ -76,7 +80,10 @@ namespace SharpCrop.Dropbox
                 success = true;
                 form.Close();
 
-                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(code, Obscure.CaesarDecode(Config.AppKey), Obscure.CaesarDecode(Config.AppSecret));
+                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
+                    code, 
+                    Obscure.CaesarDecode(Config.AppKey), 
+                    Obscure.CaesarDecode(Config.AppSecret));
 
                 if (response?.AccessToken != null && await ClientFactory(response.AccessToken))
                 {
@@ -112,7 +119,8 @@ namespace SharpCrop.Dropbox
         {
             var path = "/" + name;
 
-            // This is needed, because Dropbox API (and OneDrive and FTP aswell) will not work otherwise - I do not know why
+            // This is needed, it will not work otherwise - I do not know why
+            // TODO: Why?
             using (var newStream = new MemoryStream(stream.ToArray()))
             {
                 await client.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: newStream);

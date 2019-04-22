@@ -7,7 +7,7 @@ using SharpCrop.Provider.Forms;
 namespace SharpCrop.LocalFile
 {
     /// <summary>
-    /// An IProvider implemantation which writes the output to the local disk with File.IO.
+    /// An IProvider implementation which writes the output to the local disk with File.IO.
     /// </summary>
     public class Provider : IProvider
     {
@@ -21,9 +21,9 @@ namespace SharpCrop.LocalFile
         /// Register a path which will be saved as the state of this provider.
         /// </summary>
         /// <param name="savedState"></param>
-        /// <param name="showForm"></param>
+        /// <param name="silent"></param>
         /// <returns></returns>
-        public Task<string> Register(string savedState = null, bool showForm = true)
+        public Task<string> Register(string savedState = null, bool silent = false)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -36,8 +36,8 @@ namespace SharpCrop.LocalFile
                 return result.Task;
             }
 
-            // If the saved state was not usable and showForm is false, return with failure
-            if (!showForm)
+            // If the saved state was not usable and silent is true, return with failure
+            if (silent)
             {
                 result.SetResult(null);
                 return result.Task;

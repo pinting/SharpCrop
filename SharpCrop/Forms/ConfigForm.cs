@@ -6,9 +6,6 @@ using System.Windows.Forms;
 using SharpCrop.Properties;
 using SharpCrop.Services;
 
-// ReSharper disable LocalizableElement
-// ReSharper disable CoVariantArrayConversion
-
 namespace SharpCrop.Forms
 {
     /// <summary>

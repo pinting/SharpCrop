@@ -4,7 +4,7 @@ namespace SharpCrop.OneDrive.Models
 {
     /// <summary>
     /// OneDrive internal response object which holds the AccessToken. This is serialized
-    /// into the application settings as one state string.
+    /// into the settings file as a state string.
     /// </summary>
     public class TokenResponse
     {

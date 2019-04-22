@@ -6,7 +6,7 @@ using SharpCrop.FTP.Models;
 namespace SharpCrop.FTP.Utils
 {
     /// <summary>
-    /// FTPUploader is a lightly modified version of the official FtpWebRequest example.
+    /// FtpUploader is a lightly modified version of the official FtpWebRequest example.
     /// It can upload a MemoryStream to the given server using a username and a password.
     /// </summary>
     public static class FtpUploader

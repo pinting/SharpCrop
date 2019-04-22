@@ -29,10 +29,10 @@ namespace SharpCrop.GoogleDrive
         /// <summary>
         /// Get a working Provider for Google Drive.
         /// </summary>
-        /// <param name="savedState">Serialized TokenResponse from the Google Api (and folderId).</param>
-        /// <param name="showForm">Show registration form, if the saved state did not work.</param>
+        /// <param name="savedState">Serialized TokenResponse from the Google API (and folderId).</param>
+        /// <param name="silent"></param>
         /// <returns></returns>
-        public async Task<string> Register(string savedState = null, bool showForm = true)
+        public async Task<string> Register(string savedState = null, bool silent = false)
         {
             var result = new TaskCompletionSource<string>();
 
@@ -42,7 +42,7 @@ namespace SharpCrop.GoogleDrive
 
                 // Try to use the previously saved TokenResponse and if it fails, show the registration form (if the showForm parameter allows it)
                 var secret = new ClientSecrets { ClientId = Obscure.CaesarDecode(Config.AppKey), ClientSecret = Obscure.CaesarDecode(Config.AppSecret) };
-                var receiver = new CodeReceiver(showForm);
+                var receiver = new CodeReceiver(silent);
 
                 var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(secret, Config.Scopes, "token", CancellationToken.None, state, receiver);
 

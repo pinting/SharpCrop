@@ -11,7 +11,7 @@ using SharpCrop.Models;
 namespace SharpCrop.Services
 {
     /// <summary>
-    /// Capture service is responsible for capturing a part of the screen (with or without scaling).
+    /// Capture service is responsible for capturing a part of the screen.
     /// </summary>
     public static class CaptureService
     {

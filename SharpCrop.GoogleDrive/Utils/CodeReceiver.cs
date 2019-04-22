@@ -16,9 +16,9 @@ namespace SharpCrop.GoogleDrive.Utils
         private readonly bool showForm;
         private bool executed;
         
-        public CodeReceiver(bool showForm = true)
+        public CodeReceiver(bool silent = false)
         {
-            this.showForm = showForm;
+            showForm = !silent;
         }
         
         public Task<AuthorizationCodeResponseUrl> ReceiveCodeAsync(AuthorizationCodeRequestUrl authUrl, CancellationToken taskCancellationToken)

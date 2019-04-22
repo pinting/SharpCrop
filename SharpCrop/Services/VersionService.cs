@@ -32,12 +32,15 @@ namespace SharpCrop.Services
 
                 dynamic parsed = JObject.Parse(reader.ReadToEnd());
 
-                var tagName = ((string)parsed.tag_name.ToString()).Replace(".", "");
-                var version = (int)(int.Parse(tagName) * Math.Pow(10, Config.VersionLength - tagName.Length));
+                var tagName = (string) parsed.tag_name;
+                var remoteVersion = tagName.Split('.');
+                var remoteMajor = int.Parse(remoteVersion[0]);
+                var remoteMinor = int.Parse(remoteVersion[1]);
 
-                if (version > Config.Version)
+                if (remoteMajor > Config.VersionMajor || 
+                    remoteMajor == Config.VersionMajor && remoteMinor > Config.VersionMinor)
                 {
-                    return parsed.html_url.ToString();
+                    return parsed.html_url;
                 }
             }
             catch

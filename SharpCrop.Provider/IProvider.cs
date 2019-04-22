@@ -9,7 +9,7 @@ namespace SharpCrop.Provider
 
         string Name { get; }
 
-        Task<string> Register(string savedState = null, bool showForm = true);
+        Task<string> Register(string savedState = null, bool silent = false);
 
         Task<string> Upload(string name, MemoryStream stream);
     }

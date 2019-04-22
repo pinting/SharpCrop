@@ -8,8 +8,9 @@ namespace SharpCrop
     public static class Config
     {
         // Version
-        public const int Version = 3000;
-
+        public const int VersionMajor = 3;
+        public const int VersionMinor = 0;
+            
         // List of the available providers
         public static readonly IReadOnlyList<Type> Providers = new List<Type>
         {

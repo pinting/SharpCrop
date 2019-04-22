@@ -13,7 +13,7 @@ namespace SharpCrop.FTP
 {
     public class Provider : IProvider
     {
-        private LoginCredentials creds;
+        private LoginCredentials credentials;
 
         public string Id => Config.ProviderId;
 
@@ -22,20 +22,20 @@ namespace SharpCrop.FTP
         /// <summary>
         /// Register an FTP connection from saved or new credentials.
         /// </summary>
-        /// <param name="savedState">The login informations of the FTP.</param>
-        /// <param name="showForm">Show the registration form, if the saved state did not work.</param>
+        /// <param name="savedState">The login credentials of the server.</param>
+        /// <param name="silent"></param>
         /// <returns></returns>
-        public Task<string> Register(string savedState = null, bool showForm = true)
+        public Task<string> Register(string savedState = null, bool silent = false)
         {
             var result = new TaskCompletionSource<string>();
 
             // Try to use the old credentials
             try
             {
-                var oldCreds = JsonConvert.DeserializeObject<LoginCredentials>(Obscure.Base64Decode(savedState));
+                var oldCredentials = JsonConvert.DeserializeObject<LoginCredentials>(Obscure.Base64Decode(savedState));
 
                 result.SetResult(savedState);
-                creds = oldCreds;
+                credentials = oldCredentials;
 
                 return result.Task;
             }
@@ -44,8 +44,8 @@ namespace SharpCrop.FTP
                 // Ignored
             }
 
-            // If the saved creds were not usable and showForm is false, return with failure
-            if (!showForm)
+            // If the saved credentials were not usable and silent is true, return with failure
+            if (silent)
             {
                 result.SetResult(null);
                 return result.Task;
@@ -55,12 +55,12 @@ namespace SharpCrop.FTP
             var form = new LoginForm();
             var success = false;
 
-            form.OnResult += newCreds =>
+            form.OnResult += newCredentials =>
             {
-                creds = newCreds;
+                credentials = newCredentials;
                 success = true;
 
-                result.SetResult(Obscure.Base64Encode(JsonConvert.SerializeObject(newCreds)));
+                result.SetResult(Obscure.Base64Encode(JsonConvert.SerializeObject(newCredentials)));
                 form.Close();
             };
 
@@ -88,13 +88,14 @@ namespace SharpCrop.FTP
         {
             try
             {
-                var remote = new Uri(creds.RemotePath, name);
-                var copy = new Uri(creds.CopyPath, name);
+                var remote = new Uri(credentials.RemotePath, name);
+                var copy = new Uri(credentials.CopyPath, name);
 
                 // This is needed, it will not work otherwise - I do not know why
+                // TODO: Why?
                 using (var newStream = new MemoryStream(stream.ToArray()))
                 {
-                    FtpUploader.Upload(newStream, remote, creds.Username, creds.Password);
+                    FtpUploader.Upload(newStream, remote, credentials.Username, credentials.Password);
                 }
 
                 return Task.FromResult(copy.ToString());

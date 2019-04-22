@@ -49,9 +49,9 @@ namespace SharpCrop.OneDrive
         /// Get an access token from OneDrive - or try to use an existing one.
         /// </summary>
         /// <param name="savedState">Previous serialized TokenResponse from OneDrive.</param>
-        /// <param name="showForm"></param>
+        /// <param name="silent"></param>
         /// <returns></returns>
-        public async Task<string> Register(string savedState = null, bool showForm = true)
+        public async Task<string> Register(string savedState = null, bool silent = false)
         {
             var result = new TaskCompletionSource<string>();
             var provider = new AuthProvider();
@@ -68,8 +68,8 @@ namespace SharpCrop.OneDrive
                 }
             }
 
-            // If the saved token was not usable and showForm is false, return with failure
-            if(!showForm)
+            // If the saved state was not usable and silent is true, return with failure
+            if(silent)
             {
                 result.SetResult(null);
                 return await result.Task;
@@ -121,6 +121,7 @@ namespace SharpCrop.OneDrive
             await client.Drive.Special.AppRoot.Request().GetAsync();
 
             // This is needed, it will not work otherwise - I do not know why
+            // TODO: Why?
             using (var newStream = new MemoryStream(stream.ToArray()))
             {
                 await client.Drive.Special.AppRoot.Children[name].Content.Request().PutAsync<Item>(newStream);

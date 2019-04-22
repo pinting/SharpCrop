@@ -292,7 +292,7 @@ namespace SharpCrop.Forms
                 return;
             }
 
-            var bitmap = CaptureService.CaptureBitmap(new Rectangle(screen.Location, screen.Size));
+            var bitmap = CaptureService.CaptureBitmap(new Rectangle(PointToScreen(Location), ClientSize));
 
             BackgroundImage = bitmap;
             Opacity = 1.0D;
